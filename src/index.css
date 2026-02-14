@@ -1,0 +1,203 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand-50: #f0fdf4;
+  --color-brand-100: #dcfce7;
+  --color-brand-200: #bbf7d0;
+  --color-brand-300: #86efac;
+  --color-brand-400: #4ade80;
+  --color-brand-500: #22c55e;
+  --color-brand-600: #16a34a;
+  --color-brand-700: #15803d;
+  --color-brand-800: #166534;
+  --color-brand-900: #14532d;
+
+  /* Warm neutrals */
+  --color-warm-50:  #faf8f6;
+  --color-warm-100: #f5f0eb;
+  --color-warm-200: #ebe4db;
+  --color-warm-300: #d6cbbf;
+  --color-warm-400: #b8a898;
+  --color-warm-500: #9a8878;
+
+  /* Soft accents */
+  --color-sage-50:  #f4f7f4;
+  --color-sage-100: #e6ede6;
+  --color-sage-200: #cddacd;
+  --color-sage-300: #a8bea8;
+  --color-sage-400: #7d9b7d;
+
+  --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+}
+
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: #ffffff;
+  font-family: var(--font-sans);
+  color: #1f2937;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #d6cbbf; border-radius: 999px; }
+::-webkit-scrollbar-thumb:hover { background: #b8a898; }
+
+/* ── Chat background ── */
+.chat-bg {
+  background:
+    radial-gradient(ellipse 80% 50% at 20% 10%, rgba(220,252,231,0.25) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 80% 80%, rgba(187,247,208,0.15) 0%, transparent 50%),
+    radial-gradient(ellipse 50% 50% at 50% 50%, rgba(245,240,235,0.5) 0%, transparent 70%),
+    linear-gradient(180deg, #faf8f6 0%, #ffffff 40%, #f5f0eb 100%);
+}
+
+/* Subtle dot pattern */
+.chat-bg::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle, #d6cbbf 0.5px, transparent 0.5px);
+  background-size: 24px 24px;
+  opacity: 0.15;
+  pointer-events: none;
+}
+
+/* ── Typing dots ── */
+@keyframes pulse-dot {
+  0%,80%,100% { opacity:0.25; transform:scale(0.8); }
+  40% { opacity:1; transform:scale(1.1); }
+}
+.typing-dot { animation: pulse-dot 1.4s ease-in-out infinite; }
+.typing-dot:nth-child(2) { animation-delay: 0.15s; }
+.typing-dot:nth-child(3) { animation-delay: 0.3s; }
+
+/* ── Cursor blink ── */
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+/* ── Breathing glow ── */
+@keyframes breathe {
+  0%,100% { box-shadow: 0 0 0 0 rgba(34,197,94,0); }
+  50% { box-shadow: 0 0 16px 2px rgba(34,197,94,0.12); }
+}
+
+/* ── Fade in ── */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeInScale {
+  from { opacity: 0; transform: scale(0.97) translateY(6px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+.anim-in { animation: fadeIn 0.5s cubic-bezier(0.16,1,0.3,1) both; }
+.animate-fade-in-up { animation: fadeInScale 0.45s cubic-bezier(0.16,1,0.3,1) both; }
+
+/* ── Stagger ── */
+.stagger > *:nth-child(1) { animation-delay: 0.0s; }
+.stagger > *:nth-child(2) { animation-delay: 0.05s; }
+.stagger > *:nth-child(3) { animation-delay: 0.10s; }
+.stagger > *:nth-child(4) { animation-delay: 0.15s; }
+.stagger > *:nth-child(5) { animation-delay: 0.20s; }
+.stagger > *:nth-child(6) { animation-delay: 0.25s; }
+
+/* ── Message prose ── */
+.msg-prose { color: #374151; line-height: 1.72; }
+.msg-prose strong { font-weight: 650; color: #1f2937; }
+.msg-prose em { color: #6b7280; font-style: italic; }
+.msg-prose ul { list-style: none; padding-left: 0; margin: 0.7em 0; }
+.msg-prose ol { list-style: none; padding-left: 0; margin: 0.7em 0; counter-reset: li; }
+.msg-prose ul li { position: relative; padding-left: 1.3em; margin: 0.4em 0; }
+.msg-prose ul li::before {
+  content: '';
+  position: absolute;
+  left: 0.15em;
+  top: 0.55em;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #22c55e, #86efac);
+}
+.msg-prose ol li {
+  position: relative;
+  padding-left: 1.7em;
+  margin: 0.4em 0;
+  counter-increment: li;
+}
+.msg-prose ol li::before {
+  content: counter(li);
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 1.3em;
+  height: 1.3em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7em;
+  font-weight: 700;
+  color: #15803d;
+  background: #dcfce7;
+  border-radius: 50%;
+}
+.msg-prose p { margin: 0.65em 0; }
+.msg-prose p:first-child { margin-top: 0; }
+.msg-prose p:last-child { margin-bottom: 0; }
+
+/* ── Tool highlight ── */
+.tool-card {
+  background: linear-gradient(135deg, #f0fdf4 0%, #f4f7f4 100%);
+  border: 1px solid #dcfce7;
+  border-radius: 12px;
+  padding: 12px 14px;
+  margin: 10px 0;
+}
+.tool-card strong:first-child {
+  display: block;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #15803d;
+  margin-bottom: 4px;
+}
+
+/* ── Empathy card (Elina's caring remarks) ── */
+.empathy-card {
+  background: linear-gradient(135deg, #fdf4ff 0%, #faf5ff 50%, #f5f3ff 100%);
+  border: 1px solid #e9d5ff;
+  border-left: 3px solid #a78bfa;
+  border-radius: 12px;
+  padding: 12px 14px;
+  margin: 10px 0;
+}
+.empathy-card strong:first-child {
+  display: block;
+  font-size: 0.78rem;
+  letter-spacing: 0.02em;
+  color: #7c3aed;
+  margin-bottom: 4px;
+}
+
+/* ── Profile panel transitions ── */
+.profile-enter {
+  animation: slideInRight 0.2s ease-out both;
+}
+@keyframes slideInRight {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+/* ── Line clamp utility ── */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}

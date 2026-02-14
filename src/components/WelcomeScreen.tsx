@@ -1,0 +1,422 @@
+import { useState } from 'react'
+
+interface WelcomeScreenProps {
+  onSelectTopic: (topic: string) => void
+  onOpenToolkit: () => void
+}
+
+const TOPICS = [
+  {
+    icon: '⚖️',
+    title: 'Pitäisikö erota vai yrittää?',
+    prompt: 'Mietin eroa, mutta en tiedä onko se oikea ratkaisu. Auta minua selvittämään mitä oikeasti haluan.',
+    tag: 'Päätöksenteko',
+  },
+  {
+    icon: '💔',
+    title: 'Puolisoni haluaa erota',
+    prompt: 'Puolisoni haluaa eroa. Olen shokissa enkä tiedä miten toimia. Auta minua käsittelemään tämä tilanne.',
+    tag: 'Kriisituki',
+  },
+  {
+    icon: '👨‍👩‍👧‍👦',
+    title: 'Lapset ja ero',
+    prompt: 'Meillä on lapsia ja ero on edessä. Miten suojelen lapsia ja kerron heille? Tarvitsen konkreettista apua.',
+    tag: 'Lasten hyvinvointi',
+  },
+  {
+    icon: '🔥',
+    title: 'Tunteet polttavat',
+    prompt: 'Tunteeni ovat niin voimakkaat etten pysty ajattelemaan selkeästi. Tunnen vihaa, surua ja syyllisyyttä samaan aikaan.',
+    tag: 'Tunteiden hallinta',
+  },
+  {
+    icon: '🗣️',
+    title: 'Kommunikaatio ei toimi',
+    prompt: 'En pysty keskustelemaan puolisoni kanssa ilman riitaa. Miten voisin kommunikoida paremmin?',
+    tag: 'Vuorovaikutus',
+  },
+  {
+    icon: '🌅',
+    title: 'Uusi alku pelottaa',
+    prompt: 'Ero on tapahtunut tai tapahtumassa. Pelkään tulevaisuutta ja yksinoloa. Auta minua rakentamaan uutta elämää.',
+    tag: 'Tulevaisuus',
+  },
+]
+
+const STATS = [
+  { value: '85%', label: 'kokee elämänlaadun paranevan 2v sisällä', icon: '📈' },
+  { value: '6', label: 'tutkittua psykologista menetelmää', icon: '🧠' },
+  { value: '24/7', label: 'saatavilla aina kun tarvitset', icon: '🕐' },
+]
+
+const MOOD_OPTIONS = [
+  { emoji: '😢', label: 'Surullinen', prompt: 'Olen surullinen ja tarvitsen tukea.' },
+  { emoji: '😰', label: 'Ahdistunut', prompt: 'Olen ahdistunut ja huolissani tulevaisuudesta.' },
+  { emoji: '😠', label: 'Vihainen', prompt: 'Olen vihainen ja pettynyt. Tarvitsen apua tunteiden käsittelyyn.' },
+  { emoji: '😶', label: 'Tyhjä', prompt: 'Tunnen oloni tyhjäksi enkä tiedä mitä tehdä.' },
+  { emoji: '🤔', label: 'Hämmentynyt', prompt: 'Olen hämmentynyt tilanteestani ja tarvitsen apua selkiyttämään ajatuksia.' },
+  { emoji: '😌', label: 'Rauhallinen', prompt: 'Olen suhteellisen rauhallinen mutta haluaisin keskustella tilanteestani.' },
+]
+
+const TESTIMONIALS = [
+  {
+    text: '"Elinan kanssa uskalsin ensimmäistä kertaa sanoa ääneen mitä oikeasti tunsin. Se muutti kaiken."',
+    author: 'Minna, 42',
+    situation: 'Harkitsi eroa 8 kuukautta',
+  },
+  {
+    text: '"En tiennyt miten kertoa lapsille. Elina auttoi rakentamaan sanoituksen joka tuntui oikealta."',
+    author: 'Jukka, 38',
+    situation: 'Eronnut, 2 lasta',
+  },
+  {
+    text: '"Yöllä kello 3 kun ahdistus iski, Elina oli ainoa johon saattoi turvautua. Se riitti."',
+    author: 'Laura, 35',
+    situation: 'Puoliso halusi erota',
+  },
+]
+
+export default function WelcomeScreen({ onSelectTopic, onOpenToolkit }: WelcomeScreenProps) {
+  const [freeText, setFreeText] = useState('')
+  const [showMoodCheck, setShowMoodCheck] = useState(false)
+
+  const handleFreeSubmit = () => {
+    const t = freeText.trim()
+    if (t) onSelectTopic(t)
+  }
+
+  return (
+    <div className="flex-1 overflow-y-auto">
+      {/* ── HERO ── */}
+      <section className="bg-gray-950 text-white relative overflow-hidden">
+        {/* Subtle background decoration */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute -top-24 -right-24 w-64 h-64 rounded-full bg-brand-500/5 blur-3xl" />
+          <div className="absolute -bottom-16 -left-16 w-48 h-48 rounded-full bg-brand-400/5 blur-2xl" />
+        </div>
+
+        <div className="relative max-w-3xl mx-auto px-5 pt-14 pb-12 text-center">
+          {/* Elina avatar & intro */}
+          <div className="anim-in mb-6">
+            <div className="inline-flex flex-col items-center">
+              <div className="relative mb-3">
+                <div
+                  className="w-20 h-20 rounded-full flex items-center justify-center text-3xl"
+                  style={{
+                    background: 'linear-gradient(135deg, #22c55e 0%, #86efac 50%, #a7f3d0 100%)',
+                    boxShadow: '0 4px 20px rgba(34,197,94,0.25), 0 0 0 3px rgba(34,197,94,0.1)',
+                  }}
+                >
+                  🤝
+                </div>
+                <div
+                  className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full border-[3px] border-gray-950 flex items-center justify-center"
+                  style={{ background: '#22c55e', animation: 'breathe 3s ease-in-out infinite' }}
+                >
+                  <div className="w-2 h-2 rounded-full bg-white/80" />
+                </div>
+              </div>
+              <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur rounded-full px-3.5 py-1.5 text-xs font-medium text-brand-300 border border-white/10">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-400 opacity-75" />
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-brand-400" />
+                </span>
+                Elina on paikalla
+              </div>
+            </div>
+          </div>
+
+          <h1 className="anim-in text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-[1.1] mb-4" style={{animationDelay:'0.05s'}}>
+            Hei, olen <span className="text-brand-400">Elina</span>.<br />
+            <span className="text-gray-300 font-bold">Tukesi eron kynnyksellä.</span>
+          </h1>
+
+          <p className="anim-in text-base sm:text-lg text-gray-400 max-w-xl mx-auto mb-3 leading-relaxed" style={{animationDelay:'0.1s'}}>
+            Olen parisuhde- ja erotukiasiantuntija. Kuuntelen sinua ilman tuomitsemista, tarjoan tutkittuja 
+            työkaluja ja autan sinua löytämään oman polkusi &mdash; olipa se mikä tahansa.
+          </p>
+
+          <p className="anim-in text-sm text-gray-500 max-w-md mx-auto mb-7" style={{animationDelay:'0.12s'}}>
+            Voit kertoa minulle kaiken luottamuksellisesti. Olen täällä sinua varten, juuri nyt.
+          </p>
+
+          {/* Free text input on hero */}
+          <div className="anim-in max-w-lg mx-auto" style={{animationDelay:'0.15s'}}>
+            <div className="flex items-center gap-2 bg-white/5 border border-white/15 rounded-xl p-1.5 focus-within:border-brand-500/50 focus-within:bg-white/10 transition-colors">
+              <input
+                type="text"
+                value={freeText}
+                onChange={(e) => setFreeText(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && handleFreeSubmit()}
+                placeholder="Kerro lyhyesti miltä sinusta tuntuu..."
+                className="flex-1 bg-transparent text-white placeholder-gray-500 text-sm px-3 py-2.5 focus:outline-none"
+              />
+              <button
+                onClick={handleFreeSubmit}
+                disabled={!freeText.trim()}
+                className="flex-shrink-0 h-10 px-5 bg-brand-500 hover:bg-brand-600 disabled:opacity-30 disabled:hover:bg-brand-500
+                           text-white text-sm font-semibold rounded-lg transition-all active:scale-95"
+              >
+                Kerro Elinalle
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── MOOD CHECK-IN ── */}
+      <section className="border-b border-gray-200 bg-gradient-to-b from-brand-50/50 to-white">
+        <div className="max-w-3xl mx-auto px-5 py-8">
+          <button
+            onClick={() => setShowMoodCheck(!showMoodCheck)}
+            className="w-full text-center group"
+          >
+            <div className="inline-flex items-center gap-2 text-sm font-semibold text-gray-700 mb-1 group-hover:text-brand-600 transition-colors">
+              <span>💭</span>
+              Miltä sinusta tuntuu juuri nyt?
+              <svg
+                className={`w-4 h-4 transition-transform duration-200 ${showMoodCheck ? 'rotate-180' : ''}`}
+                fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+              </svg>
+            </div>
+            <p className="text-xs text-gray-400">Valitse tunnetilasi niin Elina osaa auttaa paremmin</p>
+          </button>
+
+          {showMoodCheck && (
+            <div className="grid grid-cols-3 sm:grid-cols-6 gap-2 mt-4 animate-fade-in-up">
+              {MOOD_OPTIONS.map((mood) => (
+                <button
+                  key={mood.label}
+                  onClick={() => onSelectTopic(mood.prompt)}
+                  className="flex flex-col items-center gap-1.5 p-3 rounded-xl border border-gray-200
+                             hover:border-brand-300 hover:bg-brand-50/50 active:scale-[0.96]
+                             transition-all duration-150"
+                >
+                  <span className="text-2xl">{mood.emoji}</span>
+                  <span className="text-[0.65rem] font-medium text-gray-600">{mood.label}</span>
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* ── STATS ── */}
+      <section className="border-b border-gray-200 bg-white">
+        <div className="max-w-3xl mx-auto px-5 py-6 grid grid-cols-3 gap-4">
+          {STATS.map((s) => (
+            <div key={s.value} className="text-center">
+              <div className="text-lg mb-1">{s.icon}</div>
+              <div className="text-2xl sm:text-3xl font-extrabold text-gray-900">{s.value}</div>
+              <div className="text-[0.65rem] sm:text-xs text-gray-500 mt-0.5 leading-tight">{s.label}</div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ── TOPICS ── */}
+      <section className="max-w-3xl mx-auto px-5 py-10">
+        <div className="text-center mb-8">
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">
+            Mistä haluat puhua?
+          </h2>
+          <p className="text-sm text-gray-500">
+            Valitse aihe tai kerro omin sanoin &mdash; Elina kuuntelee
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 stagger">
+          {TOPICS.map((t) => (
+            <button
+              key={t.title}
+              onClick={() => onSelectTopic(t.prompt)}
+              className="anim-in group text-left p-4 rounded-xl border border-gray-200
+                         hover:border-brand-300 hover:bg-brand-50/50
+                         active:scale-[0.98] transition-all duration-150
+                         focus:outline-none focus:ring-2 focus:ring-brand-500/30"
+            >
+              <div className="flex items-start gap-3">
+                <span className="text-2xl leading-none mt-0.5">{t.icon}</span>
+                <div>
+                  <h3 className="font-semibold text-gray-900 text-sm leading-snug mb-1.5">{t.title}</h3>
+                  <span className="inline-block text-[0.65rem] font-semibold text-brand-700 bg-brand-100 px-2 py-0.5 rounded-full">
+                    {t.tag}
+                  </span>
+                </div>
+              </div>
+            </button>
+          ))}
+        </div>
+      </section>
+
+      {/* ── HOW IT WORKS ── */}
+      <section className="bg-gray-50 border-y border-gray-200">
+        <div className="max-w-3xl mx-auto px-5 py-10">
+          <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-6 text-center">
+            Miten Elina auttaa sinua?
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+            {[
+              {
+                step: '1',
+                icon: '💬',
+                title: 'Kerro tilanteestasi',
+                desc: 'Kirjoita vapaasti tai valitse aihe. Elina kuuntelee aktiivisesti ja esittää oikeita kysymyksiä.',
+              },
+              {
+                step: '2',
+                icon: '🔍',
+                title: 'Saat ymmärryksen',
+                desc: 'Elina auttaa tunnistamaan tunteita, tarpeita ja ajatusvinoumia tutkittujen menetelmien avulla.',
+              },
+              {
+                step: '3',
+                icon: '🧰',
+                title: 'Saat konkreettiset työkalut',
+                desc: 'Henkilökohtaisia harjoituksia, reflektiotehtäviä ja selkeitä seuraavia askeleita eteenpäin.',
+              },
+            ].map((s) => (
+              <div key={s.step} className="text-center p-4">
+                <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-white shadow-sm border border-gray-200 text-xl mb-3">
+                  {s.icon}
+                </div>
+                <h3 className="font-semibold text-gray-900 text-sm mb-1.5">{s.title}</h3>
+                <p className="text-xs text-gray-500 leading-relaxed">{s.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── TOOLKIT PREVIEW ── */}
+      <section className="max-w-3xl mx-auto px-5 py-10">
+        <div className="text-center mb-6">
+          <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-2">
+            Elinan työkalupakki
+          </h2>
+          <p className="text-sm text-gray-500">
+            Tutkittuja harjoituksia joita voit tehdä itsenäisesti
+          </p>
+        </div>
+
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-5">
+          {[
+            { icon: '🌬️', title: '4-7-8\nHengitys', color: '#0ea5e9' },
+            { icon: '🌊', title: 'Tunteiden\naallokko', color: '#f59e0b' },
+            { icon: '⚖️', title: 'Arvo-\npuntari', color: '#8b5cf6' },
+            { icon: '📝', title: 'Syyllisyys-\nkirje', color: '#22c55e' },
+          ].map((tool) => (
+            <button
+              key={tool.title}
+              onClick={onOpenToolkit}
+              className="p-4 rounded-xl border border-gray-200 hover:border-gray-300 hover:shadow-md
+                         active:scale-[0.97] transition-all duration-150 text-center group"
+            >
+              <span className="text-2xl block mb-2 group-hover:scale-110 transition-transform">{tool.icon}</span>
+              <p className="text-[0.7rem] font-semibold text-gray-700 whitespace-pre-line leading-tight">{tool.title}</p>
+            </button>
+          ))}
+        </div>
+
+        <button
+          onClick={onOpenToolkit}
+          className="mx-auto flex items-center gap-2 px-5 py-2.5 rounded-xl border border-brand-200
+                     text-brand-700 text-sm font-semibold hover:bg-brand-50 active:scale-[0.97] transition-all"
+        >
+          <span>🧰</span>
+          Avaa koko työkalupakki
+        </button>
+      </section>
+
+      {/* ── TESTIMONIALS ── */}
+      <section className="bg-gray-50 border-y border-gray-200">
+        <div className="max-w-3xl mx-auto px-5 py-10">
+          <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-6 text-center">
+            Kokemuksia Elinan kanssa
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            {TESTIMONIALS.map((t, i) => (
+              <div
+                key={i}
+                className="p-4 rounded-xl bg-white border border-gray-200"
+                style={{ boxShadow: '0 1px 4px rgba(0,0,0,0.04)' }}
+              >
+                <p className="text-sm text-gray-700 leading-relaxed mb-3 italic">{t.text}</p>
+                <div>
+                  <p className="text-xs font-semibold text-gray-800">{t.author}</p>
+                  <p className="text-[0.6rem] text-gray-400">{t.situation}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── ELINA'S PROMISE ── */}
+      <section className="max-w-3xl mx-auto px-5 py-10">
+        <div
+          className="rounded-2xl p-6 text-center"
+          style={{
+            background: 'linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 50%, #f0fdf4 100%)',
+            border: '1px solid #dcfce7',
+          }}
+        >
+          <span className="text-3xl mb-3 inline-block">🤝</span>
+          <h3 className="text-lg font-bold text-gray-900 mb-2">Elinan lupaus sinulle</h3>
+          <div className="max-w-md mx-auto space-y-2 text-sm text-gray-600 leading-relaxed">
+            <p><strong className="text-gray-800">En tuomitse.</strong> Jokainen tilanne on ainutlaatuinen ja arvokas.</p>
+            <p><strong className="text-gray-800">En painosta päätöksiin.</strong> Autan sinua löytämään omat vastauksesi.</p>
+            <p><strong className="text-gray-800">Olen rehellinen.</strong> Sanon myös vaikeita asioita, mutta lempeästi.</p>
+            <p><strong className="text-gray-800">Opin sinusta.</strong> Mitä enemmän kerrot, sitä paremmin voin auttaa.</p>
+          </div>
+        </div>
+      </section>
+
+      {/* ── METHODS ── */}
+      <section className="bg-gray-950 text-white">
+        <div className="max-w-3xl mx-auto px-5 py-10">
+          <h2 className="text-lg sm:text-xl font-bold mb-2 text-center">Pohjautuu tutkittuihin menetelmiin</h2>
+          <p className="text-xs text-gray-500 text-center mb-6">Elinan lähestymistapa yhdistää useita tutkittuja terapiamuotoja</p>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            {[
+              { name: 'Gottman', desc: 'Parisuhdeanalyysi ja neljä ratsastajaa', icon: '💑' },
+              { name: 'CBT', desc: 'Ajatusvirheiden tunnistus ja korjaus', icon: '🧠' },
+              { name: 'EFT', desc: 'Emotionaalinen turvallisuus ja kiintymys', icon: '❤️‍🩹' },
+              { name: 'MI', desc: 'Motivoiva haastattelu ja päätöstuki', icon: '🧭' },
+            ].map((m) => (
+              <div key={m.name} className="bg-white/5 border border-white/10 rounded-xl p-4 text-center">
+                <div className="text-xl mb-1.5">{m.icon}</div>
+                <div className="text-brand-400 font-bold text-lg mb-1">{m.name}</div>
+                <div className="text-[0.65rem] text-gray-400 leading-snug">{m.desc}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── FOOTER ── */}
+      <section className="border-t border-gray-200">
+        <div className="max-w-3xl mx-auto px-5 py-6 text-center">
+          <p className="text-xs text-gray-400 mb-2">
+            Elina ei korvaa ammattiapua. Kriisitilanteessa soita:
+          </p>
+          <div className="flex flex-wrap justify-center gap-4 text-xs">
+            <a href="tel:0925250111" className="font-semibold text-gray-700 hover:text-brand-600 transition-colors">
+              Kriisipuhelin 09 2525 0111
+            </a>
+            <a href="tel:080005005" className="font-semibold text-gray-700 hover:text-brand-600 transition-colors">
+              Nollalinja 080 005 005
+            </a>
+            <span className="font-semibold text-gray-700">Hätänumero 112</span>
+          </div>
+          <p className="text-[0.6rem] text-gray-300 mt-3">
+            EroCase &copy; {new Date().getFullYear()} &middot; Kaikki keskustelut ovat luottamuksellisia
+          </p>
+        </div>
+      </section>
+    </div>
+  )
+}
