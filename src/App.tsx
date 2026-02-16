@@ -9,7 +9,7 @@ type View = 'auth' | 'home' | 'demo'
 
 function App() {
   const [view, setView] = useState<View>(() => {
-    if (sessionStorage.getItem('erocase_auth') === '1') return 'home'
+    if (sessionStorage.getItem('solvia_auth') === '1') return 'home'
     return 'auth'
   })
 

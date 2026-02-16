@@ -4,7 +4,7 @@ import { supabase } from '../lib/supabase'
 
 // Generate or retrieve session ID
 function getSessionId(): string {
-  const key = 'erocase_session_id'
+  const key = 'solvia_session_id'
   let id = localStorage.getItem(key)
   if (!id) {
     id = crypto.randomUUID()

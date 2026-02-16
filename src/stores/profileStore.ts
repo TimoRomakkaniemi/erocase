@@ -1,12 +1,13 @@
 import { create } from 'zustand'
 
 /* ═══════════════════════════════════════════════════════
-   USER PROFILE – Asiakasprofilointi (EroCase)
+   USER PROFILE – Asiakasprofilointi (Solvia)
    Rakennetaan automaattisesti keskusteluista.
-   Inspiroiduttu Hedin-pilotista, sovitettu erokontekstiin.
+   Kattava elämänhaasteiden tuki: parisuhde, yksinäisyys,
+   mielenterveys, päihteet, vanhemmuus, talous, suru.
    
    All user-facing strings are stored as translation keys
-   (e.g. 'profileDynamic.exercise_emotion_wave') and
+   (e.g. 'profileDynamic.exercise_thought_record') and
    resolved in the UI via useT().
    ═══════════════════════════════════════════════════════ */
 
@@ -15,11 +16,12 @@ export type EmotionalState =
   | 'angry' | 'grieving' | 'numb' | 'relieved' | 'confused'
 
 export type SituationType =
-  | 'considering_divorce' | 'partner_wants_divorce' | 'mutual_decision'
-  | 'post_divorce' | 'reconciliation' | 'unknown'
+  | 'relationship_crisis' | 'loneliness' | 'anxiety_depression'
+  | 'substance_use' | 'parenting' | 'financial_stress'
+  | 'grief_loss' | 'burnout' | 'unknown'
 
 export type DecisionStage =
-  | 'exploring' | 'leaning_towards' | 'decided' | 'processing_aftermath' | 'unknown'
+  | 'exploring' | 'seeking_help' | 'making_changes' | 'in_recovery' | 'unknown'
 
 export type CommunicationStyle =
   | 'direct' | 'reflective' | 'emotional' | 'analytical' | 'unknown'
@@ -28,12 +30,14 @@ export type ResilienceLevel = 'high' | 'moderate' | 'low' | 'crisis'
 
 export type SupportNeed =
   | 'emotional_support' | 'practical_advice' | 'tools_exercises'
-  | 'crisis_support' | 'legal_info' | 'children_guidance' | 'self_discovery'
+  | 'crisis_support' | 'addiction_support' | 'parenting_guidance'
+  | 'financial_guidance' | 'grief_support' | 'self_discovery'
 
 export type KeyConcern =
-  | 'children_welfare' | 'finances' | 'housing' | 'loneliness'
-  | 'identity' | 'social_stigma' | 'trust' | 'guilt'
-  | 'anger_management' | 'co_parenting' | 'new_relationship'
+  | 'relationship' | 'loneliness' | 'anxiety' | 'depression'
+  | 'substance_use' | 'self_harm' | 'finances' | 'housing'
+  | 'parenting' | 'grief' | 'work_stress' | 'sleep'
+  | 'identity' | 'anger_management'
 
 export interface UserProfile {
   situationType: SituationType
@@ -43,7 +47,7 @@ export interface UserProfile {
 
   emotionalState: EmotionalState
   emotionalIntensity: number
-  dominantEmotions: string[] // stores emotion keys, translated in UI
+  dominantEmotions: string[]
 
   communicationStyle: CommunicationStyle
   resilienceLevel: ResilienceLevel
@@ -57,7 +61,6 @@ export interface UserProfile {
   openness: 'very_open' | 'open' | 'guarded' | 'closed'
   readinessForChange: 'ready' | 'ambivalent' | 'resistant'
 
-  // These store i18n keys (resolved via t() in UI)
   recommendedApproach: string[]
   suggestedExercises: string[]
   nextSteps: string[]
@@ -68,40 +71,45 @@ export interface UserProfile {
   lastUpdated: string
 }
 
-// Keywords for profile extraction (Finnish - the primary analysis language)
 const EMOTION_KEYWORDS: Record<EmotionalState, string[]> = {
   hopeful: ['toivoa', 'toivon', 'onnellinen', 'parempi', 'positiivi', 'toiveikas', 'valoa', 'mahdollisuus'],
   neutral: [],
-  anxious: ['pelkään', 'pelottaa', 'ahdistaa', 'huoli', 'jännittä', 'stressiä', 'levottomuus', 'epävar'],
-  overwhelmed: ['liikaa', 'en jaksa', 'uupunut', 'väsynyt', 'ylivoimai', 'painaa', 'taakka', 'romaht'],
+  anxious: ['pelkään', 'pelottaa', 'ahdistaa', 'huoli', 'jännittä', 'stressiä', 'levottomuus', 'epävar', 'paniikki'],
+  overwhelmed: ['liikaa', 'en jaksa', 'uupunut', 'väsynyt', 'ylivoimai', 'painaa', 'taakka', 'romaht', 'burnout', 'loppuun palanu'],
   angry: ['vihainen', 'vihaan', 'raivostuttaa', 'ärsyttää', 'pettynyt', 'pettymys', 'vituttaa', 'suututtaa', 'epäoikeud'],
-  grieving: ['surua', 'surullinen', 'itkettää', 'itken', 'menetys', 'kaipaa', 'luopum', 'ikävä'],
-  numb: ['tunne mitään', 'tyhjä', 'turta', 'tunteeton', 'en tunne', 'samanteke'],
+  grieving: ['surua', 'surullinen', 'itkettää', 'itken', 'menetys', 'kaipaa', 'luopum', 'ikävä', 'kuollut', 'kuoli', 'menehty'],
+  numb: ['tunne mitään', 'tyhjä', 'turta', 'tunteeton', 'en tunne', 'samanteke', 'apaattinen'],
   relieved: ['helpottu', 'vapautta', 'vapaa', 'helpompaa', 'kevyempi', 'rauhallisempi'],
   confused: ['hämmentyn', 'sekava', 'en tiedä', 'ymmärrä', 'miksi', 'epäselv'],
 }
 
 const SITUATION_KEYWORDS: Record<SituationType, string[]> = {
-  considering_divorce: ['mietin eroa', 'pitäisikö erota', 'harkitsen eroa', 'erotako', 'parisuhde kriisi'],
-  partner_wants_divorce: ['puoliso haluaa erota', 'hän haluaa erota', 'jättää minut', 'sai tietää erosta'],
-  mutual_decision: ['yhdessä päätimme', 'molemmat', 'yhteinen päätös', 'sovinnollinen'],
-  post_divorce: ['ero tapahtui', 'erottiin', 'ex-puoliso', 'eron jälkeen', 'entinen'],
-  reconciliation: ['yritetään uudelleen', 'palata yhteen', 'korjata', 'antaa mahdollisuus'],
+  relationship_crisis: ['mietin eroa', 'pitäisikö erota', 'harkitsen eroa', 'erotako', 'parisuhde kriisi', 'suhde', 'puoliso', 'kumppani', 'ero', 'avioero', 'riitely', 'pettäminen', 'uskottomuus'],
+  loneliness: ['yksinäi', 'eristy', 'kukaan ei', 'yksin', 'ei ystäviä', 'ei kavereita', 'sosiaalinen', 'ulkopuoli'],
+  anxiety_depression: ['ahdistus', 'masennus', 'masentunut', 'paniikki', 'ahdistuneisuus', 'depressio', 'mielenterveys', 'mielialahäiriö'],
+  substance_use: ['alkoholi', 'huume', 'päihde', 'juominen', 'riippuvuus', 'addiktio', 'pelaaminen', 'peliongelma', 'tupakka', 'kannabis', 'lääkkeet', 'viina'],
+  parenting: ['lapset', 'lapsi', 'vanhemmuus', 'kasvatus', 'teini', 'murrosikä', 'huoltajuus', 'perhe', 'äiti', 'isä', 'koulu'],
+  financial_stress: ['raha', 'talous', 'velka', 'laina', 'toimeentulo', 'työtön', 'köyhyys', 'vuokra', 'lasku', 'ulosotto', 'maksuhäiriö'],
+  grief_loss: ['kuolema', 'kuoli', 'menetys', 'suru', 'sureva', 'hautajais', 'menehty', 'itsemurha', 'läheisen kuolema'],
+  burnout: ['burnout', 'loppuun palanu', 'työuupumus', 'ylikuormit', 'työ stressaa', 'jaksaminen', 'väsymys'],
   unknown: [],
 }
 
 const CONCERN_KEYWORDS: Record<KeyConcern, string[]> = {
-  children_welfare: ['lapset', 'lapsi', 'huoltajuus', 'tapaamis', 'koulu', 'päiväkoti', 'lasten'],
-  finances: ['raha', 'talous', 'asuntolaina', 'elatusapu', 'palkka', 'velka', 'omaisuus'],
-  housing: ['asunto', 'muutto', 'koti', 'asuminen', 'vuokra'],
-  loneliness: ['yksin', 'yksinäi', 'eristy', 'kukaan', 'tukiverkko'],
-  identity: ['kuka olen', 'identiteetti', 'oma elämä', 'unelm', 'itseni'],
-  social_stigma: ['mitä muut', 'häpeä', 'arvostelu', 'sukulais', 'ympäristö', 'tuomitsev'],
-  trust: ['luottamus', 'petti', 'uskottomuus', 'valehtel', 'petos'],
-  guilt: ['syyllisyy', 'vika', 'oma syy', 'anteeksi', 'katumus'],
-  anger_management: ['raivo', 'hallinta', 'menetän maltt', 'huudan', 'riidat'],
-  co_parenting: ['yhteishuoltajuus', 'vanhemmuus', 'isä', 'äiti', 'kasvatuk', 'vuoroviik'],
-  new_relationship: ['uusi suhde', 'deittai', 'tapaaminen', 'uusi kumppani'],
+  relationship: ['suhde', 'puoliso', 'kumppani', 'ero', 'rakkaus', 'parisuht'],
+  loneliness: ['yksin', 'yksinäi', 'eristy', 'kukaan', 'tukiverkko', 'ulkopuoli'],
+  anxiety: ['ahdist', 'pelkää', 'pelottaa', 'huoli', 'paniikki', 'jännittä'],
+  depression: ['masennus', 'masentunut', 'en jaksa', 'toivottomuus', 'merkityksetön'],
+  substance_use: ['alkohol', 'päihde', 'juominen', 'huume', 'riippuvuus', 'addikti', 'pelaaminen'],
+  self_harm: ['itsetuhoi', 'vahingoitta', 'viiltely', 'haluan kuolla', 'en halua elää'],
+  finances: ['raha', 'talous', 'velka', 'laina', 'toimeentulo', 'lasku'],
+  housing: ['asunto', 'muutto', 'koti', 'asuminen', 'vuokra', 'koditon'],
+  parenting: ['lapsi', 'lapset', 'vanhemmuus', 'kasvatus', 'huoltajuus', 'perhe'],
+  grief: ['suru', 'menetys', 'kuolema', 'luopum', 'ikävä', 'kaipaa'],
+  work_stress: ['työ', 'burnout', 'pomo', 'työpaikka', 'irtisanomi', 'työtön'],
+  sleep: ['uni', 'nukku', 'unettomuus', 'valvon', 'heräile', 'väsynyt'],
+  identity: ['kuka olen', 'identiteetti', 'oma elämä', 'itseni', 'itsetunto'],
+  anger_management: ['raivo', 'hallinta', 'menetän maltt', 'huudan', 'riidat', 'aggressii'],
 }
 
 const NEED_KEYWORDS: Record<SupportNeed, string[]> = {
@@ -109,8 +117,10 @@ const NEED_KEYWORDS: Record<SupportNeed, string[]> = {
   practical_advice: ['neuvo', 'konkreetti', 'miten toimin', 'käytännö', 'askel'],
   tools_exercises: ['harjoitus', 'työkalu', 'tekniikka', 'menetelmä', 'keino'],
   crisis_support: ['hätä', 'kriisi', 'en kestä', 'itsetuhoi', 'vahingoitta'],
-  legal_info: ['laki', 'oikeus', 'avioero', 'sopimus', 'asianajaja', 'oikeudellinen'],
-  children_guidance: ['miten kerron lapsille', 'lasten hyvinvointi', 'kasvatus', 'suojem'],
+  addiction_support: ['lopettaa juomisen', 'vähentää', 'raittius', 'retkahdus', 'vieroitus'],
+  parenting_guidance: ['miten kerron lapsille', 'lasten hyvinvointi', 'kasvatus', 'suojem'],
+  financial_guidance: ['talousneuvonta', 'velkaneuvonta', 'budjet', 'säästäminen'],
+  grief_support: ['surutyö', 'käsitellä surua', 'menetyksen', 'luopuminen'],
   self_discovery: ['löytää itseni', 'kehittyä', 'kasv', 'vahvist', 'itsetunto'],
 }
 
@@ -169,7 +179,7 @@ export function extractProfile(
       if (matches) score += matches.length
     }
     if (score > 0) {
-      detectedEmotions.push(emotion) // store emotion key, not label
+      detectedEmotions.push(emotion)
       if (score > maxEmotionScore) {
         maxEmotionScore = score
         profile.emotionalState = emotion as EmotionalState
@@ -188,12 +198,14 @@ export function extractProfile(
 
   // ── Situation type ──
   for (const [situation, keywords] of Object.entries(SITUATION_KEYWORDS)) {
+    if (situation === 'unknown') continue
     for (const kw of keywords) {
       if (allText.includes(kw)) {
         profile.situationType = situation as SituationType
         break
       }
     }
+    if (profile.situationType !== 'unknown') break
   }
 
   // ── Children ──
@@ -250,19 +262,19 @@ export function extractProfile(
   else if (personalCount >= 2) profile.openness = 'open'
   else if (messageCount > 3 && personalCount === 0) profile.openness = 'guarded'
 
-  // ── Decision stage ──
-  if (allText.includes('päätimme') || allText.includes('päätin') || allText.includes('ero on tapahtunut')) {
-    profile.decisionStage = 'decided'
-  } else if (allText.includes('eron jälkeen') || allText.includes('erottiin')) {
-    profile.decisionStage = 'processing_aftermath'
-  } else if (allText.includes('kallistun') || allText.includes('luultavasti') || allText.includes('ehkä pitäisi')) {
-    profile.decisionStage = 'leaning_towards'
-  } else if (allText.includes('mietin') || allText.includes('harkitsen') || allText.includes('en tiedä')) {
+  // ── Decision stage (broadened to change stage) ──
+  if (allText.includes('olen toipumassa') || allText.includes('menee paremmin') || allText.includes('edistynyt')) {
+    profile.decisionStage = 'in_recovery'
+  } else if (allText.includes('teen muutoksia') || allText.includes('olen aloittanut') || allText.includes('lopettanut')) {
+    profile.decisionStage = 'making_changes'
+  } else if (allText.includes('tarvitsen apua') || allText.includes('haen apua') || allText.includes('haluaisin puhua')) {
+    profile.decisionStage = 'seeking_help'
+  } else if (allText.includes('mietin') || allText.includes('harkitsen') || allText.includes('en tiedä') || allText.includes('pohdiskelen')) {
     profile.decisionStage = 'exploring'
   }
 
   // ── Resilience ──
-  const crisisWords = ['en kestä', 'en jaksa', 'haluan kuolla', 'itsetuhoi', 'lopettaa']
+  const crisisWords = ['en kestä', 'en jaksa', 'haluan kuolla', 'itsetuhoi', 'lopettaa', 'en halua elää', 'viiltely']
   const strengthWords = ['selviydy', 'pystyn', 'voin', 'jaksan', 'vahva', 'onnistun']
   const crisisCount = crisisWords.filter(w => allText.includes(w)).length
   const strengthCount = strengthWords.filter(w => allText.includes(w)).length
@@ -277,6 +289,8 @@ export function extractProfile(
   if (profile.emotionalIntensity > 8) risks.push('profileDynamic.risk_intense')
   if (profile.openness === 'closed') risks.push('profileDynamic.risk_closed')
   if (concerns.has('loneliness')) risks.push('profileDynamic.risk_loneliness')
+  if (concerns.has('substance_use')) risks.push('profileDynamic.risk_substance')
+  if (concerns.has('sleep')) risks.push('profileDynamic.risk_sleep')
   profile.riskFactors = risks
 
   // ── Recommended approach (translation keys) ──
@@ -286,23 +300,24 @@ export function extractProfile(
   if (profile.communicationStyle === 'direct') approaches.push('profileDynamic.approach_direct')
   if (profile.resilienceLevel === 'crisis') approaches.push('profileDynamic.approach_crisis')
   if (profile.decisionStage === 'exploring') approaches.push('profileDynamic.approach_explore')
+  if (concerns.has('substance_use')) approaches.push('profileDynamic.approach_motivational')
   if (approaches.length === 0) approaches.push('profileDynamic.approach_default')
   profile.recommendedApproach = approaches
 
   // ── Suggested exercises (translation keys) ──
   const exercises: string[] = []
-  if (profile.emotionalIntensity > 6) exercises.push('profileDynamic.exercise_emotion_wave')
-  if (concerns.has('guilt')) exercises.push('profileDynamic.exercise_guilt_release')
-  if (profile.decisionStage === 'exploring') exercises.push('profileDynamic.exercise_value_balance')
-  if (concerns.has('children_welfare')) exercises.push('profileDynamic.exercise_kids_emotion_map')
+  if (profile.emotionalIntensity > 7) exercises.push('profileDynamic.exercise_tipp')
+  if (concerns.has('anxiety')) exercises.push('profileDynamic.exercise_breathing')
+  if (concerns.has('anxiety') || concerns.has('depression')) exercises.push('profileDynamic.exercise_thought_record')
+  if (concerns.has('depression') || profile.emotionalState === 'numb') exercises.push('profileDynamic.exercise_behavioral_activation')
+  if (concerns.has('substance_use')) exercises.push('profileDynamic.exercise_urge_surfing')
+  if (concerns.has('sleep')) exercises.push('profileDynamic.exercise_sleep_hygiene')
+  if (concerns.has('identity') || profile.decisionStage === 'exploring') exercises.push('profileDynamic.exercise_value_compass')
   if (profile.emotionalState === 'anxious') exercises.push('profileDynamic.exercise_grounding')
-  if (profile.emotionalState === 'angry') exercises.push('profileDynamic.exercise_anger_release')
-  if (concerns.has('identity')) exercises.push('profileDynamic.exercise_identity')
-  if (concerns.has('trust')) exercises.push('profileDynamic.exercise_trust_inventory')
   exercises.push('profileDynamic.exercise_daily_journal')
   profile.suggestedExercises = exercises.slice(0, 5)
 
-  // ── Next steps (translation keys, some with variables handled via special syntax) ──
+  // ── Next steps (translation keys) ──
   const steps: string[] = []
   if (profile.resilienceLevel === 'crisis') {
     steps.push('profileDynamic.step_crisis_phone')
@@ -310,7 +325,6 @@ export function extractProfile(
   }
   if (profile.decisionStage === 'exploring') steps.push('profileDynamic.step_explore')
   if (profile.keyConcerns.length > 0) {
-    // Store key + first concern key for variable interpolation in UI
     steps.push(`profileDynamic.step_next_concern|${profile.keyConcerns[0]}`)
   }
   if (messageCount < 5) steps.push('profileDynamic.step_tell_more')
