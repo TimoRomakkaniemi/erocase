@@ -8,7 +8,6 @@ import ChatInput from './ChatInput'
 import WelcomeScreen from './WelcomeScreen'
 import ToolkitPanel from './ToolkitPanel'
 import UserProfilePanel from './UserProfilePanel'
-import LanguageSelector from './LanguageSelector'
 
 export default function ChatWindow() {
   const t = useT()
@@ -50,19 +49,6 @@ export default function ChatWindow() {
   if (!hasMessages && !isLoading) {
     return (
       <div className="flex-1 flex flex-col min-w-0">
-        {/* Slim topbar for sidebar toggle */}
-        <header className="h-12 flex-shrink-0 px-4 flex items-center justify-between bg-gray-950 border-b border-white/5 z-10">
-          <button
-            onClick={() => setSidebarOpen(true)}
-            className="p-1.5 -ml-1 rounded-lg hover:bg-white/10 text-gray-400 hover:text-white transition-colors"
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-            </svg>
-          </button>
-          <span className="text-xs font-bold text-gray-500 uppercase tracking-wider">{t('header.brand')}</span>
-          <LanguageSelector variant="dark" />
-        </header>
         <WelcomeScreen onSelectTopic={sendMessage} onOpenToolkit={() => setShowToolkit(true)} />
         {showToolkit && <ToolkitPanel onClose={() => setShowToolkit(false)} />}
       </div>
@@ -116,9 +102,6 @@ export default function ChatWindow() {
           </div>
 
           <div className="flex items-center gap-1">
-            {/* Language selector */}
-            <LanguageSelector variant="light" />
-
             {/* Toolkit button */}
             <button
               onClick={() => setShowToolkit(true)}

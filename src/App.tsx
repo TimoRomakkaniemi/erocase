@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import PasswordGate from './components/PasswordGate'
+import NavBar from './components/NavBar'
 import HomePage from './components/HomePage'
 import SidePanel from './components/SidePanel'
 import ChatWindow from './components/ChatWindow'
@@ -30,30 +31,24 @@ function App() {
     return <PasswordGate onAuthenticated={() => navigate('home')} />
   }
 
-  if (view === 'home') {
-    return <HomePage onOpenDemo={() => navigate('demo')} />
-  }
-
+  /* Both home and demo share the NavBar */
   return (
-    <div className="h-full flex flex-col bg-white">
-      {/* Back to home bar */}
-      <div className="flex items-center gap-2 px-4 py-2 bg-gray-50 border-b border-gray-100 shrink-0">
-        <button
-          onClick={() => navigate('home')}
-          className="flex items-center gap-1.5 text-xs font-medium text-gray-500 hover:text-gray-700 transition-colors"
-        >
-          <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-          </svg>
-          EroCase Home
-        </button>
-        <span className="text-gray-300 text-xs">|</span>
-        <span className="text-xs text-gray-400">Demo</span>
-      </div>
-      <div className="flex flex-1 min-h-0">
-        <SidePanel />
-        <ChatWindow />
-      </div>
+    <div className="h-full flex flex-col">
+      <NavBar
+        currentView={view as 'home' | 'demo'}
+        onNavigate={(v) => navigate(v)}
+      />
+
+      {view === 'home' ? (
+        <div className="flex-1 overflow-auto">
+          <HomePage onOpenDemo={() => navigate('demo')} />
+        </div>
+      ) : (
+        <div className="flex-1 flex min-h-0 pt-14">
+          <SidePanel />
+          <ChatWindow />
+        </div>
+      )}
     </div>
   )
 }

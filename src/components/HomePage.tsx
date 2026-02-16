@@ -1,6 +1,4 @@
-import { useState, useEffect } from 'react'
 import { useT } from '../lib/i18n'
-import LanguageSelector from './LanguageSelector'
 
 interface Props {
   onOpenDemo: () => void
@@ -8,25 +6,10 @@ interface Props {
 
 export default function HomePage({ onOpenDemo }: Props) {
   const t = useT()
-  const [scrolled, setScrolled] = useState(false)
-  const [mobileMenu, setMobileMenu] = useState(false)
-
-  useEffect(() => {
-    const handler = () => setScrolled(window.scrollY > 20)
-    window.addEventListener('scroll', handler, { passive: true })
-    return () => window.removeEventListener('scroll', handler)
-  }, [])
 
   const scrollTo = (id: string) => {
-    setMobileMenu(false)
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
   }
-
-  const NAV = [
-    { label: t('home.navHome'), id: 'hero' },
-    { label: t('home.navAbout'), id: 'about' },
-    { label: t('home.navFeatures'), id: 'features' },
-  ]
 
   const ABOUT_CARDS = [
     { icon: '💬', title: t('home.aboutCard1title'), desc: t('home.aboutCard1desc'), color: '#22c55e' },
@@ -45,92 +28,13 @@ export default function HomePage({ onOpenDemo }: Props) {
   ]
 
   return (
-    <div className="min-h-screen bg-white">
-      {/* ── Navigation ── */}
-      <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300
-        ${scrolled
-          ? 'bg-white/90 backdrop-blur-xl shadow-sm border-b border-gray-100'
-          : 'bg-transparent'
-        }`}
-      >
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-          {/* Logo */}
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg flex items-center justify-center"
-              style={{ background: 'linear-gradient(135deg, #22c55e 0%, #16a34a 100%)' }}>
-              <span className="text-lg">🤝</span>
-            </div>
-            <span className={`font-bold text-lg transition-colors ${scrolled ? 'text-gray-900' : 'text-white'}`}>
-              EroCase
-            </span>
-          </div>
-
-          {/* Desktop nav */}
-          <div className="hidden md:flex items-center gap-6">
-            {NAV.map(n => (
-              <button key={n.id} onClick={() => scrollTo(n.id)}
-                className={`text-sm font-medium transition-colors hover:text-brand-500
-                  ${scrolled ? 'text-gray-600' : 'text-white/80'}`}
-              >
-                {n.label}
-              </button>
-            ))}
-            <LanguageSelector variant={scrolled ? 'light' : 'dark'} />
-            <button onClick={onOpenDemo}
-              className="px-4 py-2 rounded-xl text-sm font-semibold text-white transition-all hover:brightness-110 active:scale-[0.98]"
-              style={{
-                background: 'linear-gradient(135deg, #22c55e 0%, #16a34a 100%)',
-                boxShadow: '0 2px 8px rgba(34,197,94,0.3)',
-              }}
-            >
-              {t('home.navDemo')}
-            </button>
-          </div>
-
-          {/* Mobile menu button */}
-          <div className="flex md:hidden items-center gap-3">
-            <LanguageSelector variant={scrolled ? 'light' : 'dark'} />
-            <button onClick={() => setMobileMenu(!mobileMenu)}
-              className={`p-2 rounded-lg transition-colors ${scrolled ? 'text-gray-600' : 'text-white'}`}
-            >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
-                {mobileMenu
-                  ? <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                  : <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-                }
-              </svg>
-            </button>
-          </div>
-        </div>
-
-        {/* Mobile menu */}
-        {mobileMenu && (
-          <div className="md:hidden bg-white border-b border-gray-100 shadow-lg animate-fade-in-up">
-            <div className="px-4 py-3 space-y-1">
-              {NAV.map(n => (
-                <button key={n.id} onClick={() => scrollTo(n.id)}
-                  className="block w-full text-left px-3 py-2.5 text-sm font-medium text-gray-700 rounded-lg hover:bg-gray-50"
-                >
-                  {n.label}
-                </button>
-              ))}
-              <button onClick={onOpenDemo}
-                className="block w-full text-left px-3 py-2.5 text-sm font-semibold text-brand-600 rounded-lg hover:bg-brand-50"
-              >
-                {t('home.navDemo')}
-              </button>
-            </div>
-          </div>
-        )}
-      </nav>
-
+    <>
       {/* ── Hero Section ── */}
       <section id="hero" className="relative min-h-screen flex items-center overflow-hidden"
         style={{
           background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 40%, #0f172a 100%)',
         }}
       >
-        {/* Background glow */}
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-20 right-1/4 w-[500px] h-[500px] rounded-full"
             style={{ background: 'radial-gradient(circle, rgba(34,197,94,0.12) 0%, transparent 60%)' }} />
@@ -140,7 +44,6 @@ export default function HomePage({ onOpenDemo }: Props) {
 
         <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 py-32 w-full">
           <div className="max-w-2xl">
-            {/* Tag */}
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full mb-6 anim-in"
               style={{
                 background: 'rgba(34,197,94,0.15)',
@@ -151,7 +54,6 @@ export default function HomePage({ onOpenDemo }: Props) {
               <span className="text-xs font-medium text-brand-400">{t('home.heroTag')}</span>
             </div>
 
-            {/* Headline */}
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6 anim-in"
               style={{ animationDelay: '0.1s' }}
             >
@@ -163,14 +65,12 @@ export default function HomePage({ onOpenDemo }: Props) {
               </span>
             </h1>
 
-            {/* Description */}
             <p className="text-lg text-gray-400 leading-relaxed mb-8 max-w-xl anim-in"
               style={{ animationDelay: '0.2s' }}
             >
               {t('home.heroDesc')}
             </p>
 
-            {/* CTAs */}
             <div className="flex flex-wrap gap-3 mb-8 anim-in" style={{ animationDelay: '0.3s' }}>
               <button onClick={onOpenDemo}
                 className="px-6 py-3 rounded-xl text-sm font-semibold text-white transition-all hover:brightness-110 active:scale-[0.98]"
@@ -189,14 +89,12 @@ export default function HomePage({ onOpenDemo }: Props) {
               </button>
             </div>
 
-            {/* Note */}
             <p className="text-xs text-gray-500 anim-in" style={{ animationDelay: '0.4s' }}>
               {t('home.heroNote')}
             </p>
           </div>
         </div>
 
-        {/* Scroll indicator */}
         <div className="absolute bottom-8 left-1/2 -translate-x-1/2">
           <div className="w-6 h-10 rounded-full border-2 border-white/20 flex items-start justify-center p-1.5">
             <div className="w-1 h-2 rounded-full bg-white/40 animate-bounce" />
@@ -296,6 +194,6 @@ export default function HomePage({ onOpenDemo }: Props) {
           </p>
         </div>
       </footer>
-    </div>
+    </>
   )
 }
