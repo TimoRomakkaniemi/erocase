@@ -163,7 +163,7 @@ export const it: TranslationTree = {
     methodMI: 'Colloquio motivazionale e supporto decisionale',
     footerDisclaimer: 'Elina non sostituisce l\'aiuto professionale. In caso di emergenza chiama:',
     footerCrisis: 'Telefono Amico 02 2327 2327',
-    footerNollalinja: 'Telefono Azzurro 19696',
+    footerNollalinja: 'Telefono contro il Suicidio 800 860 022',
     footerEmergency: 'Numero di emergenza 112',
     footerCopyright: 'EroCase © {{year}} · Tutte le conversazioni sono confidenziali',
   },

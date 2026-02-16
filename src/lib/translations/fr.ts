@@ -162,9 +162,9 @@ export const fr: TranslationTree = {
     methodEFT: 'Sécurité émotionnelle et attachement',
     methodMI: 'Entretien motivationnel et aide à la décision',
     footerDisclaimer: 'Elina ne remplace pas l\'aide professionnelle. En cas de crise, appelez :',
-    footerCrisis: 'Ligne de crise 09 2525 0111',
-    footerNollalinja: 'Nollalinja 080 005 005',
-    footerEmergency: 'Urgences 112',
+    footerCrisis: 'SOS Amitié 09 72 39 40 50',
+    footerNollalinja: 'Numéro national de prévention du suicide 3114',
+    footerEmergency: 'Urgences 112 / 15',
     footerCopyright: 'EroCase © {{year}} · Toutes les conversations sont confidentielles',
   },
 

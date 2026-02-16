@@ -331,12 +331,8 @@ export default function WelcomeScreen({ onSelectTopic, onOpenToolkit }: WelcomeS
         <div className="max-w-3xl mx-auto px-5 py-6 text-center">
           <p className="text-xs text-gray-400 mb-2">{t('welcome.footerDisclaimer')}</p>
           <div className="flex flex-wrap justify-center gap-4 text-xs">
-            <a href="tel:0925250111" className="font-semibold text-gray-700 hover:text-brand-600 transition-colors">
-              {t('welcome.footerCrisis')}
-            </a>
-            <a href="tel:080005005" className="font-semibold text-gray-700 hover:text-brand-600 transition-colors">
-              {t('welcome.footerNollalinja')}
-            </a>
+            <span className="font-semibold text-gray-700">{t('welcome.footerCrisis')}</span>
+            <span className="font-semibold text-gray-700">{t('welcome.footerNollalinja')}</span>
             <span className="font-semibold text-gray-700">{t('welcome.footerEmergency')}</span>
           </div>
           <p className="text-[0.6rem] text-gray-300 mt-3">

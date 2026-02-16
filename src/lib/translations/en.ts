@@ -176,9 +176,9 @@ export const en: TranslationTree = {
     methodMI: 'Motivational interviewing and decision support',
 
     footerDisclaimer: 'Elina does not replace professional help. In a crisis, call:',
-    footerCrisis: 'Crisis line 09 2525 0111',
-    footerNollalinja: 'Nollalinja 080 005 005',
-    footerEmergency: 'Emergency 112',
+    footerCrisis: 'Samaritans 116 123',
+    footerNollalinja: 'SHOUT text 85258',
+    footerEmergency: 'Emergency 999 / 112',
     footerCopyright: 'EroCase \u00A9 {{year}} \u00B7 All conversations are confidential',
   },
 

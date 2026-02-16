@@ -175,10 +175,10 @@ export const sv: TranslationTree = {
     methodEFT: 'Emotionell trygghet och anknytning',
     methodMI: 'Motiverande samtal och beslutsst\u00F6d',
 
-    footerDisclaimer: 'Elina ers\u00E4tter inte professionell hj\u00E4lp. I en kris, ring:',
-    footerCrisis: 'Kristelefon 09 2525 0111',
-    footerNollalinja: 'Nollalinja 080 005 005',
-    footerEmergency: 'N\u00F6dnummer 112',
+    footerDisclaimer: 'Elina ersätter inte professionell hjälp. I en kris, ring:',
+    footerCrisis: 'Mind Självmordslinjen 90 101',
+    footerNollalinja: 'Jourhavande medmänniska 08-702 16 80',
+    footerEmergency: 'Nödnummer 112',
     footerCopyright: 'EroCase \u00A9 {{year}} \u00B7 Alla konversationer \u00E4r konfidentiella',
   },
 

@@ -176,8 +176,8 @@ export const es: TranslationTree = {
     methodMI: 'Entrevista motivacional y apoyo en decisiones',
 
     footerDisclaimer: 'Elina no reemplaza la ayuda profesional. En una crisis, llama:',
-    footerCrisis: 'L\u00EDnea de crisis 09 2525 0111',
-    footerNollalinja: 'Nollalinja 080 005 005',
+    footerCrisis: 'Teléfono de la Esperanza 717 003 717',
+    footerNollalinja: 'Línea de atención a la conducta suicida 024',
     footerEmergency: 'Emergencias 112',
     footerCopyright: 'EroCase \u00A9 {{year}} \u00B7 Todas las conversaciones son confidenciales',
   },
