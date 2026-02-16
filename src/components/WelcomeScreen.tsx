@@ -1,103 +1,61 @@
 import { useState } from 'react'
+import { useT } from '../lib/i18n'
 
 interface WelcomeScreenProps {
   onSelectTopic: (topic: string) => void
   onOpenToolkit: () => void
 }
 
-const TOPICS = [
-  {
-    icon: '⚖️',
-    title: 'Pitäisikö erota vai yrittää?',
-    prompt: 'Mietin eroa, mutta en tiedä onko se oikea ratkaisu. Auta minua selvittämään mitä oikeasti haluan.',
-    tag: 'Päätöksenteko',
-  },
-  {
-    icon: '💔',
-    title: 'Puolisoni haluaa erota',
-    prompt: 'Puolisoni haluaa eroa. Olen shokissa enkä tiedä miten toimia. Auta minua käsittelemään tämä tilanne.',
-    tag: 'Kriisituki',
-  },
-  {
-    icon: '👨‍👩‍👧‍👦',
-    title: 'Lapset ja ero',
-    prompt: 'Meillä on lapsia ja ero on edessä. Miten suojelen lapsia ja kerron heille? Tarvitsen konkreettista apua.',
-    tag: 'Lasten hyvinvointi',
-  },
-  {
-    icon: '🔥',
-    title: 'Tunteet polttavat',
-    prompt: 'Tunteeni ovat niin voimakkaat etten pysty ajattelemaan selkeästi. Tunnen vihaa, surua ja syyllisyyttä samaan aikaan.',
-    tag: 'Tunteiden hallinta',
-  },
-  {
-    icon: '🗣️',
-    title: 'Kommunikaatio ei toimi',
-    prompt: 'En pysty keskustelemaan puolisoni kanssa ilman riitaa. Miten voisin kommunikoida paremmin?',
-    tag: 'Vuorovaikutus',
-  },
-  {
-    icon: '🌅',
-    title: 'Uusi alku pelottaa',
-    prompt: 'Ero on tapahtunut tai tapahtumassa. Pelkään tulevaisuutta ja yksinoloa. Auta minua rakentamaan uutta elämää.',
-    tag: 'Tulevaisuus',
-  },
-]
-
-const STATS = [
-  { value: '85%', label: 'kokee elämänlaadun paranevan 2v sisällä', icon: '📈' },
-  { value: '6', label: 'tutkittua psykologista menetelmää', icon: '🧠' },
-  { value: '24/7', label: 'saatavilla aina kun tarvitset', icon: '🕐' },
-]
-
-const MOOD_OPTIONS = [
-  { emoji: '😢', label: 'Surullinen', prompt: 'Olen surullinen ja tarvitsen tukea.' },
-  { emoji: '😰', label: 'Ahdistunut', prompt: 'Olen ahdistunut ja huolissani tulevaisuudesta.' },
-  { emoji: '😠', label: 'Vihainen', prompt: 'Olen vihainen ja pettynyt. Tarvitsen apua tunteiden käsittelyyn.' },
-  { emoji: '😶', label: 'Tyhjä', prompt: 'Tunnen oloni tyhjäksi enkä tiedä mitä tehdä.' },
-  { emoji: '🤔', label: 'Hämmentynyt', prompt: 'Olen hämmentynyt tilanteestani ja tarvitsen apua selkiyttämään ajatuksia.' },
-  { emoji: '😌', label: 'Rauhallinen', prompt: 'Olen suhteellisen rauhallinen mutta haluaisin keskustella tilanteestani.' },
-]
-
-const TESTIMONIALS = [
-  {
-    text: '"Elinan kanssa uskalsin ensimmäistä kertaa sanoa ääneen mitä oikeasti tunsin. Se muutti kaiken."',
-    author: 'Minna, 42',
-    situation: 'Harkitsi eroa 8 kuukautta',
-  },
-  {
-    text: '"En tiennyt miten kertoa lapsille. Elina auttoi rakentamaan sanoituksen joka tuntui oikealta."',
-    author: 'Jukka, 38',
-    situation: 'Eronnut, 2 lasta',
-  },
-  {
-    text: '"Yöllä kello 3 kun ahdistus iski, Elina oli ainoa johon saattoi turvautua. Se riitti."',
-    author: 'Laura, 35',
-    situation: 'Puoliso halusi erota',
-  },
-]
-
 export default function WelcomeScreen({ onSelectTopic, onOpenToolkit }: WelcomeScreenProps) {
+  const t = useT()
   const [freeText, setFreeText] = useState('')
   const [showMoodCheck, setShowMoodCheck] = useState(false)
 
   const handleFreeSubmit = () => {
-    const t = freeText.trim()
-    if (t) onSelectTopic(t)
+    const txt = freeText.trim()
+    if (txt) onSelectTopic(txt)
   }
+
+  const TOPICS = [
+    { icon: '⚖️', title: t('welcome.topic1title'), prompt: t('welcome.topic1prompt'), tag: t('welcome.topic1tag') },
+    { icon: '💔', title: t('welcome.topic2title'), prompt: t('welcome.topic2prompt'), tag: t('welcome.topic2tag') },
+    { icon: '👨‍👩‍👧‍👦', title: t('welcome.topic3title'), prompt: t('welcome.topic3prompt'), tag: t('welcome.topic3tag') },
+    { icon: '🔥', title: t('welcome.topic4title'), prompt: t('welcome.topic4prompt'), tag: t('welcome.topic4tag') },
+    { icon: '🗣️', title: t('welcome.topic5title'), prompt: t('welcome.topic5prompt'), tag: t('welcome.topic5tag') },
+    { icon: '🌅', title: t('welcome.topic6title'), prompt: t('welcome.topic6prompt'), tag: t('welcome.topic6tag') },
+  ]
+
+  const STATS = [
+    { value: t('welcome.stat1value'), label: t('welcome.stat1label'), icon: '📈' },
+    { value: t('welcome.stat2value'), label: t('welcome.stat2label'), icon: '🧠' },
+    { value: t('welcome.stat3value'), label: t('welcome.stat3label'), icon: '🕐' },
+  ]
+
+  const MOOD_OPTIONS = [
+    { emoji: '😢', label: t('welcome.moodSad'), prompt: t('welcome.moodSadPrompt') },
+    { emoji: '😰', label: t('welcome.moodAnxious'), prompt: t('welcome.moodAnxiousPrompt') },
+    { emoji: '😠', label: t('welcome.moodAngry'), prompt: t('welcome.moodAngryPrompt') },
+    { emoji: '😶', label: t('welcome.moodEmpty'), prompt: t('welcome.moodEmptyPrompt') },
+    { emoji: '🤔', label: t('welcome.moodConfused'), prompt: t('welcome.moodConfusedPrompt') },
+    { emoji: '😌', label: t('welcome.moodCalm'), prompt: t('welcome.moodCalmPrompt') },
+  ]
+
+  const TESTIMONIALS = [
+    { text: t('welcome.testimonial1text'), author: t('welcome.testimonial1author'), situation: t('welcome.testimonial1situation') },
+    { text: t('welcome.testimonial2text'), author: t('welcome.testimonial2author'), situation: t('welcome.testimonial2situation') },
+    { text: t('welcome.testimonial3text'), author: t('welcome.testimonial3author'), situation: t('welcome.testimonial3situation') },
+  ]
 
   return (
     <div className="flex-1 overflow-y-auto">
       {/* ── HERO ── */}
       <section className="bg-gray-950 text-white relative overflow-hidden">
-        {/* Subtle background decoration */}
         <div className="absolute inset-0 overflow-hidden">
           <div className="absolute -top-24 -right-24 w-64 h-64 rounded-full bg-brand-500/5 blur-3xl" />
           <div className="absolute -bottom-16 -left-16 w-48 h-48 rounded-full bg-brand-400/5 blur-2xl" />
         </div>
 
         <div className="relative max-w-3xl mx-auto px-5 pt-14 pb-12 text-center">
-          {/* Elina avatar & intro */}
           <div className="anim-in mb-6">
             <div className="inline-flex flex-col items-center">
               <div className="relative mb-3">
@@ -122,26 +80,24 @@ export default function WelcomeScreen({ onSelectTopic, onOpenToolkit }: WelcomeS
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-400 opacity-75" />
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-brand-400" />
                 </span>
-                Elina on paikalla
+                {t('welcome.online')}
               </div>
             </div>
           </div>
 
           <h1 className="anim-in text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-[1.1] mb-4" style={{animationDelay:'0.05s'}}>
-            Hei, olen <span className="text-brand-400">Elina</span>.<br />
-            <span className="text-gray-300 font-bold">Tukesi eron kynnyksellä.</span>
+            {t('welcome.heroTitle1')} <span className="text-brand-400">{t('welcome.heroTitle2')}</span>.<br />
+            <span className="text-gray-300 font-bold">{t('welcome.heroTitle3')}</span>
           </h1>
 
           <p className="anim-in text-base sm:text-lg text-gray-400 max-w-xl mx-auto mb-3 leading-relaxed" style={{animationDelay:'0.1s'}}>
-            Olen parisuhde- ja erotukiasiantuntija. Kuuntelen sinua ilman tuomitsemista, tarjoan tutkittuja 
-            työkaluja ja autan sinua löytämään oman polkusi &mdash; olipa se mikä tahansa.
+            {t('welcome.heroDesc')}
           </p>
 
           <p className="anim-in text-sm text-gray-500 max-w-md mx-auto mb-7" style={{animationDelay:'0.12s'}}>
-            Voit kertoa minulle kaiken luottamuksellisesti. Olen täällä sinua varten, juuri nyt.
+            {t('welcome.heroConfidential')}
           </p>
 
-          {/* Free text input on hero */}
           <div className="anim-in max-w-lg mx-auto" style={{animationDelay:'0.15s'}}>
             <div className="flex items-center gap-2 bg-white/5 border border-white/15 rounded-xl p-1.5 focus-within:border-brand-500/50 focus-within:bg-white/10 transition-colors">
               <input
@@ -149,7 +105,7 @@ export default function WelcomeScreen({ onSelectTopic, onOpenToolkit }: WelcomeS
                 value={freeText}
                 onChange={(e) => setFreeText(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && handleFreeSubmit()}
-                placeholder="Kerro lyhyesti miltä sinusta tuntuu..."
+                placeholder={t('welcome.heroPlaceholder')}
                 className="flex-1 bg-transparent text-white placeholder-gray-500 text-sm px-3 py-2.5 focus:outline-none"
               />
               <button
@@ -158,7 +114,7 @@ export default function WelcomeScreen({ onSelectTopic, onOpenToolkit }: WelcomeS
                 className="flex-shrink-0 h-10 px-5 bg-brand-500 hover:bg-brand-600 disabled:opacity-30 disabled:hover:bg-brand-500
                            text-white text-sm font-semibold rounded-lg transition-all active:scale-95"
               >
-                Kerro Elinalle
+                {t('welcome.heroButton')}
               </button>
             </div>
           </div>
@@ -174,7 +130,7 @@ export default function WelcomeScreen({ onSelectTopic, onOpenToolkit }: WelcomeS
           >
             <div className="inline-flex items-center gap-2 text-sm font-semibold text-gray-700 mb-1 group-hover:text-brand-600 transition-colors">
               <span>💭</span>
-              Miltä sinusta tuntuu juuri nyt?
+              {t('welcome.moodTitle')}
               <svg
                 className={`w-4 h-4 transition-transform duration-200 ${showMoodCheck ? 'rotate-180' : ''}`}
                 fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}
@@ -182,7 +138,7 @@ export default function WelcomeScreen({ onSelectTopic, onOpenToolkit }: WelcomeS
                 <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
               </svg>
             </div>
-            <p className="text-xs text-gray-400">Valitse tunnetilasi niin Elina osaa auttaa paremmin</p>
+            <p className="text-xs text-gray-400">{t('welcome.moodSubtitle')}</p>
           </button>
 
           {showMoodCheck && (
@@ -220,30 +176,26 @@ export default function WelcomeScreen({ onSelectTopic, onOpenToolkit }: WelcomeS
       {/* ── TOPICS ── */}
       <section className="max-w-3xl mx-auto px-5 py-10">
         <div className="text-center mb-8">
-          <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">
-            Mistä haluat puhua?
-          </h2>
-          <p className="text-sm text-gray-500">
-            Valitse aihe tai kerro omin sanoin &mdash; Elina kuuntelee
-          </p>
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">{t('welcome.topicsTitle')}</h2>
+          <p className="text-sm text-gray-500">{t('welcome.topicsSubtitle')}</p>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 stagger">
-          {TOPICS.map((t) => (
+          {TOPICS.map((tp) => (
             <button
-              key={t.title}
-              onClick={() => onSelectTopic(t.prompt)}
+              key={tp.title}
+              onClick={() => onSelectTopic(tp.prompt)}
               className="anim-in group text-left p-4 rounded-xl border border-gray-200
                          hover:border-brand-300 hover:bg-brand-50/50
                          active:scale-[0.98] transition-all duration-150
                          focus:outline-none focus:ring-2 focus:ring-brand-500/30"
             >
               <div className="flex items-start gap-3">
-                <span className="text-2xl leading-none mt-0.5">{t.icon}</span>
+                <span className="text-2xl leading-none mt-0.5">{tp.icon}</span>
                 <div>
-                  <h3 className="font-semibold text-gray-900 text-sm leading-snug mb-1.5">{t.title}</h3>
+                  <h3 className="font-semibold text-gray-900 text-sm leading-snug mb-1.5">{tp.title}</h3>
                   <span className="inline-block text-[0.65rem] font-semibold text-brand-700 bg-brand-100 px-2 py-0.5 rounded-full">
-                    {t.tag}
+                    {tp.tag}
                   </span>
                 </div>
               </div>
@@ -255,29 +207,12 @@ export default function WelcomeScreen({ onSelectTopic, onOpenToolkit }: WelcomeS
       {/* ── HOW IT WORKS ── */}
       <section className="bg-gray-50 border-y border-gray-200">
         <div className="max-w-3xl mx-auto px-5 py-10">
-          <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-6 text-center">
-            Miten Elina auttaa sinua?
-          </h2>
+          <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-6 text-center">{t('welcome.howTitle')}</h2>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
             {[
-              {
-                step: '1',
-                icon: '💬',
-                title: 'Kerro tilanteestasi',
-                desc: 'Kirjoita vapaasti tai valitse aihe. Elina kuuntelee aktiivisesti ja esittää oikeita kysymyksiä.',
-              },
-              {
-                step: '2',
-                icon: '🔍',
-                title: 'Saat ymmärryksen',
-                desc: 'Elina auttaa tunnistamaan tunteita, tarpeita ja ajatusvinoumia tutkittujen menetelmien avulla.',
-              },
-              {
-                step: '3',
-                icon: '🧰',
-                title: 'Saat konkreettiset työkalut',
-                desc: 'Henkilökohtaisia harjoituksia, reflektiotehtäviä ja selkeitä seuraavia askeleita eteenpäin.',
-              },
+              { step: '1', icon: '💬', title: t('welcome.how1title'), desc: t('welcome.how1desc') },
+              { step: '2', icon: '🔍', title: t('welcome.how2title'), desc: t('welcome.how2desc') },
+              { step: '3', icon: '🧰', title: t('welcome.how3title'), desc: t('welcome.how3desc') },
             ].map((s) => (
               <div key={s.step} className="text-center p-4">
                 <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-white shadow-sm border border-gray-200 text-xl mb-3">
@@ -294,20 +229,16 @@ export default function WelcomeScreen({ onSelectTopic, onOpenToolkit }: WelcomeS
       {/* ── TOOLKIT PREVIEW ── */}
       <section className="max-w-3xl mx-auto px-5 py-10">
         <div className="text-center mb-6">
-          <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-2">
-            Elinan työkalupakki
-          </h2>
-          <p className="text-sm text-gray-500">
-            Tutkittuja harjoituksia joita voit tehdä itsenäisesti
-          </p>
+          <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-2">{t('welcome.toolkitTitle')}</h2>
+          <p className="text-sm text-gray-500">{t('welcome.toolkitSubtitle')}</p>
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-5">
           {[
-            { icon: '🌬️', title: '4-7-8\nHengitys', color: '#0ea5e9' },
-            { icon: '🌊', title: 'Tunteiden\naallokko', color: '#f59e0b' },
-            { icon: '⚖️', title: 'Arvo-\npuntari', color: '#8b5cf6' },
-            { icon: '📝', title: 'Syyllisyys-\nkirje', color: '#22c55e' },
+            { icon: '🌬️', title: t('welcome.toolkitPreview1'), color: '#0ea5e9' },
+            { icon: '🌊', title: t('welcome.toolkitPreview2'), color: '#f59e0b' },
+            { icon: '⚖️', title: t('welcome.toolkitPreview3'), color: '#8b5cf6' },
+            { icon: '📝', title: t('welcome.toolkitPreview4'), color: '#22c55e' },
           ].map((tool) => (
             <button
               key={tool.title}
@@ -327,27 +258,25 @@ export default function WelcomeScreen({ onSelectTopic, onOpenToolkit }: WelcomeS
                      text-brand-700 text-sm font-semibold hover:bg-brand-50 active:scale-[0.97] transition-all"
         >
           <span>🧰</span>
-          Avaa koko työkalupakki
+          {t('welcome.toolkitOpen')}
         </button>
       </section>
 
       {/* ── TESTIMONIALS ── */}
       <section className="bg-gray-50 border-y border-gray-200">
         <div className="max-w-3xl mx-auto px-5 py-10">
-          <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-6 text-center">
-            Kokemuksia Elinan kanssa
-          </h2>
+          <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-6 text-center">{t('welcome.testimonialsTitle')}</h2>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            {TESTIMONIALS.map((t, i) => (
+            {TESTIMONIALS.map((tst, i) => (
               <div
                 key={i}
                 className="p-4 rounded-xl bg-white border border-gray-200"
                 style={{ boxShadow: '0 1px 4px rgba(0,0,0,0.04)' }}
               >
-                <p className="text-sm text-gray-700 leading-relaxed mb-3 italic">{t.text}</p>
+                <p className="text-sm text-gray-700 leading-relaxed mb-3 italic">{tst.text}</p>
                 <div>
-                  <p className="text-xs font-semibold text-gray-800">{t.author}</p>
-                  <p className="text-[0.6rem] text-gray-400">{t.situation}</p>
+                  <p className="text-xs font-semibold text-gray-800">{tst.author}</p>
+                  <p className="text-[0.6rem] text-gray-400">{tst.situation}</p>
                 </div>
               </div>
             ))}
@@ -365,12 +294,12 @@ export default function WelcomeScreen({ onSelectTopic, onOpenToolkit }: WelcomeS
           }}
         >
           <span className="text-3xl mb-3 inline-block">🤝</span>
-          <h3 className="text-lg font-bold text-gray-900 mb-2">Elinan lupaus sinulle</h3>
+          <h3 className="text-lg font-bold text-gray-900 mb-2">{t('welcome.promiseTitle')}</h3>
           <div className="max-w-md mx-auto space-y-2 text-sm text-gray-600 leading-relaxed">
-            <p><strong className="text-gray-800">En tuomitse.</strong> Jokainen tilanne on ainutlaatuinen ja arvokas.</p>
-            <p><strong className="text-gray-800">En painosta päätöksiin.</strong> Autan sinua löytämään omat vastauksesi.</p>
-            <p><strong className="text-gray-800">Olen rehellinen.</strong> Sanon myös vaikeita asioita, mutta lempeästi.</p>
-            <p><strong className="text-gray-800">Opin sinusta.</strong> Mitä enemmän kerrot, sitä paremmin voin auttaa.</p>
+            <p><strong className="text-gray-800">{t('welcome.promise1strong')}</strong> {t('welcome.promise1text')}</p>
+            <p><strong className="text-gray-800">{t('welcome.promise2strong')}</strong> {t('welcome.promise2text')}</p>
+            <p><strong className="text-gray-800">{t('welcome.promise3strong')}</strong> {t('welcome.promise3text')}</p>
+            <p><strong className="text-gray-800">{t('welcome.promise4strong')}</strong> {t('welcome.promise4text')}</p>
           </div>
         </div>
       </section>
@@ -378,14 +307,14 @@ export default function WelcomeScreen({ onSelectTopic, onOpenToolkit }: WelcomeS
       {/* ── METHODS ── */}
       <section className="bg-gray-950 text-white">
         <div className="max-w-3xl mx-auto px-5 py-10">
-          <h2 className="text-lg sm:text-xl font-bold mb-2 text-center">Pohjautuu tutkittuihin menetelmiin</h2>
-          <p className="text-xs text-gray-500 text-center mb-6">Elinan lähestymistapa yhdistää useita tutkittuja terapiamuotoja</p>
+          <h2 className="text-lg sm:text-xl font-bold mb-2 text-center">{t('welcome.methodsTitle')}</h2>
+          <p className="text-xs text-gray-500 text-center mb-6">{t('welcome.methodsSubtitle')}</p>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {[
-              { name: 'Gottman', desc: 'Parisuhdeanalyysi ja neljä ratsastajaa', icon: '💑' },
-              { name: 'CBT', desc: 'Ajatusvirheiden tunnistus ja korjaus', icon: '🧠' },
-              { name: 'EFT', desc: 'Emotionaalinen turvallisuus ja kiintymys', icon: '❤️‍🩹' },
-              { name: 'MI', desc: 'Motivoiva haastattelu ja päätöstuki', icon: '🧭' },
+              { name: 'Gottman', desc: t('welcome.methodGottman'), icon: '💑' },
+              { name: 'CBT', desc: t('welcome.methodCBT'), icon: '🧠' },
+              { name: 'EFT', desc: t('welcome.methodEFT'), icon: '❤️‍🩹' },
+              { name: 'MI', desc: t('welcome.methodMI'), icon: '🧭' },
             ].map((m) => (
               <div key={m.name} className="bg-white/5 border border-white/10 rounded-xl p-4 text-center">
                 <div className="text-xl mb-1.5">{m.icon}</div>
@@ -400,20 +329,18 @@ export default function WelcomeScreen({ onSelectTopic, onOpenToolkit }: WelcomeS
       {/* ── FOOTER ── */}
       <section className="border-t border-gray-200">
         <div className="max-w-3xl mx-auto px-5 py-6 text-center">
-          <p className="text-xs text-gray-400 mb-2">
-            Elina ei korvaa ammattiapua. Kriisitilanteessa soita:
-          </p>
+          <p className="text-xs text-gray-400 mb-2">{t('welcome.footerDisclaimer')}</p>
           <div className="flex flex-wrap justify-center gap-4 text-xs">
             <a href="tel:0925250111" className="font-semibold text-gray-700 hover:text-brand-600 transition-colors">
-              Kriisipuhelin 09 2525 0111
+              {t('welcome.footerCrisis')}
             </a>
             <a href="tel:080005005" className="font-semibold text-gray-700 hover:text-brand-600 transition-colors">
-              Nollalinja 080 005 005
+              {t('welcome.footerNollalinja')}
             </a>
-            <span className="font-semibold text-gray-700">Hätänumero 112</span>
+            <span className="font-semibold text-gray-700">{t('welcome.footerEmergency')}</span>
           </div>
           <p className="text-[0.6rem] text-gray-300 mt-3">
-            EroCase &copy; {new Date().getFullYear()} &middot; Kaikki keskustelut ovat luottamuksellisia
+            {t('welcome.footerCopyright', { year: new Date().getFullYear() })}
           </p>
         </div>
       </section>

@@ -1,22 +1,10 @@
 import {
   useProfileStore,
-  EMOTION_LABELS,
   EMOTION_COLORS,
   EMOTION_ICONS,
-  SITUATION_LABELS,
-  DECISION_LABELS,
-  CONCERN_LABELS,
-  NEED_LABELS,
-  RESILIENCE_LABELS,
-  RESILIENCE_COLORS,
   type UserProfile,
 } from '../stores/profileStore'
-
-/* ═══════════════════════════════════════════════════
-   USER PROFILE PANEL
-   Right-side panel showing real-time user insights
-   extracted from conversation.
-   ═══════════════════════════════════════════════════ */
+import { useT } from '../lib/i18n'
 
 function Badge({ label, color, icon }: { label: string; color: string; icon?: string }) {
   return (
@@ -50,24 +38,30 @@ function SectionTitle({ children }: { children: React.ReactNode }) {
 }
 
 function ProfileContent({ profile }: { profile: UserProfile }) {
+  const t = useT()
   const hasData = profile.completenessScore > 0
 
   if (!hasData) {
     return (
       <div className="flex-1 flex flex-col items-center justify-center px-4 text-center">
         <div className="text-4xl mb-3 opacity-40">🔍</div>
-        <p className="text-sm font-medium text-gray-500 mb-1">Profiili rakentuu</p>
-        <p className="text-[0.7rem] text-gray-400 leading-relaxed">
-          Kun keskustelet Elinan kanssa, profiilisi rakentuu automaattisesti ja autan sinua yhä paremmin.
-        </p>
+        <p className="text-sm font-medium text-gray-500 mb-1">{t('profile.building')}</p>
+        <p className="text-[0.7rem] text-gray-400 leading-relaxed">{t('profile.buildingDesc')}</p>
       </div>
     )
+  }
+
+  const RESILIENCE_COLORS: Record<string, string> = {
+    high: '#22c55e',
+    moderate: '#f59e0b',
+    low: '#ef4444',
+    crisis: '#dc2626',
   }
 
   return (
     <div className="flex-1 overflow-y-auto px-3 pb-4">
       {/* ── Completeness ── */}
-      <SectionTitle>Profiilin kattavuus</SectionTitle>
+      <SectionTitle>{t('profile.completeness')}</SectionTitle>
       <div className="flex items-center gap-2 mb-1">
         <ProgressBar value={profile.completenessScore} color="#22c55e" />
         <span className="text-xs font-bold text-gray-600 min-w-[2.5rem] text-right">
@@ -75,22 +69,22 @@ function ProfileContent({ profile }: { profile: UserProfile }) {
         </span>
       </div>
       <p className="text-[0.6rem] text-gray-400">
-        {profile.completenessScore < 30 && 'Kerro lisää tilanteestasi'}
-        {profile.completenessScore >= 30 && profile.completenessScore < 60 && 'Hyvä alku! Jatka kertomista'}
-        {profile.completenessScore >= 60 && profile.completenessScore < 80 && 'Profiili hahmottuu hyvin'}
-        {profile.completenessScore >= 80 && 'Erinomainen kuva tilanteestasi'}
+        {profile.completenessScore < 30 && t('profile.completenessLow')}
+        {profile.completenessScore >= 30 && profile.completenessScore < 60 && t('profile.completenessMedLow')}
+        {profile.completenessScore >= 60 && profile.completenessScore < 80 && t('profile.completenessMedHigh')}
+        {profile.completenessScore >= 80 && t('profile.completenessHigh')}
       </p>
 
       {/* ── Emotional state ── */}
-      <SectionTitle>Tunnetila</SectionTitle>
+      <SectionTitle>{t('profile.emotionalState')}</SectionTitle>
       <div className="flex items-center gap-2 mb-2">
         <span className="text-xl">{EMOTION_ICONS[profile.emotionalState]}</span>
         <div>
           <p className="text-sm font-semibold text-gray-800">
-            {EMOTION_LABELS[profile.emotionalState]}
+            {t(`emotions.${profile.emotionalState}`)}
           </p>
           <div className="flex items-center gap-1.5 mt-0.5">
-            <span className="text-[0.6rem] text-gray-400">Intensiteetti</span>
+            <span className="text-[0.6rem] text-gray-400">{t('profile.intensity')}</span>
             <div className="flex gap-[2px]">
               {Array.from({ length: 10 }).map((_, i) => (
                 <div
@@ -112,7 +106,7 @@ function ProfileContent({ profile }: { profile: UserProfile }) {
         <div className="flex flex-wrap gap-1">
           {profile.dominantEmotions.map((e) => (
             <span key={e} className="text-[0.6rem] px-2 py-0.5 rounded-full bg-gray-100 text-gray-600 font-medium">
-              {e}
+              {t(`emotions.${e}`)}
             </span>
           ))}
         </div>
@@ -121,26 +115,26 @@ function ProfileContent({ profile }: { profile: UserProfile }) {
       {/* ── Situation ── */}
       {profile.situationType !== 'unknown' && (
         <>
-          <SectionTitle>Tilanne</SectionTitle>
+          <SectionTitle>{t('profile.situation')}</SectionTitle>
           <div className="space-y-1.5">
             <div className="flex items-center gap-2">
               <div className="w-5 h-5 rounded-full bg-indigo-50 flex items-center justify-center flex-shrink-0">
                 <span className="text-[0.6rem]">📋</span>
               </div>
-              <span className="text-xs font-medium text-gray-700">{SITUATION_LABELS[profile.situationType]}</span>
+              <span className="text-xs font-medium text-gray-700">{t(`situations.${profile.situationType}`)}</span>
             </div>
             <div className="flex items-center gap-2">
               <div className="w-5 h-5 rounded-full bg-amber-50 flex items-center justify-center flex-shrink-0">
                 <span className="text-[0.6rem]">🧭</span>
               </div>
-              <span className="text-xs font-medium text-gray-700">{DECISION_LABELS[profile.decisionStage]}</span>
+              <span className="text-xs font-medium text-gray-700">{t(`decisions.${profile.decisionStage}`)}</span>
             </div>
             {profile.hasChildren && (
               <div className="flex items-center gap-2">
                 <div className="w-5 h-5 rounded-full bg-pink-50 flex items-center justify-center flex-shrink-0">
                   <span className="text-[0.6rem]">👨‍👩‍👧</span>
                 </div>
-                <span className="text-xs font-medium text-gray-700">Perheessä lapsia</span>
+                <span className="text-xs font-medium text-gray-700">{t('profile.hasChildren')}</span>
               </div>
             )}
           </div>
@@ -148,28 +142,28 @@ function ProfileContent({ profile }: { profile: UserProfile }) {
       )}
 
       {/* ── Resilience ── */}
-      <SectionTitle>Voimavarat</SectionTitle>
+      <SectionTitle>{t('profile.resilience')}</SectionTitle>
       <div className="flex items-center gap-2 mb-2">
         <Badge
-          label={RESILIENCE_LABELS[profile.resilienceLevel]}
+          label={t(`resilienceLabels.${profile.resilienceLevel}`)}
           color={RESILIENCE_COLORS[profile.resilienceLevel]}
           icon={profile.resilienceLevel === 'crisis' ? '⚠️' : profile.resilienceLevel === 'high' ? '💪' : '🌿'}
         />
         <span className="text-[0.6rem] text-gray-400">
-          {profile.resilienceLevel === 'high' && 'Hyvät selviytymiskeinot'}
-          {profile.resilienceLevel === 'moderate' && 'Tukea saatavilla'}
-          {profile.resilienceLevel === 'low' && 'Vahvistusta tarvitaan'}
-          {profile.resilienceLevel === 'crisis' && 'Akuutti avuntarve'}
+          {profile.resilienceLevel === 'high' && t('profile.resilienceHighDesc')}
+          {profile.resilienceLevel === 'moderate' && t('profile.resilienceModerateDesc')}
+          {profile.resilienceLevel === 'low' && t('profile.resilienceLowDesc')}
+          {profile.resilienceLevel === 'crisis' && t('profile.resilienceCrisisDesc')}
         </span>
       </div>
 
       {/* ── Key concerns ── */}
       {profile.keyConcerns.length > 0 && (
         <>
-          <SectionTitle>Päähuolet</SectionTitle>
+          <SectionTitle>{t('profile.keyConcerns')}</SectionTitle>
           <div className="flex flex-wrap gap-1">
             {profile.keyConcerns.map((c) => (
-              <Badge key={c} label={CONCERN_LABELS[c]} color="#6366f1" />
+              <Badge key={c} label={t(`concerns.${c}`)} color="#6366f1" />
             ))}
           </div>
         </>
@@ -178,10 +172,10 @@ function ProfileContent({ profile }: { profile: UserProfile }) {
       {/* ── Support needs ── */}
       {profile.supportNeeds.length > 0 && (
         <>
-          <SectionTitle>Tuen tarpeet</SectionTitle>
+          <SectionTitle>{t('profile.supportNeeds')}</SectionTitle>
           <div className="flex flex-wrap gap-1">
             {profile.supportNeeds.map((n) => (
-              <Badge key={n} label={NEED_LABELS[n]} color="#0891b2" />
+              <Badge key={n} label={t(`needs.${n}`)} color="#0891b2" />
             ))}
           </div>
         </>
@@ -190,7 +184,7 @@ function ProfileContent({ profile }: { profile: UserProfile }) {
       {/* ── Suggested exercises ── */}
       {profile.suggestedExercises.length > 0 && (
         <>
-          <SectionTitle>Suositellut harjoitukset</SectionTitle>
+          <SectionTitle>{t('profile.suggestedExercises')}</SectionTitle>
           <div className="space-y-1">
             {profile.suggestedExercises.map((ex, i) => (
               <div key={i} className="flex items-start gap-2 py-1">
@@ -200,7 +194,7 @@ function ProfileContent({ profile }: { profile: UserProfile }) {
                 >
                   {i + 1}
                 </span>
-                <span className="text-[0.7rem] text-gray-700 leading-snug">{ex}</span>
+                <span className="text-[0.7rem] text-gray-700 leading-snug">{t(ex)}</span>
               </div>
             ))}
           </div>
@@ -210,14 +204,21 @@ function ProfileContent({ profile }: { profile: UserProfile }) {
       {/* ── Next steps ── */}
       {profile.nextSteps.length > 0 && (
         <>
-          <SectionTitle>Seuraavat askeleet</SectionTitle>
+          <SectionTitle>{t('profile.nextSteps')}</SectionTitle>
           <div className="space-y-1.5">
-            {profile.nextSteps.map((step, i) => (
-              <div key={i} className="flex items-start gap-2">
-                <span className="text-brand-500 mt-0.5">→</span>
-                <span className="text-[0.7rem] text-gray-700 leading-snug">{step}</span>
-              </div>
-            ))}
+            {profile.nextSteps.map((step, i) => {
+              // Handle steps with variable syntax: "key|concernKey"
+              const parts = step.split('|')
+              const text = parts.length > 1
+                ? t(parts[0], { concern: t(`concerns.${parts[1]}`) })
+                : t(step)
+              return (
+                <div key={i} className="flex items-start gap-2">
+                  <span className="text-brand-500 mt-0.5">→</span>
+                  <span className="text-[0.7rem] text-gray-700 leading-snug">{text}</span>
+                </div>
+              )
+            })}
           </div>
         </>
       )}
@@ -225,37 +226,37 @@ function ProfileContent({ profile }: { profile: UserProfile }) {
       {/* ── Risk factors ── */}
       {profile.riskFactors.length > 0 && (
         <>
-          <SectionTitle>Huomioitavaa</SectionTitle>
+          <SectionTitle>{t('profile.riskFactors')}</SectionTitle>
           {profile.riskFactors.map((risk, i) => (
             <div key={i} className="flex items-start gap-2 py-0.5">
               <span className="text-amber-500 text-xs mt-0.5">⚠</span>
-              <span className="text-[0.7rem] text-amber-700 leading-snug">{risk}</span>
+              <span className="text-[0.7rem] text-amber-700 leading-snug">{t(risk)}</span>
             </div>
           ))}
         </>
       )}
 
       {/* ── Psychology snapshot ── */}
-      <SectionTitle>Psykologinen profiili</SectionTitle>
+      <SectionTitle>{t('profile.psychology')}</SectionTitle>
       <div className="grid grid-cols-2 gap-1.5">
-        <MiniStat label="Kommunikaatio" value={
-          profile.communicationStyle === 'direct' ? 'Suora' :
-          profile.communicationStyle === 'reflective' ? 'Pohdiskeleva' :
-          profile.communicationStyle === 'emotional' ? 'Tunnevetoinen' :
-          profile.communicationStyle === 'analytical' ? 'Analyyttinen' : '–'
+        <MiniStat label={t('profile.communication')} value={
+          profile.communicationStyle === 'direct' ? t('profile.commDirect') :
+          profile.communicationStyle === 'reflective' ? t('profile.commReflective') :
+          profile.communicationStyle === 'emotional' ? t('profile.commEmotional') :
+          profile.communicationStyle === 'analytical' ? t('profile.commAnalytical') : '–'
         } />
-        <MiniStat label="Avoimuus" value={
-          profile.openness === 'very_open' ? 'Erittäin avoin' :
-          profile.openness === 'open' ? 'Avoin' :
-          profile.openness === 'guarded' ? 'Varovainen' : 'Sulkeutunut'
+        <MiniStat label={t('profile.openness')} value={
+          profile.openness === 'very_open' ? t('profile.openVeryOpen') :
+          profile.openness === 'open' ? t('profile.openOpen') :
+          profile.openness === 'guarded' ? t('profile.openGuarded') : t('profile.openClosed')
         } />
-        <MiniStat label="Sitoutuminen" value={
-          profile.engagementLevel === 'high' ? 'Korkea' :
-          profile.engagementLevel === 'medium' ? 'Keskitaso' : 'Matala'
+        <MiniStat label={t('profile.engagement')} value={
+          profile.engagementLevel === 'high' ? t('profile.engHigh') :
+          profile.engagementLevel === 'medium' ? t('profile.engMedium') : t('profile.engLow')
         } />
-        <MiniStat label="Muutosvalmius" value={
-          profile.readinessForChange === 'ready' ? 'Valmis' :
-          profile.readinessForChange === 'ambivalent' ? 'Ristiriitainen' : 'Vastustava'
+        <MiniStat label={t('profile.readiness')} value={
+          profile.readinessForChange === 'ready' ? t('profile.readyReady') :
+          profile.readinessForChange === 'ambivalent' ? t('profile.readyAmbivalent') : t('profile.readyResistant')
         } />
       </div>
     </div>
@@ -272,11 +273,11 @@ function MiniStat({ label, value }: { label: string; value: string }) {
 }
 
 export default function UserProfilePanel() {
+  const t = useT()
   const { profile, profileOpen, setProfileOpen } = useProfileStore()
 
   return (
     <>
-      {/* ── Mobile overlay ── */}
       {profileOpen && (
         <div
           className="fixed inset-0 bg-black/30 backdrop-blur-sm z-40 xl:hidden"
@@ -295,7 +296,6 @@ export default function UserProfilePanel() {
           borderLeft: '1px solid rgba(214,203,191,0.4)',
         }}
       >
-        {/* ── Header ── */}
         <div className="p-3 flex items-center justify-between border-b border-gray-100">
           <div className="flex items-center gap-2">
             <div
@@ -304,7 +304,7 @@ export default function UserProfilePanel() {
             >
               <span className="text-[0.55rem]">👤</span>
             </div>
-            <span className="text-xs font-bold text-gray-800 uppercase tracking-wider">Profiili</span>
+            <span className="text-xs font-bold text-gray-800 uppercase tracking-wider">{t('profile.title')}</span>
           </div>
           <button
             onClick={() => setProfileOpen(false)}
@@ -316,14 +316,10 @@ export default function UserProfilePanel() {
           </button>
         </div>
 
-        {/* ── Content ── */}
         <ProfileContent profile={profile} />
 
-        {/* ── Footer ── */}
         <div className="p-3 border-t border-gray-100">
-          <p className="text-[0.55rem] text-gray-400 text-center leading-relaxed">
-            Profiili päivittyy automaattisesti keskustelun edetessä. Tietoja ei jaeta eteenpäin.
-          </p>
+          <p className="text-[0.55rem] text-gray-400 text-center leading-relaxed">{t('profile.footer')}</p>
         </div>
       </aside>
     </>

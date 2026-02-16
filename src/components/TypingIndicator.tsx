@@ -1,7 +1,10 @@
+import { useT } from '../lib/i18n'
+
 export default function TypingIndicator() {
+  const t = useT()
+
   return (
     <div className="mb-6 animate-fade-in-up">
-      {/* Avatar row */}
       <div className="flex items-center gap-2.5 mb-2.5">
         <div
           className="w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0"
@@ -13,10 +16,9 @@ export default function TypingIndicator() {
           <span className="text-xs">🤝</span>
         </div>
         <span className="text-xs font-semibold text-gray-700 tracking-wide">Elina</span>
-        <span className="text-[0.6rem] text-brand-500 font-medium animate-pulse">miettii...</span>
+        <span className="text-[0.6rem] text-brand-500 font-medium animate-pulse">{t('header.thinking')}</span>
       </div>
 
-      {/* Typing bubble */}
       <div className="ml-[38px]">
         <div
           className="inline-flex items-center gap-1.5 rounded-2xl rounded-tl-md px-5 py-3.5"

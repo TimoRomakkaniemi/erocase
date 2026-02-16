@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
+import { useT } from '../lib/i18n'
 
 interface ChatInputProps {
   onSend: (message: string) => void
@@ -6,6 +7,7 @@ interface ChatInputProps {
 }
 
 export default function ChatInput({ onSend, disabled }: ChatInputProps) {
+  const t = useT()
   const [input, setInput] = useState('')
   const textareaRef = useRef<HTMLTextAreaElement>(null)
 
@@ -58,7 +60,7 @@ export default function ChatInput({ onSend, disabled }: ChatInputProps) {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder="Kerro tilanteestasi..."
+            placeholder={t('chat.placeholder')}
             disabled={disabled}
             rows={1}
             className="flex-1 resize-none bg-transparent text-sm text-gray-800 placeholder-warm-300
@@ -86,9 +88,8 @@ export default function ChatInput({ onSend, disabled }: ChatInputProps) {
           </button>
         </div>
 
-        {/* Subtle hint */}
         <p className="text-center text-[0.6rem] text-warm-300 mt-2 select-none">
-          Enter lähettää · Shift+Enter rivinvaihto
+          {t('chat.enterHint')}
         </p>
       </div>
     </div>

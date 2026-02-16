@@ -1,3 +1,5 @@
+import { useT } from '../lib/i18n'
+
 interface MessageBubbleProps {
   role: 'user' | 'assistant'
   content: string
@@ -13,29 +15,24 @@ function formatContent(text: string): string {
 
       const lines = trimmed.split('\n').filter((l) => l.trim())
 
-      // Check for "Työkalu:" or "Harjoitus:" blocks → wrap in tool-card
-      if (lines[0] && /^\*\*(Työkalu|Harjoitus|Tehtävä|Tekniikka|Huomio|Vinkki):/.test(lines[0])) {
+      if (lines[0] && /^\*\*(Työkalu|Harjoitus|Tehtävä|Tekniikka|Huomio|Vinkki|Tool|Exercise|Task|Technique|Note|Tip|Verktyg|Övning|Uppgift|Teknik|Observera|Tips|Herramienta|Ejercicio|Tarea|Técnica|Atención|Consejo):/.test(lines[0])) {
         const inner = lines.map(inline).join('<br/>')
         return `<div class="tool-card"><p>${inner}</p></div>`
       }
 
-      // Check for empathy blocks (Elina's caring remarks)
-      if (lines[0] && /^\*\*(Muistathan|Tärkeää|Sinulle):/.test(lines[0])) {
+      if (lines[0] && /^\*\*(Muistathan|Tärkeää|Sinulle|Remember|Important|For you|Kom ihåg|Viktigt|Till dig|Recuerda|Importante|Para ti):/.test(lines[0])) {
         const inner = lines.map(inline).join('<br/>')
         return `<div class="empathy-card"><p>${inner}</p></div>`
       }
 
-      // Numbered list
       if (lines.every((l) => /^\d+\.\s/.test(l.trim()))) {
         const items = lines.map((l) => `<li>${inline(l.replace(/^\d+\.\s*/, ''))}</li>`).join('')
         return `<ol>${items}</ol>`
       }
-      // Bullet list
       if (lines.every((l) => /^[-*]\s/.test(l.trim()))) {
         const items = lines.map((l) => `<li>${inline(l.replace(/^[-*]\s*/, ''))}</li>`).join('')
         return `<ul>${items}</ul>`
       }
-      // Paragraph
       return `<p>${lines.map(inline).join('<br/>')}</p>`
     })
     .filter(Boolean)
@@ -49,9 +46,9 @@ function inline(t: string): string {
 }
 
 export default function MessageBubble({ role, content, isStreaming }: MessageBubbleProps) {
+  const t = useT()
   const isUser = role === 'user'
 
-  /* ── User message ── */
   if (isUser) {
     return (
       <div className="flex justify-end mb-5 animate-fade-in-up">
@@ -70,10 +67,8 @@ export default function MessageBubble({ role, content, isStreaming }: MessageBub
     )
   }
 
-  /* ── Elina's message ── */
   return (
     <div className="mb-6 animate-fade-in-up">
-      {/* Avatar row */}
       <div className="flex items-center gap-2.5 mb-2.5">
         <div
           className="w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0"
@@ -86,11 +81,10 @@ export default function MessageBubble({ role, content, isStreaming }: MessageBub
         </div>
         <span className="text-xs font-semibold text-gray-700 tracking-wide">Elina</span>
         {isStreaming && (
-          <span className="text-[0.6rem] text-brand-500 font-medium animate-pulse">kirjoittaa...</span>
+          <span className="text-[0.6rem] text-brand-500 font-medium animate-pulse">{t('header.typing')}</span>
         )}
       </div>
 
-      {/* Message card */}
       <div className="ml-[38px]">
         <div
           className="rounded-2xl rounded-tl-md px-4 py-3.5 text-[0.85rem] msg-prose"

@@ -4,6 +4,10 @@ import { create } from 'zustand'
    USER PROFILE – Asiakasprofilointi (EroCase)
    Rakennetaan automaattisesti keskusteluista.
    Inspiroiduttu Hedin-pilotista, sovitettu erokontekstiin.
+   
+   All user-facing strings are stored as translation keys
+   (e.g. 'profileDynamic.exercise_emotion_wave') and
+   resolved in the UI via useT().
    ═══════════════════════════════════════════════════════ */
 
 export type EmotionalState =
@@ -32,45 +36,39 @@ export type KeyConcern =
   | 'anger_management' | 'co_parenting' | 'new_relationship'
 
 export interface UserProfile {
-  // Basic situation
   situationType: SituationType
   decisionStage: DecisionStage
   hasChildren: boolean | null
-  relationshipDuration: 'short' | 'medium' | 'long' | null // <2, 2-10, 10+
+  relationshipDuration: 'short' | 'medium' | 'long' | null
 
-  // Emotional landscape
   emotionalState: EmotionalState
-  emotionalIntensity: number // 1-10
-  dominantEmotions: string[]
+  emotionalIntensity: number
+  dominantEmotions: string[] // stores emotion keys, translated in UI
 
-  // Psychology
   communicationStyle: CommunicationStyle
   resilienceLevel: ResilienceLevel
   selfAwareness: 'high' | 'moderate' | 'low'
   copingMechanisms: string[]
 
-  // Needs & concerns
   supportNeeds: SupportNeed[]
   keyConcerns: KeyConcern[]
-  
-  // Engagement
+
   engagementLevel: 'high' | 'medium' | 'low'
   openness: 'very_open' | 'open' | 'guarded' | 'closed'
   readinessForChange: 'ready' | 'ambivalent' | 'resistant'
 
-  // Recommendations
-  recommendedApproach: string
+  // These store i18n keys (resolved via t() in UI)
+  recommendedApproach: string[]
   suggestedExercises: string[]
   nextSteps: string[]
   riskFactors: string[]
 
-  // Meta
-  completenessScore: number // 0-100
+  completenessScore: number
   messageCount: number
   lastUpdated: string
 }
 
-// Keywords for profile extraction
+// Keywords for profile extraction (Finnish - the primary analysis language)
 const EMOTION_KEYWORDS: Record<EmotionalState, string[]> = {
   hopeful: ['toivoa', 'toivon', 'onnellinen', 'parempi', 'positiivi', 'toiveikas', 'valoa', 'mahdollisuus'],
   neutral: [],
@@ -134,7 +132,7 @@ export function createEmptyProfile(): UserProfile {
     engagementLevel: 'medium',
     openness: 'open',
     readinessForChange: 'ambivalent',
-    recommendedApproach: '',
+    recommendedApproach: [],
     suggestedExercises: [],
     nextSteps: [],
     riskFactors: [],
@@ -146,7 +144,7 @@ export function createEmptyProfile(): UserProfile {
 
 /**
  * Analyse user messages and extract/update profile.
- * Uses keyword-based extraction (can be upgraded to AI later).
+ * User-facing strings are stored as translation keys.
  */
 export function extractProfile(
   userMessages: string[],
@@ -161,7 +159,6 @@ export function extractProfile(
 
   // ── Emotional state ──
   let maxEmotionScore = 0
-  const emotionScores: Partial<Record<EmotionalState, number>> = {}
   const detectedEmotions: string[] = []
 
   for (const [emotion, keywords] of Object.entries(EMOTION_KEYWORDS)) {
@@ -172,8 +169,7 @@ export function extractProfile(
       if (matches) score += matches.length
     }
     if (score > 0) {
-      emotionScores[emotion as EmotionalState] = score
-      detectedEmotions.push(EMOTION_LABELS[emotion as EmotionalState])
+      detectedEmotions.push(emotion) // store emotion key, not label
       if (score > maxEmotionScore) {
         maxEmotionScore = score
         profile.emotionalState = emotion as EmotionalState
@@ -234,7 +230,7 @@ export function extractProfile(
   const questionMarks = (allText.match(/\?/g) || []).length
   const exclamationMarks = (allText.match(/!/g) || []).length
   const avgMsgLength = allText.length / Math.max(messageCount, 1)
-  
+
   let detectedStyle: CommunicationStyle = 'unknown'
   if (avgMsgLength > 200 && questionMarks > 2) detectedStyle = 'analytical'
   else if (exclamationMarks > 2 || maxEmotionScore > 5) detectedStyle = 'emotional'
@@ -270,51 +266,55 @@ export function extractProfile(
   const strengthWords = ['selviydy', 'pystyn', 'voin', 'jaksan', 'vahva', 'onnistun']
   const crisisCount = crisisWords.filter(w => allText.includes(w)).length
   const strengthCount = strengthWords.filter(w => allText.includes(w)).length
-  
+
   if (crisisCount > 0) profile.resilienceLevel = 'crisis'
   else if (strengthCount > crisisCount + 1) profile.resilienceLevel = 'high'
   else if (profile.emotionalIntensity > 7) profile.resilienceLevel = 'low'
 
-  // ── Risk factors ──
+  // ── Risk factors (translation keys) ──
   const risks: string[] = []
-  if (crisisCount > 0) risks.push('Kriisioireita havaittu - tarkkaile tilannetta')
-  if (profile.emotionalIntensity > 8) risks.push('Erittäin voimakkaat tunteet')
-  if (profile.openness === 'closed') risks.push('Vaikeuksia avautua - rakenna luottamusta')
-  if (concerns.has('loneliness')) risks.push('Yksinäisyys ja eristäytymisen riski')
+  if (crisisCount > 0) risks.push('profileDynamic.risk_crisis')
+  if (profile.emotionalIntensity > 8) risks.push('profileDynamic.risk_intense')
+  if (profile.openness === 'closed') risks.push('profileDynamic.risk_closed')
+  if (concerns.has('loneliness')) risks.push('profileDynamic.risk_loneliness')
   profile.riskFactors = risks
 
-  // ── Recommended approach ──
+  // ── Recommended approach (translation keys) ──
   const approaches: string[] = []
-  if (profile.communicationStyle === 'emotional') approaches.push('Painota empatiaa ja tunteiden validointia')
-  if (profile.communicationStyle === 'analytical') approaches.push('Tarjoa tutkimuspohjaista tietoa ja rakenteellisia työkaluja')
-  if (profile.communicationStyle === 'direct') approaches.push('Mene suoraan asiaan, tarjoa konkreettisia toimintaohjeita')
-  if (profile.resilienceLevel === 'crisis') approaches.push('Priorisoi turvallisuus ja kriisituki')
-  if (profile.decisionStage === 'exploring') approaches.push('Auta selkiyttämään ajatuksia, älä painosta päätöksiin')
-  profile.recommendedApproach = approaches.join('. ') || 'Kuuntele aktiivisesti ja tarjoa turvallinen tila reflektiolle'
+  if (profile.communicationStyle === 'emotional') approaches.push('profileDynamic.approach_empathy')
+  if (profile.communicationStyle === 'analytical') approaches.push('profileDynamic.approach_analytical')
+  if (profile.communicationStyle === 'direct') approaches.push('profileDynamic.approach_direct')
+  if (profile.resilienceLevel === 'crisis') approaches.push('profileDynamic.approach_crisis')
+  if (profile.decisionStage === 'exploring') approaches.push('profileDynamic.approach_explore')
+  if (approaches.length === 0) approaches.push('profileDynamic.approach_default')
+  profile.recommendedApproach = approaches
 
-  // ── Suggested exercises ──
+  // ── Suggested exercises (translation keys) ──
   const exercises: string[] = []
-  if (profile.emotionalIntensity > 6) exercises.push('Tunteiden aallokko -harjoitus')
-  if (concerns.has('guilt')) exercises.push('Syyllisyyden purkaminen -kirjoitustehtävä')
-  if (profile.decisionStage === 'exploring') exercises.push('Arvopuntari: mitä todella haluat?')
-  if (concerns.has('children_welfare')) exercises.push('Lasten tunnekartta -harjoitus')
-  if (profile.emotionalState === 'anxious') exercises.push('5-4-3-2-1 rauhoittumistekniikka')
-  if (profile.emotionalState === 'angry') exercises.push('Hallittu tunteiden purkaminen')
-  if (concerns.has('identity')) exercises.push('Oman identiteetin uudelleenrakentaminen')
-  if (concerns.has('trust')) exercises.push('Luottamuksen inventaario')
-  exercises.push('Päiväkirjahetki: 3 asiaa jotka kannattelevat')
+  if (profile.emotionalIntensity > 6) exercises.push('profileDynamic.exercise_emotion_wave')
+  if (concerns.has('guilt')) exercises.push('profileDynamic.exercise_guilt_release')
+  if (profile.decisionStage === 'exploring') exercises.push('profileDynamic.exercise_value_balance')
+  if (concerns.has('children_welfare')) exercises.push('profileDynamic.exercise_kids_emotion_map')
+  if (profile.emotionalState === 'anxious') exercises.push('profileDynamic.exercise_grounding')
+  if (profile.emotionalState === 'angry') exercises.push('profileDynamic.exercise_anger_release')
+  if (concerns.has('identity')) exercises.push('profileDynamic.exercise_identity')
+  if (concerns.has('trust')) exercises.push('profileDynamic.exercise_trust_inventory')
+  exercises.push('profileDynamic.exercise_daily_journal')
   profile.suggestedExercises = exercises.slice(0, 5)
 
-  // ── Next steps ──
+  // ── Next steps (translation keys, some with variables handled via special syntax) ──
   const steps: string[] = []
   if (profile.resilienceLevel === 'crisis') {
-    steps.push('Ota yhteyttä kriisipuhelimeen: 09 2525 0111')
-    steps.push('Hae ammattiapua mahdollisimman pian')
+    steps.push('profileDynamic.step_crisis_phone')
+    steps.push('profileDynamic.step_crisis_professional')
   }
-  if (profile.decisionStage === 'exploring') steps.push('Jatka tilanteen kartoittamista rauhassa')
-  if (profile.keyConcerns.length > 0) steps.push(`Käsitellään seuraavaksi: ${CONCERN_LABELS[profile.keyConcerns[0]]}`)
-  if (messageCount < 5) steps.push('Kerro lisää tilanteestasi, niin voin auttaa paremmin')
-  else steps.push('Kokeile suositeltua harjoitusta')
+  if (profile.decisionStage === 'exploring') steps.push('profileDynamic.step_explore')
+  if (profile.keyConcerns.length > 0) {
+    // Store key + first concern key for variable interpolation in UI
+    steps.push(`profileDynamic.step_next_concern|${profile.keyConcerns[0]}`)
+  }
+  if (messageCount < 5) steps.push('profileDynamic.step_tell_more')
+  else steps.push('profileDynamic.step_try_exercise')
   profile.nextSteps = steps.slice(0, 3)
 
   // ── Completeness score ──
@@ -335,20 +335,7 @@ export function extractProfile(
   return profile
 }
 
-// ── Label maps for Finnish UI ──
-
-export const EMOTION_LABELS: Record<EmotionalState, string> = {
-  hopeful: 'Toiveikas',
-  neutral: 'Neutraali',
-  anxious: 'Ahdistunut',
-  overwhelmed: 'Ylikuormittunut',
-  angry: 'Vihainen',
-  grieving: 'Sureva',
-  numb: 'Turtunut',
-  relieved: 'Helpottunut',
-  confused: 'Hämmentynyt',
-}
-
+// Colors and icons (not translatable)
 export const EMOTION_COLORS: Record<EmotionalState, string> = {
   hopeful: '#22c55e',
   neutral: '#94a3b8',
@@ -371,61 +358,6 @@ export const EMOTION_ICONS: Record<EmotionalState, string> = {
   numb: '😶',
   relieved: '😌',
   confused: '🤔',
-}
-
-export const SITUATION_LABELS: Record<SituationType, string> = {
-  considering_divorce: 'Harkitsee eroa',
-  partner_wants_divorce: 'Puoliso haluaa erota',
-  mutual_decision: 'Yhteinen päätös',
-  post_divorce: 'Eron jälkeen',
-  reconciliation: 'Yrittää korjata',
-  unknown: 'Kartoitetaan',
-}
-
-export const DECISION_LABELS: Record<DecisionStage, string> = {
-  exploring: 'Tutkii vaihtoehtoja',
-  leaning_towards: 'Kallistuu päätökseen',
-  decided: 'Päätös tehty',
-  processing_aftermath: 'Käsittelee eroa',
-  unknown: 'Alkuvaihe',
-}
-
-export const CONCERN_LABELS: Record<KeyConcern, string> = {
-  children_welfare: 'Lasten hyvinvointi',
-  finances: 'Talous',
-  housing: 'Asuminen',
-  loneliness: 'Yksinäisyys',
-  identity: 'Identiteetti',
-  social_stigma: 'Sosiaalinen paine',
-  trust: 'Luottamus',
-  guilt: 'Syyllisyys',
-  anger_management: 'Vihan hallinta',
-  co_parenting: 'Yhteishuoltajuus',
-  new_relationship: 'Uusi suhde',
-}
-
-export const NEED_LABELS: Record<SupportNeed, string> = {
-  emotional_support: 'Tunnetuki',
-  practical_advice: 'Käytännön neuvot',
-  tools_exercises: 'Työkalut & harjoitukset',
-  crisis_support: 'Kriisituki',
-  legal_info: 'Lakitieto',
-  children_guidance: 'Lapsiohjaus',
-  self_discovery: 'Itsetuntemus',
-}
-
-export const RESILIENCE_LABELS: Record<ResilienceLevel, string> = {
-  high: 'Vahva',
-  moderate: 'Kohtalainen',
-  low: 'Hauras',
-  crisis: 'Kriisi',
-}
-
-export const RESILIENCE_COLORS: Record<ResilienceLevel, string> = {
-  high: '#22c55e',
-  moderate: '#f59e0b',
-  low: '#ef4444',
-  crisis: '#dc2626',
 }
 
 /* ── Zustand store ── */

@@ -1,158 +1,105 @@
 import { useState } from 'react'
-
-/* ═══════════════════════════════════════════════════
-   TOOLKIT PANEL
-   Self-help exercises and practical tools that
-   add real value and can be used independently.
-   ═══════════════════════════════════════════════════ */
+import { useT } from '../lib/i18n'
 
 interface Exercise {
   id: string
   icon: string
-  title: string
-  duration: string
+  titleKey: string
+  durKey: string
   category: 'breathing' | 'writing' | 'reflection' | 'action' | 'mindfulness'
-  description: string
-  steps: string[]
-  tip?: string
+  descKey: string
+  stepKeys: string[]
+  tipKey?: string
 }
 
 const EXERCISES: Exercise[] = [
   {
     id: 'breathing-calm',
     icon: '🌬️',
-    title: '4-7-8 Rauhoittuminen',
-    duration: '3 min',
+    titleKey: 'toolkit.ex1title',
+    durKey: 'toolkit.ex1dur',
     category: 'breathing',
-    description: 'Aktivoi parasympaattinen hermosto ja lievitä ahdistusta tehokkaalla hengitystekniikalla.',
-    steps: [
-      'Hengitä nenän kautta sisään 4 sekuntia',
-      'Pidätä hengitystä 7 sekuntia',
-      'Puhalla suun kautta ulos 8 sekuntia',
-      'Toista 4 kierrosta',
-      'Huomaa miltä kehossasi tuntuu',
-    ],
-    tip: 'Tee tätä ennen nukkumaanmenoa tai aina kun ahdistus nousee.',
+    descKey: 'toolkit.ex1desc',
+    stepKeys: ['toolkit.ex1s1', 'toolkit.ex1s2', 'toolkit.ex1s3', 'toolkit.ex1s4', 'toolkit.ex1s5'],
+    tipKey: 'toolkit.ex1tip',
   },
   {
     id: 'grounding-54321',
     icon: '🌿',
-    title: '5-4-3-2-1 Maadoitus',
-    duration: '5 min',
+    titleKey: 'toolkit.ex2title',
+    durKey: 'toolkit.ex2dur',
     category: 'mindfulness',
-    description: 'Kun tunteet vyöryvät yli, tämä tekniikka ankkuroi sinut nykyhetkeen.',
-    steps: [
-      'Nimeä 5 asiaa jotka näet ympärilläsi',
-      'Nimeä 4 asiaa joihin voit koskea',
-      'Nimeä 3 ääntä jotka kuulet',
-      'Nimeä 2 tuoksua jotka haistat',
-      'Nimeä 1 maku jota maistat',
-    ],
-    tip: 'Käytä tätä paniikkikohtauksen tai voimakkaan tunnekuohun aikana.',
+    descKey: 'toolkit.ex2desc',
+    stepKeys: ['toolkit.ex2s1', 'toolkit.ex2s2', 'toolkit.ex2s3', 'toolkit.ex2s4', 'toolkit.ex2s5'],
+    tipKey: 'toolkit.ex2tip',
   },
   {
     id: 'emotion-wave',
     icon: '🌊',
-    title: 'Tunteiden aallokko',
-    duration: '10 min',
+    titleKey: 'toolkit.ex3title',
+    durKey: 'toolkit.ex3dur',
     category: 'reflection',
-    description: 'Opettele tarkkailemaan tunteitasi ilman tuomitsemista - ne tulevat ja menevät kuin aallot.',
-    steps: [
-      'Istu rauhallisesti ja sulje silmäsi',
-      'Tunnista: mikä tunne on nyt vahvin?',
-      'Missä kehossasi tunnet sen? Kuvaile tarkasti.',
-      'Anna tunteen olla - älä yritä muuttaa sitä',
-      'Huomaa: tunne muuttuu itsestään. Se on kuin aalto.',
-      'Kirjoita ylös mitä huomasit',
-    ],
-    tip: 'Tunteita ei tarvitse korjata. Ne ovat tietoa, eivät totuuksia.',
+    descKey: 'toolkit.ex3desc',
+    stepKeys: ['toolkit.ex3s1', 'toolkit.ex3s2', 'toolkit.ex3s3', 'toolkit.ex3s4', 'toolkit.ex3s5', 'toolkit.ex3s6'],
+    tipKey: 'toolkit.ex3tip',
   },
   {
     id: 'value-balance',
     icon: '⚖️',
-    title: 'Arvopuntari',
-    duration: '15 min',
+    titleKey: 'toolkit.ex4title',
+    durKey: 'toolkit.ex4dur',
     category: 'reflection',
-    description: 'Selkiytä mitä todella haluat elämältäsi. Erossa tärkeintä on tietää omat arvosi.',
-    steps: [
-      'Kirjoita 5 arvoa jotka ovat sinulle tärkeimpiä (esim. turvallisuus, vapaus, rehellisyys)',
-      'Anna jokaiselle pistemäärä 1-10: miten ne toteutuvat nyt?',
-      'Mieti: miten ne toteutuisivat eron jälkeen?',
-      'Entä jos yrittäisitte vielä?',
-      'Vertaa tuloksia - mikä suunta tukee arvojasi?',
-    ],
+    descKey: 'toolkit.ex4desc',
+    stepKeys: ['toolkit.ex4s1', 'toolkit.ex4s2', 'toolkit.ex4s3', 'toolkit.ex4s4', 'toolkit.ex4s5'],
   },
   {
     id: 'guilt-release',
     icon: '📝',
-    title: 'Syyllisyyskirje',
-    duration: '15 min',
+    titleKey: 'toolkit.ex5title',
+    durKey: 'toolkit.ex5dur',
     category: 'writing',
-    description: 'Syyllisyys on eron voimakkaimpia tunteita. Tämä harjoitus auttaa käsittelemään sitä turvallisesti.',
-    steps: [
-      'Kirjoita kirje itsellesi - aloita: "Rakas minä..."',
-      'Kerro mistä tunnet syyllisyyttä',
-      'Kirjoita sitten mitä sanoisit ystävällesi samassa tilanteessa',
-      'Huomaa ero: olet itseäsi kohtaan paljon ankarampi',
-      'Lopeta kirje anteeksiantoon: "Teit parhaasi sillä mitä tiesit"',
-    ],
-    tip: 'Syyllisyys on usein merkki siitä, että välität. Se ei tarkoita, että olet toiminut väärin.',
+    descKey: 'toolkit.ex5desc',
+    stepKeys: ['toolkit.ex5s1', 'toolkit.ex5s2', 'toolkit.ex5s3', 'toolkit.ex5s4', 'toolkit.ex5s5'],
+    tipKey: 'toolkit.ex5tip',
   },
   {
     id: 'safe-communication',
     icon: '🗣️',
-    title: 'Turvallinen viesti',
-    duration: '10 min',
+    titleKey: 'toolkit.ex6title',
+    durKey: 'toolkit.ex6dur',
     category: 'action',
-    description: 'Opi kommunikoimaan vaikeista asioista ilman syyttelyä. Tehokas työkalu ristiriitojen hallintaan.',
-    steps: [
-      'Valitse yksi asia josta haluaisit puhua kumppanisi kanssa',
-      'Muotoile se "Minä-viestinä": "Minä tunnen... kun... koska..."',
-      'Vältä: "Sinä aina..." / "Sinä et koskaan..."',
-      'Lisää toive: "Toivoisin, että voisimme..."',
-      'Harjoittele ääneen - miltä se kuulostaa?',
-    ],
-    tip: '"Sinä olet" → "Minä tunnen". Tämä yksi muutos voi muuttaa kaiken.',
+    descKey: 'toolkit.ex6desc',
+    stepKeys: ['toolkit.ex6s1', 'toolkit.ex6s2', 'toolkit.ex6s3', 'toolkit.ex6s4', 'toolkit.ex6s5'],
+    tipKey: 'toolkit.ex6tip',
   },
   {
     id: 'daily-anchor',
     icon: '⚓',
-    title: 'Päivän ankkurit',
-    duration: '5 min',
+    titleKey: 'toolkit.ex7title',
+    durKey: 'toolkit.ex7dur',
     category: 'writing',
-    description: 'Jokaisessa päivässä on jotain hyvää. Tämä harjoitus auttaa näkemään sen.',
-    steps: [
-      'Kirjoita 3 asiaa jotka kannattelevat sinua tänään',
-      'Yksi asia jonka teit hyvin (pienikin riittää)',
-      'Yksi asia jota odotat huomiselta',
-      'Yksi henkilö jolle olet kiitollinen',
-    ],
-    tip: 'Tee tätä joka ilta. Aivot oppivat etsimään hyvää kun harjoittelet.',
+    descKey: 'toolkit.ex7desc',
+    stepKeys: ['toolkit.ex7s1', 'toolkit.ex7s2', 'toolkit.ex7s3', 'toolkit.ex7s4'],
+    tipKey: 'toolkit.ex7tip',
   },
   {
     id: 'kids-emotion-map',
     icon: '🎨',
-    title: 'Lasten tunnekartta',
-    duration: '20 min',
+    titleKey: 'toolkit.ex8title',
+    durKey: 'toolkit.ex8dur',
     category: 'action',
-    description: 'Konkreettinen työkalu lasten tunteiden ymmärtämiseen ja tukemiseen eron aikana.',
-    steps: [
-      'Ota paperia ja kyniä - tee tämä lapsen kanssa tai yksin',
-      'Piirrä iso sydän ja jaa se osiin',
-      'Jokaiseen osaan: yksi tunne jonka lapsi saattaa kokea',
-      'Merkitse: mitä lapsi tarvitsee kunkin tunteen kanssa?',
-      'Keskustelkaa yhdessä: "On ok tuntea kaikkia näitä"',
-    ],
-    tip: 'Lapset eivät tarvitse täydellisiä vastauksia. He tarvitsevat tiedon, että tunteilla on tilaa.',
+    descKey: 'toolkit.ex8desc',
+    stepKeys: ['toolkit.ex8s1', 'toolkit.ex8s2', 'toolkit.ex8s3', 'toolkit.ex8s4', 'toolkit.ex8s5'],
+    tipKey: 'toolkit.ex8tip',
   },
 ]
 
-const CATEGORY_LABELS: Record<string, string> = {
-  breathing: 'Hengitys',
-  writing: 'Kirjoittaminen',
-  reflection: 'Reflektio',
-  action: 'Toiminta',
-  mindfulness: 'Läsnäolo',
+const CATEGORY_KEYS: Record<string, string> = {
+  breathing: 'toolkit.catBreathing',
+  writing: 'toolkit.catWriting',
+  reflection: 'toolkit.catReflection',
+  action: 'toolkit.catAction',
+  mindfulness: 'toolkit.catMindfulness',
 }
 
 const CATEGORY_COLORS: Record<string, string> = {
@@ -168,6 +115,7 @@ interface ToolkitPanelProps {
 }
 
 export default function ToolkitPanel({ onClose }: ToolkitPanelProps) {
+  const t = useT()
   const [selectedExercise, setSelectedExercise] = useState<Exercise | null>(null)
   const [filter, setFilter] = useState<string | null>(null)
 
@@ -186,12 +134,11 @@ export default function ToolkitPanel({ onClose }: ToolkitPanelProps) {
           }}
         >
           <div className="p-5">
-            {/* Header */}
             <div className="flex items-start justify-between mb-4">
               <div className="flex items-center gap-3">
                 <span className="text-3xl">{selectedExercise.icon}</span>
                 <div>
-                  <h2 className="text-lg font-bold text-gray-900">{selectedExercise.title}</h2>
+                  <h2 className="text-lg font-bold text-gray-900">{t(selectedExercise.titleKey)}</h2>
                   <div className="flex items-center gap-2 mt-1">
                     <span
                       className="text-[0.6rem] font-semibold px-2 py-0.5 rounded-full"
@@ -200,9 +147,9 @@ export default function ToolkitPanel({ onClose }: ToolkitPanelProps) {
                         color: CATEGORY_COLORS[selectedExercise.category],
                       }}
                     >
-                      {CATEGORY_LABELS[selectedExercise.category]}
+                      {t(CATEGORY_KEYS[selectedExercise.category])}
                     </span>
-                    <span className="text-[0.65rem] text-gray-400">⏱ {selectedExercise.duration}</span>
+                    <span className="text-[0.65rem] text-gray-400">⏱ {t(selectedExercise.durKey)}</span>
                   </div>
                 </div>
               </div>
@@ -216,11 +163,10 @@ export default function ToolkitPanel({ onClose }: ToolkitPanelProps) {
               </button>
             </div>
 
-            <p className="text-sm text-gray-600 leading-relaxed mb-5">{selectedExercise.description}</p>
+            <p className="text-sm text-gray-600 leading-relaxed mb-5">{t(selectedExercise.descKey)}</p>
 
-            {/* Steps */}
             <div className="space-y-3 mb-5">
-              {selectedExercise.steps.map((step, i) => (
+              {selectedExercise.stepKeys.map((sk, i) => (
                 <div key={i} className="flex items-start gap-3">
                   <span
                     className="flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold text-white"
@@ -228,20 +174,19 @@ export default function ToolkitPanel({ onClose }: ToolkitPanelProps) {
                   >
                     {i + 1}
                   </span>
-                  <p className="text-sm text-gray-700 leading-relaxed pt-0.5">{step}</p>
+                  <p className="text-sm text-gray-700 leading-relaxed pt-0.5">{t(sk)}</p>
                 </div>
               ))}
             </div>
 
-            {/* Tip */}
-            {selectedExercise.tip && (
+            {selectedExercise.tipKey && (
               <div
                 className="rounded-xl p-3.5 mb-4"
                 style={{ background: 'linear-gradient(135deg, #fef3c7, #fef9c3)' }}
               >
                 <div className="flex items-start gap-2">
                   <span className="text-sm">💡</span>
-                  <p className="text-xs text-amber-800 leading-relaxed">{selectedExercise.tip}</p>
+                  <p className="text-xs text-amber-800 leading-relaxed">{t(selectedExercise.tipKey)}</p>
                 </div>
               </div>
             )}
@@ -254,7 +199,7 @@ export default function ToolkitPanel({ onClose }: ToolkitPanelProps) {
                 boxShadow: '0 2px 8px rgba(22,163,74,0.25)',
               }}
             >
-              Valmis
+              {t('common.done')}
             </button>
           </div>
         </div>
@@ -271,14 +216,13 @@ export default function ToolkitPanel({ onClose }: ToolkitPanelProps) {
           boxShadow: '0 25px 50px rgba(0,0,0,0.15)',
         }}
       >
-        {/* Header */}
         <div className="p-5 border-b border-gray-100 flex-shrink-0">
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-3">
               <span className="text-2xl">🧰</span>
               <div>
-                <h2 className="text-lg font-bold text-gray-900">Elinan työkalupakki</h2>
-                <p className="text-xs text-gray-500">Tutkittuja harjoituksia ja tekniikoita itsehoitoon</p>
+                <h2 className="text-lg font-bold text-gray-900">{t('toolkit.title')}</h2>
+                <p className="text-xs text-gray-500">{t('toolkit.subtitle')}</p>
               </div>
             </div>
             <button
@@ -291,16 +235,15 @@ export default function ToolkitPanel({ onClose }: ToolkitPanelProps) {
             </button>
           </div>
 
-          {/* Filters */}
           <div className="flex flex-wrap gap-1.5">
             <button
               onClick={() => setFilter(null)}
               className={`text-[0.65rem] font-semibold px-2.5 py-1 rounded-full transition-all
                 ${!filter ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-500 hover:bg-gray-200'}`}
             >
-              Kaikki
+              {t('common.all')}
             </button>
-            {Object.entries(CATEGORY_LABELS).map(([key, label]) => (
+            {Object.entries(CATEGORY_KEYS).map(([key, tKey]) => (
               <button
                 key={key}
                 onClick={() => setFilter(filter === key ? null : key)}
@@ -313,13 +256,12 @@ export default function ToolkitPanel({ onClose }: ToolkitPanelProps) {
                   color: CATEGORY_COLORS[key],
                 }}
               >
-                {label}
+                {t(tKey)}
               </button>
             ))}
           </div>
         </div>
 
-        {/* Exercise grid */}
         <div className="flex-1 overflow-y-auto p-5">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {filtered.map((exercise) => (
@@ -332,9 +274,9 @@ export default function ToolkitPanel({ onClose }: ToolkitPanelProps) {
                 <div className="flex items-start gap-3">
                   <span className="text-2xl group-hover:scale-110 transition-transform">{exercise.icon}</span>
                   <div className="flex-1 min-w-0">
-                    <h3 className="font-semibold text-gray-900 text-sm leading-snug mb-1">{exercise.title}</h3>
+                    <h3 className="font-semibold text-gray-900 text-sm leading-snug mb-1">{t(exercise.titleKey)}</h3>
                     <p className="text-[0.7rem] text-gray-500 leading-relaxed line-clamp-2 mb-2">
-                      {exercise.description}
+                      {t(exercise.descKey)}
                     </p>
                     <div className="flex items-center gap-2">
                       <span
@@ -344,9 +286,9 @@ export default function ToolkitPanel({ onClose }: ToolkitPanelProps) {
                           color: CATEGORY_COLORS[exercise.category],
                         }}
                       >
-                        {CATEGORY_LABELS[exercise.category]}
+                        {t(CATEGORY_KEYS[exercise.category])}
                       </span>
-                      <span className="text-[0.6rem] text-gray-400">⏱ {exercise.duration}</span>
+                      <span className="text-[0.6rem] text-gray-400">⏱ {t(exercise.durKey)}</span>
                     </div>
                   </div>
                 </div>

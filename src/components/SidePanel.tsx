@@ -1,20 +1,25 @@
 import { useEffect } from 'react'
 import { useChatStore, type Conversation } from '../stores/chatStore'
 import { useProfileStore } from '../stores/profileStore'
+import { useT, useI18nStore } from '../lib/i18n'
 
-function timeAgo(dateStr: string): string {
+function timeAgo(dateStr: string, t: (key: string, vars?: Record<string, string | number>) => string, locale: string): string {
   const d = Date.now() - new Date(dateStr).getTime()
   const m = Math.floor(d / 60000)
-  if (m < 1) return 'Nyt'
-  if (m < 60) return `${m} min`
+  if (m < 1) return t('common.now')
+  if (m < 60) return t('common.min', { n: m })
   const h = Math.floor(d / 3600000)
-  if (h < 24) return `${h} h`
+  if (h < 24) return t('common.hours', { n: h })
   const days = Math.floor(d / 86400000)
-  if (days < 7) return `${days} pv`
-  return new Date(dateStr).toLocaleDateString('fi-FI')
+  if (days < 7) return t('common.days', { n: days })
+  return new Date(dateStr).toLocaleDateString(locale)
 }
 
 export default function SidePanel() {
+  const t = useT()
+  const lang = useI18nStore((s) => s.lang)
+  const locale = ({ fi: 'fi-FI', sv: 'sv-SE', en: 'en-GB', es: 'es-ES', it: 'it-IT', fr: 'fr-FR', de: 'de-DE' } as Record<string, string>)[lang] ?? 'fi-FI'
+
   const {
     conversations,
     currentConversationId,
@@ -61,8 +66,8 @@ export default function SidePanel() {
               <span className="text-xs">🤝</span>
             </div>
             <div>
-              <span className="text-xs font-bold text-gray-800 tracking-wide">EroCase</span>
-              <p className="text-[0.55rem] text-warm-400 leading-none mt-0.5">Tukea eron kynnyksellä</p>
+              <span className="text-xs font-bold text-gray-800 tracking-wide">{t('header.brand')}</span>
+              <p className="text-[0.55rem] text-warm-400 leading-none mt-0.5">{t('sidebar.subtitle')}</p>
             </div>
           </div>
           <button
@@ -90,7 +95,7 @@ export default function SidePanel() {
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
             </svg>
-            Uusi keskustelu Elinan kanssa
+            {t('sidebar.newChat')}
           </button>
         </div>
 
@@ -99,15 +104,15 @@ export default function SidePanel() {
           {conversations.length === 0 ? (
             <div className="text-center mt-12 px-4">
               <div className="text-2xl mb-2 opacity-30">💬</div>
-              <p className="text-xs text-warm-400 mb-1">Ei vielä keskusteluja</p>
+              <p className="text-xs text-warm-400 mb-1">{t('sidebar.noConversations')}</p>
               <p className="text-[0.6rem] text-warm-300 leading-relaxed">
-                Aloita keskustelu Elinan kanssa &mdash; hän on täällä sinua varten.
+                {t('sidebar.noConversationsHint')}
               </p>
             </div>
           ) : (
             <>
               <p className="text-[0.55rem] font-bold text-warm-400 uppercase tracking-wider px-3 mb-2">
-                Keskusteluhistoria
+                {t('sidebar.history')}
               </p>
               {conversations.map((c: Conversation) => {
                 const active = c.id === currentConversationId
@@ -132,9 +137,9 @@ export default function SidePanel() {
                           {c.mood === 'positive' ? '🌱' : c.mood === 'negative' ? '🌧️' : '💭'}
                         </span>
                       )}
-                      <p className="truncate leading-snug flex-1">{c.title || 'Uusi keskustelu'}</p>
+                      <p className="truncate leading-snug flex-1">{c.title || t('sidebar.defaultTitle')}</p>
                     </div>
-                    <p className="text-[0.6rem] text-warm-400 mt-0.5">{timeAgo(c.updated_at)}</p>
+                    <p className="text-[0.6rem] text-warm-400 mt-0.5">{timeAgo(c.updated_at, t, locale)}</p>
                   </button>
                 )
               })}
@@ -149,7 +154,7 @@ export default function SidePanel() {
               className="w-2 h-2 rounded-full flex-shrink-0"
               style={{ background: '#22c55e', animation: 'breathe 3s ease-in-out infinite' }}
             />
-            <p className="text-[0.6rem] text-warm-400">Elina on aina paikalla</p>
+            <p className="text-[0.6rem] text-warm-400">{t('sidebar.alwaysHere')}</p>
           </div>
         </div>
       </aside>
