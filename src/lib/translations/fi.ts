@@ -11,11 +11,12 @@ export const fi = {
   },
 
   auth: {
+    language: 'Kieli',
     title: 'Tervetuloa Solvia-demoon',
-    subtitle: 'Syötä salasana päästäksesi eteenpäin',
+    subtitle: 'Syötä salasana jatkaaksesi — tämä on vain demoversion käyttöön',
     placeholder: 'Salasana',
     button: 'Kirjaudu',
-    error: 'Väärä salasana',
+    error: 'Salasana ei täsmännyt. Voit kokeilla uudestaan.',
   },
 
   home: {
@@ -189,8 +190,8 @@ export const fi = {
   },
 
   chat: {
-    trustBadge: 'Solvia kuuntelee sinua luottamuksellisesti',
-    placeholder: 'Kerro tilanteestasi...',
+    trustBadge: 'Täällä voit olla oma itsesi — kaikki pysyy luottamuksellisena',
+    placeholder: 'Mitä mietit? Kirjoita tähän, niin kuuntelen.',
     enterHint: 'Enter lähettää \u00B7 Shift+Enter rivinvaihto',
   },
 
@@ -198,21 +199,21 @@ export const fi = {
     subtitle: 'Tukea elämän haasteissa',
     newChat: 'Uusi keskustelu Solvian kanssa',
     noConversations: 'Ei vielä keskusteluja',
-    noConversationsHint: 'Aloita keskustelu Solvian kanssa \u2014 hän on täällä sinua varten.',
+    noConversationsHint: 'Kun vain haluat puhua, olen täällä. Aloita milloin tahansa.',
     history: 'Keskusteluhistoria',
-    alwaysHere: 'Solvia on aina paikalla',
+    alwaysHere: 'Olen aina täällä, kun tarvitset.',
     defaultTitle: 'Uusi keskustelu',
   },
 
   profile: {
     title: 'Profiili',
-    building: 'Profiili rakentuu',
-    buildingDesc: 'Kun keskustelet Solvian kanssa, profiilisi rakentuu automaattisesti ja autan sinua yhä paremmin.',
-    completeness: 'Profiilin kattavuus',
-    completenessLow: 'Kerro lisää tilanteestasi',
-    completenessMedLow: 'Hyvä alku! Jatka kertomista',
-    completenessMedHigh: 'Profiili hahmottuu hyvin',
-    completenessHigh: 'Erinomainen kuva tilanteestasi',
+    building: 'Tutustutaan sinuun',
+    buildingDesc: 'Kun jaat Solvialle, saan vähitellen paremman kuvan tilanteestasi ja voin tukea sinua entistä paremmin.',
+    completeness: 'Kuva tilanteestasi',
+    completenessLow: 'Voit kertoa lisää kun vain valmis — ei kiire',
+    completenessMedLow: 'Hyvä alku. Jatka vain kertomista, kun siltä tuntuu',
+    completenessMedHigh: 'Saan jo hyvän kuvan — jatka rohkeasti',
+    completenessHigh: 'Kiitos että olet jakanut — ymmärrän tilanteesi hyvin',
     emotionalState: 'Tunnetila',
     intensity: 'Intensiteetti',
     situation: 'Tilanne',
@@ -311,10 +312,10 @@ export const fi = {
   },
 
   resilienceLabels: {
-    high: 'Vahva',
-    moderate: 'Kohtalainen',
-    low: 'Hauras',
-    crisis: 'Kriisi',
+    high: 'Hyvät voimavarat',
+    moderate: 'Tukea hyödyllistä',
+    low: 'Tarvitsee enemmän tukea',
+    crisis: 'Akuutti tuki tärkeää',
   },
 
   toolkit: {
@@ -440,12 +441,12 @@ export const fi = {
 
   topicDetail: {
     backButton: 'Takaisin aiheisiin',
-    startChat: 'Aloita keskustelu t\u00e4st\u00e4 aiheesta',
+    startChat: 'Haluan kuulla — kerro tästä aiheesta',
     signsTitle: 'Tunnista tilanne',
     tipsTitle: 'Ensimm\u00e4iset askeleet',
     methodsTitle: 'Tutkitut menetelm\u00e4t',
     exercisesTitle: 'Suositellut harjoitukset',
-    professionalTitle: 'Milloin hakea ammattiapua',
+    professionalTitle: 'Kun kannattaa hakeutua ammattiapuan',
     statsTitle: 'Tiesitk\u00f6?',
 
     relationship: {

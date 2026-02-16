@@ -13,11 +13,12 @@ export const sv: TranslationTree = {
   },
 
   auth: {
+    language: 'Spr\u00E5k',
     title: 'V\u00E4lkommen till Solvia-demo',
-    subtitle: 'Ange l\u00F6senord f\u00F6r att forts\u00E4tta',
+    subtitle: 'Ange l\u00F6senord f\u00F6r att forts\u00E4tta \u2014 endast f\u00F6r demo',
     placeholder: 'L\u00F6senord',
     button: 'Logga in',
-    error: 'Fel l\u00F6senord',
+    error: 'Det st\u00E4mde inte. Du kan f\u00F6rs\u00F6ka igen.',
   },
 
   home: {
@@ -191,8 +192,8 @@ export const sv: TranslationTree = {
   },
 
   chat: {
-    trustBadge: 'Solvia lyssnar p\u00E5 dig konfidentiellt',
-    placeholder: 'Ber\u00E4tta om din situation...',
+    trustBadge: 'H\u00E4r kan du vara dig sj\u00E4lv \u2014 allt stannar mellan oss',
+    placeholder: 'Vad t\u00E4nker du p\u00E5? Skriv h\u00E4r s\u00E5 lyssnar jag.',
     enterHint: 'Enter skickar \u00B7 Shift+Enter f\u00F6r ny rad',
   },
 
@@ -200,21 +201,21 @@ export const sv: TranslationTree = {
     subtitle: 'St\u00F6d vid livets utmaningar',
     newChat: 'Ny konversation med Solvia',
     noConversations: 'Inga konversationer \u00E4nnu',
-    noConversationsHint: 'Starta en konversation med Solvia \u2014 hon \u00E4r h\u00E4r f\u00F6r dig.',
+    noConversationsHint: 'N\u00E4r du vill prata \u00E4r jag h\u00E4r. B\u00F6rja n\u00E4r du \u00E4r redo.',
     history: 'Konversationshistorik',
-    alwaysHere: 'Solvia \u00E4r alltid h\u00E4r',
+    alwaysHere: 'Jag \u00E4r alltid h\u00E4r n\u00E4r du beh\u00F6ver mig.',
     defaultTitle: 'Ny konversation',
   },
 
   profile: {
     title: 'Profil',
-    building: 'Profilen byggs',
-    buildingDesc: 'N\u00E4r du chattar med Solvia byggs din profil automatiskt och jag kan hj\u00E4lpa dig \u00E4nnu b\u00E4ttre.',
-    completeness: 'Profilens komplettering',
-    completenessLow: 'Ber\u00E4tta mer om din situation',
-    completenessMedLow: 'Bra b\u00F6rjan! Forts\u00E4tt ber\u00E4tta',
-    completenessMedHigh: 'Profilen tar form bra',
-    completenessHigh: 'Utm\u00E4rkt bild av din situation',
+    building: 'Vi l\u00E4r k\u00E4nna dig',
+    buildingDesc: 'N\u00E4r du delar med Solvia f\u00E5r jag en tydligare bild av din situation och kan st\u00F6tta dig mer personligt.',
+    completeness: 'Bild av din situation',
+    completenessLow: 'Du kan ber\u00E4tta mer n\u00E4r du \u00E4r redo \u2014 ingen br\u00E5dska',
+    completenessMedLow: 'Bra start. Forts\u00E4tt dela n\u00E4r det k\u00E4nns r\u00E4tt',
+    completenessMedHigh: 'Jag f\u00E5r en bra bild \u2014 forts\u00E4tt g\u00E4rna dela',
+    completenessHigh: 'Tack f\u00F6r att du delar \u2014 jag har en bra f\u00F6rst\u00E5else f\u00F6r din situation',
     emotionalState: 'K\u00E4nslotillst\u00E5nd',
     intensity: 'Intensitet',
     situation: 'Situation',
@@ -313,10 +314,10 @@ export const sv: TranslationTree = {
   },
 
   resilienceLabels: {
-    high: 'Stark',
-    moderate: 'M\u00E5ttlig',
-    low: 'Sk\u00F6r',
-    crisis: 'Kris',
+    high: 'God resurs',
+    moderate: 'St\u00F6d g\u00F6r gott',
+    low: 'Beh\u00F6ver mer st\u00F6d',
+    crisis: 'Professionell st\u00F6d viktig',
   },
 
   toolkit: {
@@ -442,12 +443,12 @@ export const sv: TranslationTree = {
 
   topicDetail: {
     backButton: 'Tillbaka till \u00E4mnen',
-    startChat: 'Starta en konversation om detta \u00E4mne',
+    startChat: 'Jag vill g\u00E4rna h\u00F6ra \u2014 ber\u00E4tta om detta',
     signsTitle: 'K\u00E4nn igen tecknen',
     tipsTitle: 'F\u00F6rsta steg',
     methodsTitle: 'Evidensbaserade metoder',
     exercisesTitle: 'Rekommenderade \u00F6vningar',
-    professionalTitle: 'N\u00E4r du ska s\u00F6ka professionell hj\u00E4lp',
+    professionalTitle: 'N\u00E4r det \u00E4r bra att s\u00F6ka professionell st\u00F6d',
     statsTitle: 'Visste du att?',
 
     relationship: {

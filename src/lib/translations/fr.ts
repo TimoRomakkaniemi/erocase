@@ -13,11 +13,12 @@ export const fr: TranslationTree = {
   },
 
   auth: {
-    title: 'Bienvenue dans la démo Solvia',
-    subtitle: 'Entrez le mot de passe pour continuer',
+    language: 'Langue',
+    title: 'Bienvenue dans la d\u00E9mo Solvia',
+    subtitle: 'Entrez le mot de passe pour continuer \u2014 acc\u00E8s d\u00E9mo uniquement',
     placeholder: 'Mot de passe',
     button: 'Connexion',
-    error: 'Mot de passe incorrect',
+    error: '\u00C7a n\u2019a pas fonctionn\u00E9. Vous pouvez r\u00E9essayer.',
   },
 
   home: {
@@ -191,30 +192,30 @@ export const fr: TranslationTree = {
   },
 
   chat: {
-    trustBadge: 'Solvia vous écoute en toute confidentialité',
-    placeholder: 'Parlez de votre situation...',
-    enterHint: 'Entrée pour envoyer \u00B7 Shift+Entrée pour un saut de ligne',
+    trustBadge: 'Ici vous pouvez \u00EAtre vous-m\u00EAme \u2014 tout reste confidentiel',
+    placeholder: 'Qu\u2019est-ce qui vous pr\u00E9occupe ? \u00C9crivez ici, je vous \u00E9coute.',
+    enterHint: 'Entr\u00E9e pour envoyer \u00B7 Shift+Entr\u00E9e pour un saut de ligne',
   },
 
   sidebar: {
-    subtitle: 'Soutien pour les défis de la vie',
+    subtitle: 'Soutien pour les d\u00E9fis de la vie',
     newChat: 'Nouvelle conversation avec Solvia',
     noConversations: 'Pas encore de conversations',
-    noConversationsHint: 'Commencez une conversation avec Solvia \u2014 elle est là pour vous.',
+    noConversationsHint: 'Quand vous voulez parler, je suis l\u00E0. Commencez quand vous \u00EAtes pr\u00EAt(e).',
     history: 'Historique des conversations',
-    alwaysHere: 'Solvia est toujours là',
+    alwaysHere: 'Je suis toujours l\u00E0 quand vous avez besoin.',
     defaultTitle: 'Nouvelle conversation',
   },
 
   profile: {
     title: 'Profil',
-    building: 'Construction du profil',
-    buildingDesc: 'En discutant avec Solvia, votre profil se construit automatiquement et je peux vous aider encore mieux.',
-    completeness: 'Complétude du profil',
-    completenessLow: 'Parlez davantage de votre situation',
-    completenessMedLow: 'Bon début ! Continuez à partager',
-    completenessMedHigh: 'Le profil prend forme',
-    completenessHigh: 'Excellente vue de votre situation',
+    building: 'Je vous d\u00E9couvre',
+    buildingDesc: 'Quand vous partagez avec Solvia, je me fais une image plus claire et peux vous accompagner de fa\u00E7on plus personnelle.',
+    completeness: 'Image de votre situation',
+    completenessLow: 'Vous pouvez en dire plus quand vous voulez \u2014 sans pr\u00E9cipitation',
+    completenessMedLow: 'Bon d\u00E9but. Continuez \u00E0 partager quand \u00E7a vous va',
+    completenessMedHigh: 'Je me fais une bonne id\u00E9e \u2014 n\u2019h\u00E9sitez pas \u00E0 continuer',
+    completenessHigh: 'Merci d\u2019avoir partag\u00E9 \u2014 je comprends bien votre situation',
     emotionalState: 'État émotionnel',
     intensity: 'Intensité',
     situation: 'Situation',
@@ -313,10 +314,10 @@ export const fr: TranslationTree = {
   },
 
   resilienceLabels: {
-    high: 'Fort(e)',
-    moderate: 'Modéré(e)',
-    low: 'Fragile',
-    crisis: 'Crise',
+    high: 'Bonnes ressources',
+    moderate: 'Le soutien aide',
+    low: 'A besoin de plus de soutien',
+    crisis: 'Soutien professionnel important',
   },
 
   toolkit: {
@@ -442,12 +443,12 @@ export const fr: TranslationTree = {
 
   topicDetail: {
     backButton: 'Retour aux sujets',
-    startChat: 'Commencer une conversation sur ce sujet',
-    signsTitle: 'Reconnaître les signes',
+    startChat: 'J\u2019aimerais vous \u00E9couter \u2014 parlez-moi de ce sujet',
+    signsTitle: 'Reconna\u00EEtre les signes',
     tipsTitle: 'Premiers pas',
-    methodsTitle: 'Méthodes fondées sur les preuves',
-    exercisesTitle: 'Exercices recommandés',
-    professionalTitle: 'Quand consulter un professionnel',
+    methodsTitle: 'M\u00E9thodes fond\u00E9es sur les preuves',
+    exercisesTitle: 'Exercices recommand\u00E9s',
+    professionalTitle: 'Quand il est bon de faire appel \u00E0 un professionnel',
     statsTitle: 'Le saviez-vous ?',
 
     relationship: {

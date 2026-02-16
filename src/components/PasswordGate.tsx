@@ -41,11 +41,6 @@ export default function PasswordGate({ onAuthenticated }: Props) {
           style={{ background: 'radial-gradient(circle, #86efac 0%, transparent 70%)' }} />
       </div>
 
-      {/* Language selector */}
-      <div className="absolute top-4 right-4 z-10">
-        <LanguageSelector variant="dark" />
-      </div>
-
       {/* Login card */}
       <div className={`relative z-10 w-full max-w-sm mx-4 ${shake ? 'animate-shake' : ''}`}>
         <div className="rounded-2xl p-6 sm:p-8 backdrop-blur-xl"
@@ -55,6 +50,14 @@ export default function PasswordGate({ onAuthenticated }: Props) {
             boxShadow: '0 25px 50px rgba(0,0,0,0.3)',
           }}
         >
+          {/* Language selector – top of card */}
+          <div className="flex justify-end mb-6">
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-gray-500">{t('auth.language')}</span>
+              <LanguageSelector variant="dark" />
+            </div>
+          </div>
+
           {/* Logo */}
           <div className="text-center mb-8">
             <div className="inline-flex items-center justify-center mb-4">

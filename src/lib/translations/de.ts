@@ -13,11 +13,12 @@ export const de: TranslationTree = {
   },
 
   auth: {
+    language: 'Sprache',
     title: 'Willkommen zur Solvia-Demo',
-    subtitle: 'Geben Sie das Passwort ein, um fortzufahren',
+    subtitle: 'Passwort eingeben, um fortzufahren \u2014 nur f\u00FCr den Demo-Zugang',
     placeholder: 'Passwort',
     button: 'Anmelden',
-    error: 'Falsches Passwort',
+    error: 'Das hat nicht geklappt. Bitte versuchen Sie es erneut.',
   },
 
   home: {
@@ -191,8 +192,8 @@ export const de: TranslationTree = {
   },
 
   chat: {
-    trustBadge: 'Solvia hört Ihnen vertraulich zu',
-    placeholder: 'Erzählen Sie von Ihrer Situation...',
+    trustBadge: 'Hier können Sie Sie selbst sein — alles bleibt vertraulich',
+    placeholder: 'Was beschäftigt Sie? Schreiben Sie hier, ich höre zu.',
     enterHint: 'Enter zum Senden \u00B7 Shift+Enter für Zeilenumbruch',
   },
 
@@ -200,21 +201,21 @@ export const de: TranslationTree = {
     subtitle: 'Unterstützung in Lebenskrisen',
     newChat: 'Neues Gespräch mit Solvia',
     noConversations: 'Noch keine Gespräche',
-    noConversationsHint: 'Starten Sie ein Gespräch mit Solvia \u2014 sie ist für Sie da.',
+    noConversationsHint: 'Wenn Sie reden möchten, bin ich da. Starten Sie, wann Sie bereit sind.',
     history: 'Gesprächsverlauf',
-    alwaysHere: 'Solvia ist immer da',
+    alwaysHere: 'Ich bin immer da, wenn Sie mich brauchen.',
     defaultTitle: 'Neues Gespräch',
   },
 
   profile: {
     title: 'Profil',
-    building: 'Profilerstellung',
-    buildingDesc: 'Während Sie mit Solvia sprechen, wird Ihr Profil automatisch erstellt und ich kann Ihnen noch besser helfen.',
-    completeness: 'Profilvollständigkeit',
-    completenessLow: 'Erzählen Sie mehr über Ihre Situation',
-    completenessMedLow: 'Guter Anfang! Erzählen Sie weiter',
-    completenessMedHigh: 'Das Profil nimmt Form an',
-    completenessHigh: 'Ausgezeichnetes Bild Ihrer Situation',
+    building: 'Wir lernen Sie kennen',
+    buildingDesc: 'Wenn Sie Solvia etwas mitteilen, bekomme ich ein klareres Bild und kann Sie pers\u00F6nlicher unterst\u00FCtzen.',
+    completeness: 'Bild Ihrer Situation',
+    completenessLow: 'Sie k\u00F6nnen mehr erz\u00E4hlen, wann Sie m\u00F6chten \u2014 ohne Eile',
+    completenessMedLow: 'Guter Anfang. Erz\u00E4hlen Sie weiter, wenn es sich richtig anf\u00FChlt',
+    completenessMedHigh: 'Ich bekomme ein gutes Bild \u2014 erz\u00E4hlen Sie ruhig weiter',
+    completenessHigh: 'Danke, dass Sie teilen \u2014 ich verstehe Ihre Situation gut',
     emotionalState: 'Emotionaler Zustand',
     intensity: 'Intensität',
     situation: 'Situation',
@@ -313,10 +314,10 @@ export const de: TranslationTree = {
   },
 
   resilienceLabels: {
-    high: 'Stark',
-    moderate: 'Mäßig',
-    low: 'Zerbrechlich',
-    crisis: 'Krise',
+    high: 'Gute Ressourcen',
+    moderate: 'Unterstützung hilfreich',
+    low: 'Braucht mehr Unterstützung',
+    crisis: 'Professionelle Unterstützung wichtig',
   },
 
   toolkit: {
@@ -442,12 +443,12 @@ export const de: TranslationTree = {
 
   topicDetail: {
     backButton: 'Zurück zu den Themen',
-    startChat: 'Gespräch zu diesem Thema starten',
+    startChat: 'Ich höre gern zu — erzählen Sie davon',
     signsTitle: 'Anzeichen erkennen',
     tipsTitle: 'Erste Schritte',
     methodsTitle: 'Evidenzbasierte Methoden',
     exercisesTitle: 'Empfohlene Übungen',
-    professionalTitle: 'Wann professionelle Hilfe suchen?',
+    professionalTitle: 'Wann professionelle Unterstützung sinnvoll ist',
     statsTitle: 'Wussten Sie schon?',
 
     relationship: {

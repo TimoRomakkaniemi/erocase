@@ -13,11 +13,12 @@ export const es: TranslationTree = {
   },
 
   auth: {
-    title: 'Bienvenido a la demo de Solvia',
-    subtitle: 'Introduce la contraseña para continuar',
+    language: 'Idioma',
+    title: 'Bienvenido/a a la demo de Solvia',
+    subtitle: 'Introduce la contraseña para continuar — solo para acceder a la demo',
     placeholder: 'Contraseña',
-    button: 'Iniciar sesión',
-    error: 'Contraseña incorrecta',
+    button: 'Entrar',
+    error: 'No ha funcionado. Puedes intentarlo de nuevo.',
   },
 
   home: {
@@ -191,8 +192,8 @@ export const es: TranslationTree = {
   },
 
   chat: {
-    trustBadge: 'Solvia te escucha confidencialmente',
-    placeholder: 'Cuenta tu situación...',
+    trustBadge: 'Aquí puedes ser tú mismo/a — todo queda entre nosotros',
+    placeholder: '¿Qué te preocupa? Escribe aquí, te escucho.',
     enterHint: 'Enter para enviar \u00B7 Shift+Enter para nueva línea',
   },
 
@@ -200,21 +201,21 @@ export const es: TranslationTree = {
     subtitle: 'Apoyo para los retos de la vida',
     newChat: 'Nueva conversación con Solvia',
     noConversations: 'Aún no hay conversaciones',
-    noConversationsHint: 'Inicia una conversación con Solvia \u2014 está aquí para ti.',
+    noConversationsHint: 'Cuando quieras hablar, estoy aquí. Empieza cuando te apetezca.',
     history: 'Historial de conversaciones',
-    alwaysHere: 'Solvia siempre está aquí',
+    alwaysHere: 'Estoy siempre aquí cuando me necesites.',
     defaultTitle: 'Nueva conversación',
   },
 
   profile: {
     title: 'Perfil',
-    building: 'Perfil en construcción',
-    buildingDesc: 'Mientras charlas con Solvia, tu perfil se construye automáticamente y puedo ayudarte aún mejor.',
-    completeness: 'Completitud del perfil',
-    completenessLow: 'Cuenta más sobre tu situación',
-    completenessMedLow: '¡Buen comienzo! Sigue compartiendo',
-    completenessMedHigh: 'El perfil va tomando forma',
-    completenessHigh: 'Excelente panorama de tu situación',
+    building: 'Conociéndote',
+    buildingDesc: 'Cuando compartes con Solvia, voy entendiendo mejor tu situación y puedo apoyarte de forma más personal.',
+    completeness: 'Imagen de tu situación',
+    completenessLow: 'Puedes contar más cuando quieras — sin prisa',
+    completenessMedLow: 'Buen comienzo. Sigue compartiendo cuando te apetezca',
+    completenessMedHigh: 'Voy teniendo buena imagen — sigue compartiendo',
+    completenessHigh: 'Gracias por compartir — entiendo bien tu situación',
     emotionalState: 'Estado emocional',
     intensity: 'Intensidad',
     situation: 'Situación',
@@ -313,10 +314,10 @@ export const es: TranslationTree = {
   },
 
   resilienceLabels: {
-    high: 'Fuerte',
-    moderate: 'Moderado',
-    low: 'Frágil',
-    crisis: 'Crisis',
+    high: 'Buenos recursos',
+    moderate: 'El apoyo ayuda',
+    low: 'Necesita más apoyo',
+    crisis: 'Apoyo profesional importante',
   },
 
   toolkit: {
@@ -442,12 +443,12 @@ export const es: TranslationTree = {
 
   topicDetail: {
     backButton: 'Volver a los temas',
-    startChat: 'Iniciar conversación sobre este tema',
+    startChat: 'Me gustaría escucharte — cuéntame sobre esto',
     signsTitle: 'Reconoce la situación',
     tipsTitle: 'Primeros pasos',
     methodsTitle: 'Métodos basados en evidencia',
     exercisesTitle: 'Ejercicios recomendados',
-    professionalTitle: 'Cuándo buscar ayuda profesional',
+    professionalTitle: 'Cuándo conviene pedir apoyo profesional',
     statsTitle: '¿Sabías que?',
 
     relationship: {
