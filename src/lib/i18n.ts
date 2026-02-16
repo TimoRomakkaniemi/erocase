@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 
 /* ═══════════════════════════════════════════════════════
-   i18n – Internationalization system for EroCase
+   i18n – Internationalization system for Solvia
    Supports: FI, SV, EN, ES, IT, FR, DE
    Uses {{variable}} syntax for interpolation.
    ═══════════════════════════════════════════════════════ */
@@ -11,13 +11,13 @@ export type Lang = 'fi' | 'sv' | 'en' | 'es' | 'it' | 'fr' | 'de'
 const VALID_LANGS: Lang[] = ['fi', 'sv', 'en', 'es', 'it', 'fr', 'de']
 
 export const LANGUAGES: { code: Lang; label: string; flag: string }[] = [
-  { code: 'fi', label: 'Suomi', flag: '🇫🇮' },
-  { code: 'sv', label: 'Svenska', flag: '🇸🇪' },
+  { code: 'de', label: 'Deutsch', flag: '🇩🇪' },
   { code: 'en', label: 'English', flag: '🇬🇧' },
   { code: 'es', label: 'Español', flag: '🇪🇸' },
-  { code: 'it', label: 'Italiano', flag: '🇮🇹' },
   { code: 'fr', label: 'Français', flag: '🇫🇷' },
-  { code: 'de', label: 'Deutsch', flag: '🇩🇪' },
+  { code: 'it', label: 'Italiano', flag: '🇮🇹' },
+  { code: 'fi', label: 'Suomi', flag: '🇫🇮' },
+  { code: 'sv', label: 'Svenska', flag: '🇸🇪' },
 ]
 
 function getNestedValue(obj: Record<string, unknown>, path: string): string | undefined {
@@ -43,7 +43,7 @@ interface I18nState {
 }
 
 function getInitialLang(): Lang {
-  const stored = localStorage.getItem('erocase_lang')
+  const stored = localStorage.getItem('solvia_lang')
   if (stored && VALID_LANGS.includes(stored as Lang)) return stored as Lang
   const browser = navigator.language.slice(0, 2).toLowerCase()
   if (VALID_LANGS.includes(browser as Lang)) return browser as Lang
@@ -53,7 +53,7 @@ function getInitialLang(): Lang {
 export const useI18nStore = create<I18nState>((set) => ({
   lang: getInitialLang(),
   setLang: (lang: Lang) => {
-    localStorage.setItem('erocase_lang', lang)
+    localStorage.setItem('solvia_lang', lang)
     set({ lang })
   },
 }))
