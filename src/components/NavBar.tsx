@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useT } from '../lib/i18n'
 import LanguageSelector from './LanguageSelector'
+import SolviaLogo from './SolviaLogo'
 
 interface Props {
   currentView: 'home' | 'demo'
@@ -53,12 +54,9 @@ export default function NavBar({ currentView, onNavigate }: Props) {
           onClick={() => onNavigate('home')}
           className="flex items-center gap-2 hover:opacity-80 transition-opacity"
         >
-          <div className="w-7 h-7 rounded-lg flex items-center justify-center"
-            style={{ background: 'linear-gradient(135deg, #22c55e 0%, #16a34a 100%)' }}>
-            <span className="text-base">🤝</span>
-          </div>
+          <SolviaLogo size={28} />
           <span className={`font-bold text-base transition-colors ${forceLight ? 'text-gray-900' : 'text-white'}`}>
-            EroCase
+            Solvia
           </span>
         </button>
 

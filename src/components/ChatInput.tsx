@@ -38,7 +38,7 @@ export default function ChatInput({ onSend, disabled }: ChatInputProps) {
 
   return (
     <div
-      className="flex-shrink-0 px-4 py-3"
+      className="flex-shrink-0 px-3 sm:px-4 py-3 safe-bottom"
       style={{
         background: 'linear-gradient(180deg, rgba(250,248,246,0) 0%, #faf8f6 30%)',
       }}
@@ -69,7 +69,7 @@ export default function ChatInput({ onSend, disabled }: ChatInputProps) {
           <button
             onClick={handleSend}
             disabled={!hasText || disabled}
-            className="flex-shrink-0 w-9 h-9 rounded-xl flex items-center justify-center transition-all duration-200"
+            className="flex-shrink-0 w-10 h-10 sm:w-9 sm:h-9 rounded-xl flex items-center justify-center transition-all duration-200"
             style={{
               background: hasText && !disabled
                 ? 'linear-gradient(135deg, #22c55e 0%, #16a34a 100%)'
@@ -88,7 +88,7 @@ export default function ChatInput({ onSend, disabled }: ChatInputProps) {
           </button>
         </div>
 
-        <p className="text-center text-[0.6rem] text-warm-300 mt-2 select-none">
+        <p className="text-center text-xs sm:text-[0.6rem] text-warm-300 mt-2 select-none">
           {t('chat.enterHint')}
         </p>
       </div>

@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { useChatStore, type Conversation } from '../stores/chatStore'
 import { useProfileStore } from '../stores/profileStore'
 import { useT, useI18nStore } from '../lib/i18n'
+import SolviaLogo from './SolviaLogo'
 
 function timeAgo(dateStr: string, t: (key: string, vars?: Record<string, string | number>) => string, locale: string): string {
   const d = Date.now() - new Date(dateStr).getTime()
@@ -46,7 +47,7 @@ export default function SidePanel() {
         <div className="fixed inset-0 bg-black/30 backdrop-blur-sm z-40 lg:hidden" onClick={() => setSidebarOpen(false)} />
       )}
       <aside
-        className={`fixed top-0 left-0 h-full w-[270px] z-50 
+        className={`fixed top-0 left-0 h-full w-[85vw] max-w-[270px] z-50 
                      flex flex-col transform transition-transform duration-200 ease-out
                      ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
                      lg:relative lg:translate-x-0 lg:z-auto
@@ -59,20 +60,15 @@ export default function SidePanel() {
         {/* Top */}
         <div className="p-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div
-              className="w-7 h-7 rounded-full flex items-center justify-center"
-              style={{ background: 'linear-gradient(135deg, #22c55e 0%, #86efac 100%)' }}
-            >
-              <span className="text-xs">🤝</span>
-            </div>
+            <SolviaLogo size={28} className="rounded-full" />
             <div>
               <span className="text-xs font-bold text-gray-800 tracking-wide">{t('header.brand')}</span>
-              <p className="text-[0.55rem] text-warm-400 leading-none mt-0.5">{t('sidebar.subtitle')}</p>
+              <p className="text-xs sm:text-[0.55rem] text-warm-400 leading-none mt-0.5">{t('sidebar.subtitle')}</p>
             </div>
           </div>
           <button
             onClick={() => setSidebarOpen(false)}
-            className="lg:hidden p-1 rounded-lg hover:bg-warm-200/60 text-warm-400"
+            className="lg:hidden p-2 rounded-lg hover:bg-warm-200/60 text-warm-400"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
@@ -105,13 +101,13 @@ export default function SidePanel() {
             <div className="text-center mt-12 px-4">
               <div className="text-2xl mb-2 opacity-30">💬</div>
               <p className="text-xs text-warm-400 mb-1">{t('sidebar.noConversations')}</p>
-              <p className="text-[0.6rem] text-warm-300 leading-relaxed">
+              <p className="text-xs sm:text-[0.6rem] text-warm-300 leading-relaxed">
                 {t('sidebar.noConversationsHint')}
               </p>
             </div>
           ) : (
             <>
-              <p className="text-[0.55rem] font-bold text-warm-400 uppercase tracking-wider px-3 mb-2">
+              <p className="text-xs sm:text-[0.55rem] font-bold text-warm-400 uppercase tracking-wider px-3 mb-2">
                 {t('sidebar.history')}
               </p>
               {conversations.map((c: Conversation) => {
@@ -139,7 +135,7 @@ export default function SidePanel() {
                       )}
                       <p className="truncate leading-snug flex-1">{c.title || t('sidebar.defaultTitle')}</p>
                     </div>
-                    <p className="text-[0.6rem] text-warm-400 mt-0.5">{timeAgo(c.updated_at, t, locale)}</p>
+                    <p className="text-xs sm:text-[0.6rem] text-warm-400 mt-0.5">{timeAgo(c.updated_at, t, locale)}</p>
                   </button>
                 )
               })}
@@ -154,7 +150,7 @@ export default function SidePanel() {
               className="w-2 h-2 rounded-full flex-shrink-0"
               style={{ background: '#22c55e', animation: 'breathe 3s ease-in-out infinite' }}
             />
-            <p className="text-[0.6rem] text-warm-400">{t('sidebar.alwaysHere')}</p>
+            <p className="text-xs sm:text-[0.6rem] text-warm-400">{t('sidebar.alwaysHere')}</p>
           </div>
         </div>
       </aside>

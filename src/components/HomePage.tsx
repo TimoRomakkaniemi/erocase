@@ -1,4 +1,5 @@
 import { useT } from '../lib/i18n'
+import SolviaLogo from './SolviaLogo'
 
 interface Props {
   onOpenDemo: () => void
@@ -36,13 +37,13 @@ export default function HomePage({ onOpenDemo }: Props) {
         }}
       >
         <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-20 right-1/4 w-[500px] h-[500px] rounded-full"
+          <div className="absolute top-20 right-1/4 w-[200px] h-[200px] sm:w-[350px] sm:h-[350px] lg:w-[500px] lg:h-[500px] rounded-full"
             style={{ background: 'radial-gradient(circle, rgba(34,197,94,0.12) 0%, transparent 60%)' }} />
-          <div className="absolute bottom-20 left-1/4 w-[400px] h-[400px] rounded-full"
+          <div className="absolute bottom-20 left-1/4 w-[150px] h-[150px] sm:w-[250px] sm:h-[250px] lg:w-[400px] lg:h-[400px] rounded-full"
             style={{ background: 'radial-gradient(circle, rgba(134,239,172,0.08) 0%, transparent 60%)' }} />
         </div>
 
-        <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 py-32 w-full">
+        <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 py-20 sm:py-28 lg:py-32 w-full">
           <div className="max-w-2xl">
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full mb-6 anim-in"
               style={{
@@ -54,7 +55,7 @@ export default function HomePage({ onOpenDemo }: Props) {
               <span className="text-xs font-medium text-brand-400">{t('home.heroTag')}</span>
             </div>
 
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6 anim-in"
+            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6 anim-in"
               style={{ animationDelay: '0.1s' }}
             >
               {t('home.heroTitle')}<br />
@@ -65,7 +66,7 @@ export default function HomePage({ onOpenDemo }: Props) {
               </span>
             </h1>
 
-            <p className="text-lg text-gray-400 leading-relaxed mb-8 max-w-xl anim-in"
+            <p className="text-base sm:text-lg text-gray-400 leading-relaxed mb-8 max-w-xl anim-in"
               style={{ animationDelay: '0.2s' }}
             >
               {t('home.heroDesc')}
@@ -95,7 +96,7 @@ export default function HomePage({ onOpenDemo }: Props) {
           </div>
         </div>
 
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2">
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 hidden sm:block">
           <div className="w-6 h-10 rounded-full border-2 border-white/20 flex items-start justify-center p-1.5">
             <div className="w-1 h-2 rounded-full bg-white/40 animate-bounce" />
           </div>
@@ -164,14 +165,13 @@ export default function HomePage({ onOpenDemo }: Props) {
         }}
       >
         <div className="max-w-3xl mx-auto px-4 sm:px-6 text-center">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-6"
-            style={{ background: 'linear-gradient(135deg, #22c55e 0%, #16a34a 100%)' }}>
-            <span className="text-3xl">🤝</span>
+          <div className="inline-flex items-center justify-center mb-6">
+            <SolviaLogo size={64} className="rounded-2xl" />
           </div>
           <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">{t('home.ctaTitle')}</h2>
           <p className="text-gray-400 mb-8 max-w-lg mx-auto">{t('home.ctaDesc')}</p>
           <button onClick={onOpenDemo}
-            className="px-8 py-4 rounded-xl text-base font-semibold text-white transition-all hover:brightness-110 active:scale-[0.98]"
+              className="px-6 py-3 sm:px-8 sm:py-4 rounded-xl text-sm sm:text-base font-semibold text-white transition-all hover:brightness-110 active:scale-[0.98]"
             style={{
               background: 'linear-gradient(135deg, #22c55e 0%, #16a34a 100%)',
               boxShadow: '0 4px 24px rgba(34,197,94,0.35)',
@@ -186,8 +186,8 @@ export default function HomePage({ onOpenDemo }: Props) {
       <footer className="py-8 bg-gray-900 border-t border-gray-800">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-3">
           <div className="flex items-center gap-2">
-            <span className="text-lg">🤝</span>
-            <span className="text-sm font-semibold text-white">EroCase</span>
+            <SolviaLogo size={24} />
+            <span className="text-sm font-semibold text-white">Solvia</span>
           </div>
           <p className="text-xs text-gray-500">
             {t('home.footerMadeWith')} ❤️ &nbsp;|&nbsp; {t('home.footerRights', { year: new Date().getFullYear() })}

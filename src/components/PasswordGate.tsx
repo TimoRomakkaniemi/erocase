@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useT } from '../lib/i18n'
 import LanguageSelector from './LanguageSelector'
+import SolviaLogo from './SolviaLogo'
 
 const CORRECT_PASSWORD = 'tenkanen'
 
@@ -17,7 +18,7 @@ export default function PasswordGate({ onAuthenticated }: Props) {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (password.trim().toLowerCase() === CORRECT_PASSWORD) {
-      sessionStorage.setItem('erocase_auth', '1')
+      sessionStorage.setItem('solvia_auth', '1')
       onAuthenticated()
     } else {
       setError(true)
@@ -34,9 +35,9 @@ export default function PasswordGate({ onAuthenticated }: Props) {
     >
       {/* Background elements */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full opacity-10"
+        <div className="absolute top-1/4 left-1/4 w-48 h-48 sm:w-64 sm:h-64 lg:w-96 lg:h-96 rounded-full opacity-10"
           style={{ background: 'radial-gradient(circle, #22c55e 0%, transparent 70%)' }} />
-        <div className="absolute bottom-1/4 right-1/4 w-64 h-64 rounded-full opacity-8"
+        <div className="absolute bottom-1/4 right-1/4 w-32 h-32 sm:w-48 sm:h-48 lg:w-64 lg:h-64 rounded-full opacity-8"
           style={{ background: 'radial-gradient(circle, #86efac 0%, transparent 70%)' }} />
       </div>
 
@@ -47,7 +48,7 @@ export default function PasswordGate({ onAuthenticated }: Props) {
 
       {/* Login card */}
       <div className={`relative z-10 w-full max-w-sm mx-4 ${shake ? 'animate-shake' : ''}`}>
-        <div className="rounded-2xl p-8 backdrop-blur-xl"
+        <div className="rounded-2xl p-6 sm:p-8 backdrop-blur-xl"
           style={{
             background: 'rgba(255,255,255,0.05)',
             border: '1px solid rgba(255,255,255,0.1)',
@@ -56,9 +57,8 @@ export default function PasswordGate({ onAuthenticated }: Props) {
         >
           {/* Logo */}
           <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-4"
-              style={{ background: 'linear-gradient(135deg, #22c55e 0%, #16a34a 100%)' }}>
-              <span className="text-3xl">🤝</span>
+            <div className="inline-flex items-center justify-center mb-4">
+              <SolviaLogo size={64} className="rounded-2xl" />
             </div>
             <h1 className="text-xl font-bold text-white mb-1">{t('auth.title')}</h1>
             <p className="text-sm text-gray-400">{t('auth.subtitle')}</p>
@@ -85,7 +85,7 @@ export default function PasswordGate({ onAuthenticated }: Props) {
             </div>
             <button
               type="submit"
-              className="w-full py-3 rounded-xl text-sm font-semibold text-white transition-all hover:brightness-110 active:scale-[0.98]"
+              className="w-full h-11 rounded-xl text-sm font-semibold text-white transition-all hover:brightness-110 active:scale-[0.98]"
               style={{
                 background: 'linear-gradient(135deg, #22c55e 0%, #16a34a 100%)',
                 boxShadow: '0 4px 12px rgba(34,197,94,0.3)',

@@ -34,37 +34,38 @@ const EXERCISES: Exercise[] = [
     tipKey: 'toolkit.ex2tip',
   },
   {
-    id: 'emotion-wave',
-    icon: '🌊',
+    id: 'thought-record',
+    icon: '📝',
     titleKey: 'toolkit.ex3title',
     durKey: 'toolkit.ex3dur',
-    category: 'reflection',
+    category: 'writing',
     descKey: 'toolkit.ex3desc',
     stepKeys: ['toolkit.ex3s1', 'toolkit.ex3s2', 'toolkit.ex3s3', 'toolkit.ex3s4', 'toolkit.ex3s5', 'toolkit.ex3s6'],
     tipKey: 'toolkit.ex3tip',
   },
   {
-    id: 'value-balance',
-    icon: '⚖️',
+    id: 'value-compass',
+    icon: '🧭',
     titleKey: 'toolkit.ex4title',
     durKey: 'toolkit.ex4dur',
     category: 'reflection',
     descKey: 'toolkit.ex4desc',
     stepKeys: ['toolkit.ex4s1', 'toolkit.ex4s2', 'toolkit.ex4s3', 'toolkit.ex4s4', 'toolkit.ex4s5'],
+    tipKey: 'toolkit.ex4tip',
   },
   {
-    id: 'guilt-release',
-    icon: '📝',
+    id: 'tipp-technique',
+    icon: '🧊',
     titleKey: 'toolkit.ex5title',
     durKey: 'toolkit.ex5dur',
-    category: 'writing',
+    category: 'breathing',
     descKey: 'toolkit.ex5desc',
-    stepKeys: ['toolkit.ex5s1', 'toolkit.ex5s2', 'toolkit.ex5s3', 'toolkit.ex5s4', 'toolkit.ex5s5'],
+    stepKeys: ['toolkit.ex5s1', 'toolkit.ex5s2', 'toolkit.ex5s3', 'toolkit.ex5s4'],
     tipKey: 'toolkit.ex5tip',
   },
   {
-    id: 'safe-communication',
-    icon: '🗣️',
+    id: 'behavioral-activation',
+    icon: '🚀',
     titleKey: 'toolkit.ex6title',
     durKey: 'toolkit.ex6dur',
     category: 'action',
@@ -73,18 +74,18 @@ const EXERCISES: Exercise[] = [
     tipKey: 'toolkit.ex6tip',
   },
   {
-    id: 'daily-anchor',
-    icon: '⚓',
+    id: 'urge-surfing',
+    icon: '🌊',
     titleKey: 'toolkit.ex7title',
     durKey: 'toolkit.ex7dur',
-    category: 'writing',
+    category: 'mindfulness',
     descKey: 'toolkit.ex7desc',
-    stepKeys: ['toolkit.ex7s1', 'toolkit.ex7s2', 'toolkit.ex7s3', 'toolkit.ex7s4'],
+    stepKeys: ['toolkit.ex7s1', 'toolkit.ex7s2', 'toolkit.ex7s3', 'toolkit.ex7s4', 'toolkit.ex7s5'],
     tipKey: 'toolkit.ex7tip',
   },
   {
-    id: 'kids-emotion-map',
-    icon: '🎨',
+    id: 'sleep-hygiene',
+    icon: '🌙',
     titleKey: 'toolkit.ex8title',
     durKey: 'toolkit.ex8dur',
     category: 'action',
@@ -125,23 +126,23 @@ export default function ToolkitPanel({ onClose }: ToolkitPanelProps) {
 
   if (selectedExercise) {
     return (
-      <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4">
+      <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4">
         <div
-          className="w-full max-w-lg max-h-[90vh] overflow-y-auto rounded-2xl"
+          className="w-full max-w-[95vw] sm:max-w-lg max-h-[90vh] overflow-y-auto rounded-2xl"
           style={{
             background: 'linear-gradient(180deg, #ffffff 0%, #faf8f6 100%)',
             boxShadow: '0 25px 50px rgba(0,0,0,0.15)',
           }}
         >
-          <div className="p-5">
+          <div className="p-4 sm:p-5">
             <div className="flex items-start justify-between mb-4">
-              <div className="flex items-center gap-3">
-                <span className="text-3xl">{selectedExercise.icon}</span>
-                <div>
-                  <h2 className="text-lg font-bold text-gray-900">{t(selectedExercise.titleKey)}</h2>
+              <div className="flex items-center gap-2 sm:gap-3">
+                <span className="text-2xl sm:text-3xl">{selectedExercise.icon}</span>
+                <div className="min-w-0">
+                  <h2 className="text-base sm:text-lg font-bold text-gray-900">{t(selectedExercise.titleKey)}</h2>
                   <div className="flex items-center gap-2 mt-1">
                     <span
-                      className="text-[0.6rem] font-semibold px-2 py-0.5 rounded-full"
+                      className="text-xs sm:text-[0.6rem] font-semibold px-2 py-0.5 rounded-full"
                       style={{
                         background: `${CATEGORY_COLORS[selectedExercise.category]}15`,
                         color: CATEGORY_COLORS[selectedExercise.category],
@@ -149,13 +150,13 @@ export default function ToolkitPanel({ onClose }: ToolkitPanelProps) {
                     >
                       {t(CATEGORY_KEYS[selectedExercise.category])}
                     </span>
-                    <span className="text-[0.65rem] text-gray-400">⏱ {t(selectedExercise.durKey)}</span>
+                    <span className="text-xs sm:text-[0.65rem] text-gray-400">⏱ {t(selectedExercise.durKey)}</span>
                   </div>
                 </div>
               </div>
               <button
                 onClick={() => setSelectedExercise(null)}
-                className="p-1 rounded-lg hover:bg-gray-100 text-gray-400"
+                className="p-2 sm:p-1.5 rounded-lg hover:bg-gray-100 text-gray-400"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
@@ -193,7 +194,7 @@ export default function ToolkitPanel({ onClose }: ToolkitPanelProps) {
 
             <button
               onClick={() => setSelectedExercise(null)}
-              className="w-full py-2.5 rounded-xl text-sm font-semibold text-white transition-all active:scale-[0.98]"
+              className="w-full h-11 sm:py-2.5 rounded-xl text-sm font-semibold text-white transition-all active:scale-[0.98]"
               style={{
                 background: 'linear-gradient(135deg, #22c55e, #16a34a)',
                 boxShadow: '0 2px 8px rgba(22,163,74,0.25)',
@@ -208,20 +209,20 @@ export default function ToolkitPanel({ onClose }: ToolkitPanelProps) {
   }
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4">
       <div
-        className="w-full max-w-2xl max-h-[85vh] overflow-hidden rounded-2xl flex flex-col"
+        className="w-full max-w-[95vw] sm:max-w-2xl max-h-[90vh] sm:max-h-[85vh] overflow-hidden rounded-2xl flex flex-col"
         style={{
           background: 'linear-gradient(180deg, #ffffff 0%, #faf8f6 100%)',
           boxShadow: '0 25px 50px rgba(0,0,0,0.15)',
         }}
       >
-        <div className="p-5 border-b border-gray-100 flex-shrink-0">
+        <div className="p-4 sm:p-5 border-b border-gray-100 flex-shrink-0">
           <div className="flex items-center justify-between mb-3">
-            <div className="flex items-center gap-3">
-              <span className="text-2xl">🧰</span>
+            <div className="flex items-center gap-2 sm:gap-3">
+              <span className="text-xl sm:text-2xl">🧰</span>
               <div>
-                <h2 className="text-lg font-bold text-gray-900">{t('toolkit.title')}</h2>
+                <h2 className="text-base sm:text-lg font-bold text-gray-900">{t('toolkit.title')}</h2>
                 <p className="text-xs text-gray-500">{t('toolkit.subtitle')}</p>
               </div>
             </div>
@@ -238,7 +239,7 @@ export default function ToolkitPanel({ onClose }: ToolkitPanelProps) {
           <div className="flex flex-wrap gap-1.5">
             <button
               onClick={() => setFilter(null)}
-              className={`text-[0.65rem] font-semibold px-2.5 py-1 rounded-full transition-all
+              className={`text-xs sm:text-[0.65rem] font-semibold px-3 py-1.5 sm:px-2.5 sm:py-1 rounded-full transition-all
                 ${!filter ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-500 hover:bg-gray-200'}`}
             >
               {t('common.all')}
@@ -247,7 +248,7 @@ export default function ToolkitPanel({ onClose }: ToolkitPanelProps) {
               <button
                 key={key}
                 onClick={() => setFilter(filter === key ? null : key)}
-                className="text-[0.65rem] font-semibold px-2.5 py-1 rounded-full transition-all"
+                className="text-xs sm:text-[0.65rem] font-semibold px-3 py-1.5 sm:px-2.5 sm:py-1 rounded-full transition-all"
                 style={filter === key ? {
                   background: CATEGORY_COLORS[key],
                   color: 'white',
@@ -262,8 +263,8 @@ export default function ToolkitPanel({ onClose }: ToolkitPanelProps) {
           </div>
         </div>
 
-        <div className="flex-1 overflow-y-auto p-5">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div className="flex-1 overflow-y-auto p-4 sm:p-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
             {filtered.map((exercise) => (
               <button
                 key={exercise.id}
@@ -275,12 +276,12 @@ export default function ToolkitPanel({ onClose }: ToolkitPanelProps) {
                   <span className="text-2xl group-hover:scale-110 transition-transform">{exercise.icon}</span>
                   <div className="flex-1 min-w-0">
                     <h3 className="font-semibold text-gray-900 text-sm leading-snug mb-1">{t(exercise.titleKey)}</h3>
-                    <p className="text-[0.7rem] text-gray-500 leading-relaxed line-clamp-2 mb-2">
+                    <p className="text-xs sm:text-[0.7rem] text-gray-500 leading-relaxed line-clamp-2 mb-2">
                       {t(exercise.descKey)}
                     </p>
                     <div className="flex items-center gap-2">
                       <span
-                        className="text-[0.6rem] font-semibold px-2 py-0.5 rounded-full"
+                        className="text-xs sm:text-[0.6rem] font-semibold px-2 py-0.5 rounded-full"
                         style={{
                           background: `${CATEGORY_COLORS[exercise.category]}12`,
                           color: CATEGORY_COLORS[exercise.category],
@@ -288,7 +289,7 @@ export default function ToolkitPanel({ onClose }: ToolkitPanelProps) {
                       >
                         {t(CATEGORY_KEYS[exercise.category])}
                       </span>
-                      <span className="text-[0.6rem] text-gray-400">⏱ {t(exercise.durKey)}</span>
+                      <span className="text-xs sm:text-[0.6rem] text-gray-400">⏱ {t(exercise.durKey)}</span>
                     </div>
                   </div>
                 </div>

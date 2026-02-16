@@ -1,4 +1,5 @@
 import { useT } from '../lib/i18n'
+import SolviaLogo from './SolviaLogo'
 
 export default function TypingIndicator() {
   const t = useT()
@@ -6,16 +7,10 @@ export default function TypingIndicator() {
   return (
     <div className="mb-6 animate-fade-in-up">
       <div className="flex items-center gap-2.5 mb-2.5">
-        <div
-          className="w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0"
-          style={{
-            background: 'linear-gradient(135deg, #22c55e 0%, #86efac 100%)',
+        <SolviaLogo size={28} className="rounded-full flex-shrink-0" style={{
             boxShadow: '0 2px 8px rgba(34,197,94,0.2)',
-          }}
-        >
-          <span className="text-xs">🤝</span>
-        </div>
-        <span className="text-xs font-semibold text-gray-700 tracking-wide">Elina</span>
+          }} />
+        <span className="text-xs font-semibold text-gray-700 tracking-wide">Solvia</span>
         <span className="text-[0.6rem] text-brand-500 font-medium animate-pulse">{t('header.thinking')}</span>
       </div>
 

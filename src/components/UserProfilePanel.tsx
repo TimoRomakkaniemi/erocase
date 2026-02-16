@@ -46,7 +46,7 @@ function ProfileContent({ profile }: { profile: UserProfile }) {
       <div className="flex-1 flex flex-col items-center justify-center px-4 text-center">
         <div className="text-4xl mb-3 opacity-40">🔍</div>
         <p className="text-sm font-medium text-gray-500 mb-1">{t('profile.building')}</p>
-        <p className="text-[0.7rem] text-gray-400 leading-relaxed">{t('profile.buildingDesc')}</p>
+        <p className="text-xs sm:text-[0.7rem] text-gray-400 leading-relaxed">{t('profile.buildingDesc')}</p>
       </div>
     )
   }
@@ -68,7 +68,7 @@ function ProfileContent({ profile }: { profile: UserProfile }) {
           {profile.completenessScore}%
         </span>
       </div>
-      <p className="text-[0.6rem] text-gray-400">
+      <p className="text-xs sm:text-[0.6rem] text-gray-400">
         {profile.completenessScore < 30 && t('profile.completenessLow')}
         {profile.completenessScore >= 30 && profile.completenessScore < 60 && t('profile.completenessMedLow')}
         {profile.completenessScore >= 60 && profile.completenessScore < 80 && t('profile.completenessMedHigh')}
@@ -84,7 +84,7 @@ function ProfileContent({ profile }: { profile: UserProfile }) {
             {t(`emotions.${profile.emotionalState}`)}
           </p>
           <div className="flex items-center gap-1.5 mt-0.5">
-            <span className="text-[0.6rem] text-gray-400">{t('profile.intensity')}</span>
+            <span className="text-xs sm:text-[0.6rem] text-gray-400">{t('profile.intensity')}</span>
             <div className="flex gap-[2px]">
               {Array.from({ length: 10 }).map((_, i) => (
                 <div
@@ -105,7 +105,7 @@ function ProfileContent({ profile }: { profile: UserProfile }) {
       {profile.dominantEmotions.length > 0 && (
         <div className="flex flex-wrap gap-1">
           {profile.dominantEmotions.map((e) => (
-            <span key={e} className="text-[0.6rem] px-2 py-0.5 rounded-full bg-gray-100 text-gray-600 font-medium">
+            <span key={e} className="text-xs sm:text-[0.6rem] px-2 py-0.5 rounded-full bg-gray-100 text-gray-600 font-medium">
               {t(`emotions.${e}`)}
             </span>
           ))}
@@ -149,7 +149,7 @@ function ProfileContent({ profile }: { profile: UserProfile }) {
           color={RESILIENCE_COLORS[profile.resilienceLevel]}
           icon={profile.resilienceLevel === 'crisis' ? '⚠️' : profile.resilienceLevel === 'high' ? '💪' : '🌿'}
         />
-        <span className="text-[0.6rem] text-gray-400">
+        <span className="text-xs sm:text-[0.6rem] text-gray-400">
           {profile.resilienceLevel === 'high' && t('profile.resilienceHighDesc')}
           {profile.resilienceLevel === 'moderate' && t('profile.resilienceModerateDesc')}
           {profile.resilienceLevel === 'low' && t('profile.resilienceLowDesc')}
@@ -189,12 +189,12 @@ function ProfileContent({ profile }: { profile: UserProfile }) {
             {profile.suggestedExercises.map((ex, i) => (
               <div key={i} className="flex items-start gap-2 py-1">
                 <span
-                  className="flex-shrink-0 w-4 h-4 rounded-full flex items-center justify-center text-[0.55rem] font-bold text-white mt-0.5"
+                  className="flex-shrink-0 w-5 h-5 sm:w-4 sm:h-4 rounded-full flex items-center justify-center text-[0.55rem] font-bold text-white mt-0.5"
                   style={{ background: 'linear-gradient(135deg, #22c55e, #16a34a)' }}
                 >
                   {i + 1}
                 </span>
-                <span className="text-[0.7rem] text-gray-700 leading-snug">{t(ex)}</span>
+                <span className="text-xs sm:text-[0.7rem] text-gray-700 leading-snug">{t(ex)}</span>
               </div>
             ))}
           </div>
@@ -215,7 +215,7 @@ function ProfileContent({ profile }: { profile: UserProfile }) {
               return (
                 <div key={i} className="flex items-start gap-2">
                   <span className="text-brand-500 mt-0.5">→</span>
-                  <span className="text-[0.7rem] text-gray-700 leading-snug">{text}</span>
+                  <span className="text-xs sm:text-[0.7rem] text-gray-700 leading-snug">{text}</span>
                 </div>
               )
             })}
@@ -230,7 +230,7 @@ function ProfileContent({ profile }: { profile: UserProfile }) {
           {profile.riskFactors.map((risk, i) => (
             <div key={i} className="flex items-start gap-2 py-0.5">
               <span className="text-amber-500 text-xs mt-0.5">⚠</span>
-              <span className="text-[0.7rem] text-amber-700 leading-snug">{t(risk)}</span>
+              <span className="text-xs sm:text-[0.7rem] text-amber-700 leading-snug">{t(risk)}</span>
             </div>
           ))}
         </>
@@ -266,8 +266,8 @@ function ProfileContent({ profile }: { profile: UserProfile }) {
 function MiniStat({ label, value }: { label: string; value: string }) {
   return (
     <div className="bg-gray-50 rounded-lg px-2.5 py-2 text-center">
-      <p className="text-[0.55rem] text-gray-400 font-medium mb-0.5">{label}</p>
-      <p className="text-[0.7rem] font-semibold text-gray-700">{value}</p>
+      <p className="text-xs sm:text-[0.55rem] text-gray-400 font-medium mb-0.5">{label}</p>
+      <p className="text-xs sm:text-[0.7rem] font-semibold text-gray-700">{value}</p>
     </div>
   )
 }
@@ -286,7 +286,7 @@ export default function UserProfilePanel() {
       )}
 
       <aside
-        className={`fixed top-0 right-0 h-full w-[280px] z-50 flex flex-col
+        className={`fixed top-0 right-0 h-full w-[85vw] max-w-[280px] z-50 flex flex-col
                      transform transition-transform duration-200 ease-out
                      ${profileOpen ? 'translate-x-0' : 'translate-x-full'}
                      xl:relative xl:translate-x-0 xl:z-auto
@@ -308,7 +308,7 @@ export default function UserProfilePanel() {
           </div>
           <button
             onClick={() => setProfileOpen(false)}
-            className="xl:hidden p-1 rounded-lg hover:bg-gray-100 text-gray-400"
+            className="xl:hidden p-2 rounded-lg hover:bg-gray-100 text-gray-400"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
@@ -319,7 +319,7 @@ export default function UserProfilePanel() {
         <ProfileContent profile={profile} />
 
         <div className="p-3 border-t border-gray-100">
-          <p className="text-[0.55rem] text-gray-400 text-center leading-relaxed">{t('profile.footer')}</p>
+          <p className="text-xs sm:text-[0.55rem] text-gray-400 text-center leading-relaxed">{t('profile.footer')}</p>
         </div>
       </aside>
     </>

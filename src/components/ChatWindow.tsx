@@ -8,6 +8,7 @@ import ChatInput from './ChatInput'
 import WelcomeScreen from './WelcomeScreen'
 import ToolkitPanel from './ToolkitPanel'
 import UserProfilePanel from './UserProfilePanel'
+import SolviaLogo from './SolviaLogo'
 
 export default function ChatWindow() {
   const t = useT()
@@ -59,7 +60,7 @@ export default function ChatWindow() {
   return (
     <>
       <div className="flex-1 flex flex-col min-w-0">
-        {/* Header with Elina persona */}
+        {/* Header with Solvia persona */}
         <header
           className="h-14 flex-shrink-0 px-4 flex items-center justify-between z-10"
           style={{
@@ -70,7 +71,7 @@ export default function ChatWindow() {
           <div className="flex items-center gap-3">
             <button
               onClick={() => setSidebarOpen(true)}
-              className="p-1.5 -ml-1 rounded-lg hover:bg-warm-200/60 text-warm-400 hover:text-warm-500 transition-colors"
+              className="p-2 -ml-1 rounded-lg hover:bg-warm-200/60 text-warm-400 hover:text-warm-500 transition-colors"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
@@ -78,23 +79,15 @@ export default function ChatWindow() {
             </button>
             <div className="flex items-center gap-2.5">
               <div className="relative">
-                <div
-                  className="w-8 h-8 rounded-full flex items-center justify-center"
-                  style={{
-                    background: 'linear-gradient(135deg, #22c55e 0%, #86efac 100%)',
-                    boxShadow: '0 2px 8px rgba(34,197,94,0.18)',
-                  }}
-                >
-                  <span className="text-sm">🤝</span>
-                </div>
+                <SolviaLogo size={32} className="rounded-full" />
                 <div
                   className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full border-2 border-warm-50"
                   style={{ background: '#22c55e', animation: 'breathe 3s ease-in-out infinite' }}
                 />
               </div>
               <div>
-                <h1 className="text-sm font-semibold text-gray-800 leading-none">Elina</h1>
-                <p className="text-[0.6rem] text-warm-400 mt-0.5 leading-none">
+                <h1 className="text-sm font-semibold text-gray-800 leading-none">Solvia</h1>
+                <p className="text-[0.6rem] sm:text-[0.65rem] text-warm-400 mt-0.5 leading-none">
                   {isStreaming ? t('header.typing') : t('header.subtitle')}
                 </p>
               </div>
@@ -105,7 +98,7 @@ export default function ChatWindow() {
             {/* Toolkit button */}
             <button
               onClick={() => setShowToolkit(true)}
-              className="p-1.5 rounded-lg hover:bg-warm-200/60 text-warm-400 hover:text-warm-500 transition-colors"
+              className="p-2 rounded-lg hover:bg-warm-200/60 text-warm-400 hover:text-warm-500 transition-colors"
               title={t('header.toolkit')}
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
@@ -116,7 +109,7 @@ export default function ChatWindow() {
             {/* Profile button */}
             <button
               onClick={() => setProfileOpen(!profileOpen)}
-              className={`p-1.5 rounded-lg transition-colors ${
+              className={`p-2 rounded-lg transition-colors ${
                 profileOpen
                   ? 'bg-indigo-50 text-indigo-500'
                   : 'hover:bg-warm-200/60 text-warm-400 hover:text-warm-500'
@@ -131,7 +124,7 @@ export default function ChatWindow() {
             {/* New conversation */}
             <button
               onClick={() => startNewConversation()}
-              className="p-1.5 rounded-lg hover:bg-warm-200/60 text-warm-400 hover:text-warm-500 transition-colors"
+              className="p-2 rounded-lg hover:bg-warm-200/60 text-warm-400 hover:text-warm-500 transition-colors"
               title={t('header.newChat')}
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
@@ -146,7 +139,7 @@ export default function ChatWindow() {
           <div className="relative z-[1] max-w-2xl mx-auto px-4 py-8">
             {messages.length <= 2 && (
               <div className="mb-6 text-center animate-fade-in-up">
-                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-50/80 border border-brand-100 text-[0.65rem] text-brand-700 font-medium">
+                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-50/80 border border-brand-100 text-xs sm:text-[0.65rem] text-brand-700 font-medium">
                   <span>🌿</span>
                   {t('chat.trustBadge')}
                 </div>
