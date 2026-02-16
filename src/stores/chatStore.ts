@@ -1,6 +1,7 @@
 import { create } from 'zustand'
 import { streamChat, type ChatMessage } from '../lib/api'
 import { supabase } from '../lib/supabase'
+import { useI18nStore } from '../lib/i18n'
 
 // Generate or retrieve session ID
 function getSessionId(): string {
@@ -75,11 +76,13 @@ export const useChatStore = create<ChatState>((set, get) => ({
     })
 
     let receivedConvId = currentConversationId
+    const language = useI18nStore.getState().lang
 
     await streamChat(
       newMessages,
       sessionId,
       currentConversationId,
+      language,
       {
         onChunk: (text: string, conversationId: string) => {
           if (!receivedConvId && conversationId) {

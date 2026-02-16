@@ -10,6 +10,12 @@ export const fi = {
     days: '{{n}} pv',
   },
 
+  errors: {
+    httpError: 'Virhe: {{status}} - {{details}}',
+    noResponse: 'Ei voitu lukea vastausta',
+    connectionError: 'Yhteysvirhe: {{details}}',
+  },
+
   auth: {
     language: 'Kieli',
     title: 'Tervetuloa Solvia-demoon',

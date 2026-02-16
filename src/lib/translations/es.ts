@@ -12,6 +12,12 @@ export const es: TranslationTree = {
     days: '{{n}} d',
   },
 
+  errors: {
+    httpError: 'Error: {{status}} - {{details}}',
+    noResponse: 'No se pudo leer la respuesta',
+    connectionError: 'Error de conexi\u00F3n: {{details}}',
+  },
+
   auth: {
     language: 'Idioma',
     title: 'Bienvenido/a a la demo de Solvia',

@@ -1,4 +1,5 @@
 import { EDGE_FUNCTION_URL } from './supabase'
+import { t } from './i18n'
 
 export interface ChatMessage {
   role: 'user' | 'assistant'
@@ -15,6 +16,7 @@ export async function streamChat(
   messages: ChatMessage[],
   sessionId: string,
   conversationId: string | null,
+  language: string,
   callbacks: StreamCallbacks
 ): Promise<void> {
   try {
@@ -27,18 +29,19 @@ export async function streamChat(
         messages,
         session_id: sessionId,
         conversation_id: conversationId,
+        language,
       }),
     })
 
     if (!response.ok) {
       const err = await response.text()
-      callbacks.onError(`Virhe: ${response.status} - ${err}`)
+      callbacks.onError(t('errors.httpError', { status: response.status, details: err }))
       return
     }
 
     const reader = response.body?.getReader()
     if (!reader) {
-      callbacks.onError('Ei voitu lukea vastausta')
+      callbacks.onError(t('errors.noResponse'))
       return
     }
 
@@ -78,6 +81,6 @@ export async function streamChat(
 
     callbacks.onDone()
   } catch (err) {
-    callbacks.onError(`Yhteysvirhe: ${String(err)}`)
+    callbacks.onError(t('errors.connectionError', { details: String(err) }))
   }
 }
