@@ -2,11 +2,13 @@
 
 import { useT } from '@/lib/i18n'
 import SolviaLogo from '@/components/SolviaLogo'
+import SaveInsightButton from '@/components/journal/SaveInsightButton'
 
 interface MessageBubbleProps {
   role: 'user' | 'assistant'
   content: string
   isStreaming?: boolean
+  conversationId?: string
 }
 
 function formatContent(text: string): string {
@@ -48,7 +50,7 @@ function inline(t: string): string {
     .replace(/(?<!\*)\*([^*]+)\*(?!\*)/g, '<em>$1</em>')
 }
 
-export default function MessageBubble({ role, content, isStreaming }: MessageBubbleProps) {
+export default function MessageBubble({ role, content, isStreaming, conversationId }: MessageBubbleProps) {
   const t = useT()
   const isUser = role === 'user'
 
@@ -92,6 +94,9 @@ export default function MessageBubble({ role, content, isStreaming }: MessageBub
           }}
         >
           <div dangerouslySetInnerHTML={{ __html: formatContent(content) }} />
+          {!isStreaming && role === 'assistant' && (
+            <SaveInsightButton content={content} conversationId={conversationId} />
+          )}
           {isStreaming && (
             <span
               className="inline-block w-[2px] h-[1.05em] ml-0.5 align-text-bottom rounded-full"

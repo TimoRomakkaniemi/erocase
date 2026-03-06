@@ -54,20 +54,66 @@ export async function POST(request: Request) {
           const plan = sub.metadata.plan || 'payg'
           const period = getSubscriptionPeriod(sub)
 
+          const updatePayload: Record<string, unknown> = {
+            subscription_id: sub.id,
+            plan,
+            plan_status: 'active',
+            included_minutes_remaining: plan === 'starter' ? 900 : plan === 'couple' ? 900 : 0,
+            current_period_start: period.start.toISOString(),
+            current_period_end: period.end.toISOString(),
+            updated_at: new Date().toISOString(),
+          }
+
           await admin
             .from('profiles')
-            .update({
-              subscription_id: sub.id,
-              plan,
-              plan_status: 'active',
-              included_minutes_remaining: plan === 'starter' ? 900 : 0,
-              current_period_start: period.start.toISOString(),
-              current_period_end: period.end.toISOString(),
-              updated_at: new Date().toISOString(),
-            })
+            .update(updatePayload)
             .eq('id', userId)
 
-          const budgetEur = computeSessionBudget(plan, plan === 'starter' ? 900 : 60)
+          // Couple plan: find partner from partner space and upgrade them too
+          if (plan === 'couple') {
+            const { data: memberships } = await admin
+              .from('shared_space_members')
+              .select('space_id')
+              .eq('user_id', userId)
+
+            const spaceIds = (memberships || []).map((m) => m.space_id)
+            if (spaceIds.length > 0) {
+              const { data: partnerSpace } = await admin
+                .from('shared_spaces')
+                .select('id')
+                .in('id', spaceIds)
+                .eq('type', 'partner')
+                .eq('status', 'active')
+                .limit(1)
+                .single()
+
+              if (partnerSpace) {
+                const { data: otherMembers } = await admin
+                  .from('shared_space_members')
+                  .select('user_id')
+                  .eq('space_id', partnerSpace.id)
+                  .neq('user_id', userId)
+
+                const partnerId = otherMembers?.[0]?.user_id
+                if (partnerId) {
+                  await admin
+                    .from('profiles')
+                    .update({
+                      plan: 'couple',
+                      plan_status: 'active',
+                      linked_partner_id: userId,
+                      included_minutes_remaining: 900,
+                      current_period_start: period.start.toISOString(),
+                      current_period_end: period.end.toISOString(),
+                      updated_at: new Date().toISOString(),
+                    })
+                    .eq('id', partnerId)
+                }
+              }
+            }
+          }
+
+          const budgetEur = computeSessionBudget(plan, plan === 'starter' || plan === 'couple' ? 900 : 60)
 
           await admin.from('ai_usage_ledger').insert({
             user_id: userId,
@@ -86,21 +132,36 @@ export async function POST(request: Request) {
 
         const plan = sub.metadata.plan || 'payg'
         const period = getSubscriptionPeriod(sub)
+        const planStatus = sub.status === 'active' ? 'active'
+          : sub.status === 'past_due' ? 'past_due'
+          : sub.status === 'canceled' ? 'canceled'
+          : sub.status
 
         await admin
           .from('profiles')
           .update({
             plan,
-            plan_status: sub.status === 'active' ? 'active'
-              : sub.status === 'past_due' ? 'past_due'
-              : sub.status === 'canceled' ? 'canceled'
-              : sub.status,
-            included_minutes_remaining: plan === 'starter' ? 900 : 0,
+            plan_status: planStatus,
+            included_minutes_remaining: plan === 'starter' || plan === 'couple' ? 900 : 0,
             current_period_start: period.start.toISOString(),
             current_period_end: period.end.toISOString(),
             updated_at: new Date().toISOString(),
           })
           .eq('id', userId)
+
+        // Sync partner status for couple plan
+        if (plan === 'couple') {
+          await admin
+            .from('profiles')
+            .update({
+              plan_status: planStatus,
+              included_minutes_remaining: 900,
+              current_period_start: period.start.toISOString(),
+              current_period_end: period.end.toISOString(),
+              updated_at: new Date().toISOString(),
+            })
+            .eq('linked_partner_id', userId)
+        }
         break
       }
 
@@ -116,9 +177,22 @@ export async function POST(request: Request) {
             plan_status: 'canceled',
             subscription_id: null,
             included_minutes_remaining: 0,
+            linked_partner_id: null,
             updated_at: new Date().toISOString(),
           })
           .eq('id', userId)
+
+        // Reset partner if they were linked to this subscriber (couple plan)
+        await admin
+          .from('profiles')
+          .update({
+            plan: 'free',
+            plan_status: 'canceled',
+            linked_partner_id: null,
+            included_minutes_remaining: 0,
+            updated_at: new Date().toISOString(),
+          })
+          .eq('linked_partner_id', userId)
         break
       }
 
@@ -134,7 +208,7 @@ export async function POST(request: Request) {
 
         const plan = sub.metadata.plan || 'payg'
         const period = getSubscriptionPeriod(sub)
-        const budgetEur = computeSessionBudget(plan, plan === 'starter' ? 900 : 60)
+        const budgetEur = computeSessionBudget(plan, plan === 'starter' || plan === 'couple' ? 900 : 60)
 
         await admin.from('ai_usage_ledger').upsert(
           {
@@ -151,11 +225,17 @@ export async function POST(request: Request) {
           { onConflict: 'user_id,period_start' }
         )
 
-        if (plan === 'starter') {
+        if (plan === 'starter' || plan === 'couple') {
           await admin
             .from('profiles')
             .update({ included_minutes_remaining: 900 })
             .eq('id', userId)
+          if (plan === 'couple') {
+            await admin
+              .from('profiles')
+              .update({ included_minutes_remaining: 900 })
+              .eq('linked_partner_id', userId)
+          }
         }
         break
       }

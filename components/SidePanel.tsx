@@ -1,8 +1,10 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
+import Link from 'next/link'
 import { useChatStore, type Conversation } from '@/stores/chatStore'
 import { useProfileStore } from '@/stores/profileStore'
+import { useSOSStore } from '@/stores/sosStore'
 import { useT, useI18nStore } from '@/lib/i18n'
 import SolviaLogo from '@/components/SolviaLogo'
 
@@ -34,8 +36,16 @@ export default function SidePanel() {
   } = useChatStore()
 
   const resetProfile = useProfileStore((s) => s.resetProfile)
+  const startSOS = useSOSStore((s) => s.startSOS)
+  const [showSOS, setShowSOS] = useState(false)
 
   useEffect(() => { loadConversations() }, [loadConversations])
+
+  const handleSOS = (mode: string) => {
+    startSOS(mode)
+    setShowSOS(false)
+    setSidebarOpen(false)
+  }
 
   const handleNewConversation = () => {
     startNewConversation()
@@ -78,8 +88,8 @@ export default function SidePanel() {
           </button>
         </div>
 
-        {/* New chat */}
-        <div className="px-3 mb-3">
+        {/* New chat & Today */}
+        <div className="px-3 mb-3 space-y-2">
           <button
             onClick={handleNewConversation}
             className="w-full h-10 flex items-center justify-center gap-2 rounded-xl
@@ -95,6 +105,55 @@ export default function SidePanel() {
             </svg>
             {t('sidebar.newChat')}
           </button>
+          <Link
+            href="/today"
+            onClick={() => setSidebarOpen(false)}
+            className="w-full h-10 flex items-center justify-center gap-2 rounded-xl
+                       text-sm font-medium text-brand-700 bg-brand-50 border border-brand-200
+                       hover:bg-brand-100 active:scale-[0.98] transition-all duration-150"
+          >
+            <span aria-hidden>☀️</span>
+            {t('sos.relief.startToday')}
+          </Link>
+          <Link
+            href="/journal"
+            onClick={() => setSidebarOpen(false)}
+            className="w-full h-10 flex items-center justify-center gap-2 rounded-xl
+                       text-sm font-medium text-brand-700 bg-brand-50 border border-brand-200
+                       hover:bg-brand-100 active:scale-[0.98] transition-all duration-150"
+          >
+            <span aria-hidden>📔</span>
+            {t('journal.title')}
+          </Link>
+          <div className="space-y-1">
+            <button
+              onClick={() => setShowSOS(!showSOS)}
+              className="w-full h-10 flex items-center justify-center gap-2 rounded-xl
+                         text-sm font-medium text-red-700 bg-red-50 border border-red-200
+                         hover:bg-red-100 active:scale-[0.98] transition-all duration-150"
+            >
+              <span aria-hidden>🆘</span>
+              {t('sos.trigger')}
+            </button>
+            {showSOS && (
+              <div className="grid grid-cols-2 gap-1.5 pl-1">
+                {[
+                  { mode: 'conflict', key: 'sos.modeConflict' },
+                  { mode: 'breakup', key: 'sos.modeBreakup' },
+                  { mode: 'loneliness', key: 'sos.modeLoneliness' },
+                  { mode: 'calm', key: 'sos.modeCalm' },
+                ].map(({ mode, key }) => (
+                  <button
+                    key={mode}
+                    onClick={() => handleSOS(mode)}
+                    className="rounded-lg px-2 py-2 text-xs font-medium text-red-700 bg-red-50/80 border border-red-200/80 hover:bg-red-100"
+                  >
+                    {t(key)}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
 
         {/* List */}

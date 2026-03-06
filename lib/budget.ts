@@ -15,14 +15,19 @@ export function estimateCost(tokensIn: number, tokensOut: number): number {
   return costIn + costOut
 }
 
+const FREE_DAILY_BUDGET_EUR = 2.0 // ~3 messages/day * 30 days for free tier
+
 export function computeSessionBudget(
   plan: string,
   billableMinutes: number
 ): number {
+  if (plan === 'free') {
+    return FREE_DAILY_BUDGET_EUR
+  }
   if (plan === 'payg') {
     return (billableMinutes / 60) * PAYG_HOURLY_RATE * BUDGET_MARGIN_TARGET
   }
-  if (plan === 'starter') {
+  if (plan === 'starter' || plan === 'couple') {
     const includedMinutes = STARTER_INCLUDED_HOURS * 60
     if (billableMinutes <= includedMinutes) {
       return STARTER_MONTHLY_PRICE * BUDGET_MARGIN_TARGET
@@ -106,48 +111,37 @@ export async function updateLedger(
 ): Promise<LedgerEntry> {
   const supabase = await createSupabaseAdmin()
 
-  const { data, error } = await supabase.rpc('update_ledger_usage', {
-    p_ledger_id: ledgerId,
-    p_tokens_in: tokensIn,
-    p_tokens_out: tokensOut,
-    p_cost: cost,
-  })
+  const { data: current, error: fetchError } = await supabase
+    .from('ai_usage_ledger')
+    .select('*')
+    .eq('id', ledgerId)
+    .single()
 
-  if (error) {
-    const { data: fallback, error: fallbackError } = await supabase
-      .from('ai_usage_ledger')
-      .select('*')
-      .eq('id', ledgerId)
-      .single()
+  if (fetchError) throw fetchError
 
-    if (fallbackError) throw fallbackError
+  const entry = current as LedgerEntry
+  const newCost = entry.estimated_cost_eur + cost
+  const newStatus = isHardLimit(newCost, entry.budget_eur)
+    ? 'HARD_LIMIT'
+    : isSoftLimit(newCost, entry.budget_eur)
+      ? 'SOFT_LIMIT'
+      : 'ACTIVE'
 
-    const updated = fallback as LedgerEntry
-    const newCost = updated.estimated_cost_eur + cost
-    const newStatus = isHardLimit(newCost, updated.budget_eur)
-      ? 'HARD_LIMIT'
-      : isSoftLimit(newCost, updated.budget_eur)
-        ? 'SOFT_LIMIT'
-        : 'ACTIVE'
+  const { data: result, error: updateError } = await supabase
+    .from('ai_usage_ledger')
+    .update({
+      tokens_in: entry.tokens_in + tokensIn,
+      tokens_out: entry.tokens_out + tokensOut,
+      estimated_cost_eur: newCost,
+      status: newStatus,
+      updated_at: new Date().toISOString(),
+    })
+    .eq('id', ledgerId)
+    .select()
+    .single()
 
-    const { data: result, error: updateError } = await supabase
-      .from('ai_usage_ledger')
-      .update({
-        tokens_in: updated.tokens_in + tokensIn,
-        tokens_out: updated.tokens_out + tokensOut,
-        estimated_cost_eur: newCost,
-        status: newStatus,
-        updated_at: new Date().toISOString(),
-      })
-      .eq('id', ledgerId)
-      .select()
-      .single()
-
-    if (updateError) throw updateError
-    return result as LedgerEntry
-  }
-
-  return data as LedgerEntry
+  if (updateError) throw updateError
+  return result as LedgerEntry
 }
 
 export async function getAvailableBudget(

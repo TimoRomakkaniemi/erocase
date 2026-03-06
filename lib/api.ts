@@ -8,8 +8,13 @@ export interface ChatMessage {
 interface StreamCallbacks {
   onChunk: (text: string, conversationId: string) => void
   onDone: () => void
-  onError: (error: string) => void
+  onError: (error: string, code?: string) => void
   onWarning?: (warning: string) => void
+  onMeta?: (meta: {
+    conversation_id: string
+    ai_session_id: string | null
+    triage?: { type: string; confidence: string | null }
+  }) => void
 }
 
 export async function streamChat(
@@ -17,7 +22,8 @@ export async function streamChat(
   sessionId: string,
   conversationId: string | null,
   language: string,
-  callbacks: StreamCallbacks
+  callbacks: StreamCallbacks,
+  mode?: string | null
 ): Promise<void> {
   try {
     const response = await fetch('/api/chat', {
@@ -28,6 +34,7 @@ export async function streamChat(
         session_id: sessionId,
         conversation_id: conversationId,
         language,
+        mode: mode || undefined,
       }),
     })
 
@@ -35,11 +42,15 @@ export async function streamChat(
       const err = await response.json().catch(() => ({ error: 'Unknown error' }))
       if (err.error === 'HARD_LIMIT') {
         callbacks.onWarning?.('HARD_LIMIT')
-        callbacks.onError(err.message || 'Budget exhausted')
+        callbacks.onError(err.message || 'Budget exhausted', 'HARD_LIMIT')
         return
       }
       if (err.error === 'NO_PLAN') {
-        callbacks.onError(err.message || 'Please subscribe to use Solvia')
+        callbacks.onError(err.message || 'Please subscribe to use Solvia', 'NO_PLAN')
+        return
+      }
+      if (err.error === 'PAYWALL') {
+        callbacks.onError(err.message || "You've used your 3 free messages today. Subscribe to continue.", 'PAYWALL')
         return
       }
       callbacks.onError(t('errors.httpError', { status: response.status, details: err.error || err.details || '' }))
@@ -72,6 +83,10 @@ export async function streamChat(
           }
           try {
             const parsed = JSON.parse(data)
+            if (parsed.meta) {
+              callbacks.onMeta?.(parsed)
+              continue
+            }
             if (parsed.warning) {
               callbacks.onWarning?.(parsed.warning)
               continue
@@ -92,6 +107,6 @@ export async function streamChat(
 
     callbacks.onDone()
   } catch (err) {
-    callbacks.onError(t('errors.connectionError', { details: String(err) }))
+    callbacks.onError(t('errors.connectionError', { details: String(err) }), 'CONNECTION')
   }
 }

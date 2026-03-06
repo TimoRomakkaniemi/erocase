@@ -6,9 +6,9 @@ import { create } from 'zustand'
    Uses {{variable}} syntax for interpolation.
    ═══════════════════════════════════════════════════════ */
 
-export type Lang = 'fi' | 'sv' | 'en' | 'es' | 'it' | 'fr' | 'de'
+export type Lang = 'fi' | 'sv' | 'en' | 'es' | 'it' | 'fr' | 'de' | 'nl'
 
-const VALID_LANGS: Lang[] = ['fi', 'sv', 'en', 'es', 'it', 'fr', 'de']
+const VALID_LANGS: Lang[] = ['fi', 'sv', 'en', 'es', 'it', 'fr', 'de', 'nl']
 
 export const LANGUAGES: { code: Lang; label: string; flag: string }[] = [
   { code: 'de', label: 'Deutsch', flag: '🇩🇪' },
@@ -16,6 +16,7 @@ export const LANGUAGES: { code: Lang; label: string; flag: string }[] = [
   { code: 'es', label: 'Español', flag: '🇪🇸' },
   { code: 'fr', label: 'Français', flag: '🇫🇷' },
   { code: 'it', label: 'Italiano', flag: '🇮🇹' },
+  { code: 'nl', label: 'Nederlands', flag: '🇳🇱' },
   { code: 'fi', label: 'Suomi', flag: '🇫🇮' },
   { code: 'sv', label: 'Svenska', flag: '🇸🇪' },
 ]
@@ -98,7 +99,7 @@ export function getLocale(): string {
   const lang = useI18nStore.getState().lang
   const map: Record<Lang, string> = {
     fi: 'fi-FI', sv: 'sv-SE', en: 'en-GB', es: 'es-ES',
-    it: 'it-IT', fr: 'fr-FR', de: 'de-DE',
+    it: 'it-IT', fr: 'fr-FR', de: 'de-DE', nl: 'nl-NL',
   }
   return map[lang]
 }

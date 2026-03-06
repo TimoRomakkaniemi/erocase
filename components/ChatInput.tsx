@@ -1,7 +1,9 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
-import { useT } from '@/lib/i18n'
+import { useT, useI18nStore } from '@/lib/i18n'
+import VoiceInput from '@/components/voice/VoiceInput'
+import TranscriptPreview from '@/components/voice/TranscriptPreview'
 
 interface ChatInputProps {
   onSend: (message: string) => void
@@ -10,8 +12,17 @@ interface ChatInputProps {
 
 export default function ChatInput({ onSend, disabled }: ChatInputProps) {
   const t = useT()
+  const lang = useI18nStore((s) => s.lang)
   const [input, setInput] = useState('')
+  const [showVoice, setShowVoice] = useState(false)
+  const [voiceTranscript, setVoiceTranscript] = useState<string | null>(null)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
+
+  const localeMap: Record<string, string> = {
+    fi: 'fi-FI', sv: 'sv-SE', en: 'en-GB', es: 'es-ES',
+    it: 'it-IT', fr: 'fr-FR', de: 'de-DE',
+  }
+  const voiceLang = localeMap[lang] || 'en-GB'
 
   useEffect(() => {
     const el = textareaRef.current
@@ -27,6 +38,13 @@ export default function ChatInput({ onSend, disabled }: ChatInputProps) {
     onSend(trimmed)
     setInput('')
     if (textareaRef.current) textareaRef.current.style.height = 'auto'
+  }
+
+  const handleVoiceSend = (text: string) => {
+    if (!text.trim() || disabled) return
+    onSend(text.trim())
+    setVoiceTranscript(null)
+    setShowVoice(false)
   }
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -46,6 +64,34 @@ export default function ChatInput({ onSend, disabled }: ChatInputProps) {
       }}
     >
       <div className="max-w-2xl mx-auto">
+        {showVoice && voiceTranscript ? (
+          <div className="mb-3">
+            <TranscriptPreview
+              transcript={voiceTranscript}
+              onSend={handleVoiceSend}
+              onRerecord={() => setVoiceTranscript(null)}
+              onCancel={() => {
+                setVoiceTranscript(null)
+                setShowVoice(false)
+              }}
+            />
+          </div>
+        ) : showVoice ? (
+          <div className="mb-3 px-4 py-3 rounded-2xl bg-white border border-gray-200 shadow-sm">
+            <VoiceInput
+              onTranscript={(text) => setVoiceTranscript(text)}
+              disabled={disabled}
+              language={voiceLang}
+            />
+            <button
+              onClick={() => setShowVoice(false)}
+              className="w-full mt-2 py-2 text-xs text-warm-500 hover:text-gray-600"
+            >
+              {t('common.cancel')}
+            </button>
+          </div>
+        ) : null}
+
         <div
           className={`flex items-end gap-2 rounded-2xl px-4 py-2.5 transition-all duration-200
             ${disabled ? 'opacity-60' : ''}`}
@@ -68,6 +114,25 @@ export default function ChatInput({ onSend, disabled }: ChatInputProps) {
             className="flex-1 resize-none bg-transparent text-sm text-gray-800 placeholder-warm-300
                        py-1.5 focus:outline-none disabled:cursor-not-allowed"
           />
+          <button
+            onClick={() => {
+              if (showVoice) {
+                setShowVoice(false)
+                setVoiceTranscript(null)
+              } else {
+                setShowVoice(true)
+              }
+            }}
+            disabled={disabled}
+            className={`flex-shrink-0 w-10 h-10 sm:w-9 sm:h-9 rounded-xl flex items-center justify-center transition-all
+              ${showVoice ? 'bg-brand-100 text-brand-600' : 'text-warm-400 hover:text-brand-500 hover:bg-brand-50'}`}
+            title={showVoice ? t('voice.stop') : t('voice.start')}
+            aria-label={showVoice ? t('voice.stop') : t('voice.start')}
+          >
+            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm-1 3.93c-3.95-.49-7-3.85-7-7.93h2c0 3.31 2.69 6 6 6s6-2.69 6-6h2c0 4.08-3.05 7.44-7 7.93V21h-2v-3.07z" />
+            </svg>
+          </button>
           <button
             onClick={handleSend}
             disabled={!hasText || disabled}

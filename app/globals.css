@@ -100,6 +100,21 @@ body {
   50% { box-shadow: 0 0 16px 2px rgba(34,197,94,0.12); }
 }
 
+/* ── SOS breathing (4s inhale, 4s exhale) ── */
+@keyframes sosBreatheInOut {
+  0%, 100% { transform: scale(0.7); opacity: 0.6; }
+  50% { transform: scale(1.15); opacity: 1; }
+}
+
+/* ── 4-7-8 breathing circle ── */
+@keyframes breathe478 {
+  0% { transform: scale(0.6); }
+  22% { transform: scale(1.1); }
+  39% { transform: scale(1.1); }
+  61% { transform: scale(0.6); }
+  100% { transform: scale(0.6); }
+}
+
 /* ── Fade in ── */
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(10px); }
@@ -212,4 +227,14 @@ body {
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+}
+
+/* ── Voice pulse animation ── */
+@keyframes voicePulse {
+  0%, 100% { transform: scale(1); opacity: 0.5; }
+  50% { transform: scale(1.4); opacity: 0; }
+}
+.animate-voice-pulse {
+  animation: voicePulse 1.5s ease-in-out infinite;
+  background: radial-gradient(circle, currentColor 30%, transparent 70%);
 }

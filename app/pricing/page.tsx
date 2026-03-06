@@ -10,8 +10,10 @@ export default function PricingPage() {
   const t = useT()
   const router = useRouter()
   const [loading, setLoading] = useState<string | null>(null)
+  const [checkoutError, setCheckoutError] = useState<string | null>(null)
 
-  const handleCheckout = async (plan: 'payg' | 'starter') => {
+  const handleCheckout = async (plan: 'payg' | 'starter' | 'couple') => {
+    setCheckoutError(null)
     setLoading(plan)
     try {
       const res = await fetch('/api/stripe/checkout', {
@@ -22,11 +24,18 @@ export default function PricingPage() {
       const data = await res.json()
       if (data.url) {
         window.location.href = data.url
-      } else if (data.error === 'Unauthorized') {
+        return
+      }
+      if (res.status === 401) {
         router.push('/login?next=/pricing')
+        return
+      }
+      if (res.status === 503 || res.status === 500 || !res.ok) {
+        setCheckoutError(t('errors.checkoutUnavailable'))
+        return
       }
     } catch {
-      console.error('Checkout failed')
+      setCheckoutError(t('errors.checkoutUnavailable'))
     } finally {
       setLoading(null)
     }
@@ -41,6 +50,19 @@ export default function PricingPage() {
 
       <div className="pt-24 pb-20 px-4 sm:px-6">
         <div className="max-w-4xl mx-auto">
+          {checkoutError && (
+            <div className="mb-6 p-4 rounded-xl bg-amber-50 border border-amber-200 flex items-start gap-3">
+              <span className="text-amber-500 mt-0.5">⚠</span>
+              <p className="flex-1 text-sm font-medium text-amber-800">{checkoutError}</p>
+              <button
+                type="button"
+                onClick={() => setCheckoutError(null)}
+                className="text-amber-600 hover:text-amber-800 text-sm font-medium"
+              >
+                {t('common.close')}
+              </button>
+            </div>
+          )}
           <div className="text-center mb-12">
             <div className="inline-flex items-center justify-center mb-4">
               <SolviaLogo size={48} />
@@ -53,7 +75,7 @@ export default function PricingPage() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-6 max-w-3xl mx-auto">
+          <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
             {/* PAYG Card */}
             <div className="bg-white rounded-2xl p-6 sm:p-8 border border-gray-200 hover:border-brand-300 transition-all hover:shadow-lg">
               <div className="mb-6">
@@ -141,6 +163,48 @@ export default function PricingPage() {
                 }}
               >
                 {loading === 'starter' ? '...' : t('pricing.starterCta') || 'Subscribe now'}
+              </button>
+            </div>
+
+            {/* Couple Card */}
+            <div className="bg-white rounded-2xl p-6 sm:p-8 border border-gray-200 hover:border-brand-300 transition-all hover:shadow-lg">
+              <div className="mb-6">
+                <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold text-brand-700 bg-brand-50 border border-brand-100 mb-3">
+                  {t('pricing.coupleTitle') || 'Couple'}
+                </span>
+                <div className="flex items-baseline gap-1 mb-1">
+                  <span className="text-4xl font-bold text-gray-900">
+                    {process.env.NEXT_PUBLIC_COUPLE_PRICE || t('pricing.couplePrice') || 'TBD'}
+                  </span>
+                  <span className="text-gray-500 text-sm">/ {t('pricing.month') || 'month'}</span>
+                </div>
+                <p className="text-sm text-gray-500">
+                  {t('pricing.coupleDesc') || 'Partner plan for two'}
+                </p>
+              </div>
+
+              <ul className="space-y-3 mb-8">
+                {[
+                  t('pricing.coupleFeature1') || 'For two',
+                  t('pricing.coupleFeature2') || 'Partner Space included',
+                  t('pricing.coupleFeature3') || '15h shared usage',
+                  t('pricing.coupleFeature4') || 'One person pays',
+                ].map((feat, i) => (
+                  <li key={i} className="flex items-start gap-2.5 text-sm text-gray-600">
+                    <svg className="w-4 h-4 text-brand-500 mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                    </svg>
+                    {feat}
+                  </li>
+                ))}
+              </ul>
+
+              <button
+                onClick={() => handleCheckout('couple')}
+                disabled={loading !== null}
+                className="w-full py-3 rounded-xl text-sm font-semibold text-brand-700 bg-brand-50 border border-brand-200 hover:bg-brand-100 transition-all disabled:opacity-50"
+              >
+                {loading === 'couple' ? '...' : t('pricing.starterCta') || 'Subscribe now'}
               </button>
             </div>
           </div>

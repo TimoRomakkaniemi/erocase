@@ -1,5 +1,7 @@
 import type { Metadata } from 'next'
 import './globals.css'
+import { SOSFlow } from '@/components/sos/SOSFlow'
+import { TriageFlowWrapper } from '@/components/safety/TriageFlowWrapper'
 
 export const metadata: Metadata = {
   title: 'Solvia – AI-Powered Life Support',
@@ -23,7 +25,11 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className="h-full">{children}</body>
+      <body className="h-full">
+        {children}
+        <SOSFlow />
+        <TriageFlowWrapper />
+      </body>
     </html>
   )
 }

@@ -43,6 +43,7 @@ export default function ChatWindow() {
     isStreaming,
     streamingText,
     error,
+    errorCode,
     sendMessage,
     clearError,
     setSidebarOpen,
@@ -52,6 +53,7 @@ export default function ChatWindow() {
     dismissSoftLimit,
     sessionStartTime,
     reportUsage,
+    currentConversationId,
   } = useChatStore()
 
   const { updateProfile, setProfileOpen, profileOpen } = useProfileStore()
@@ -200,13 +202,18 @@ export default function ChatWindow() {
             )}
 
             {messages.map((msg, i) => (
-              <MessageBubble key={i} role={msg.role} content={msg.content} />
+              <MessageBubble
+                key={i}
+                role={msg.role}
+                content={msg.content}
+                conversationId={currentConversationId ?? undefined}
+              />
             ))}
             {isStreaming && streamingText && (
               <MessageBubble role="assistant" content={streamingText} isStreaming />
             )}
             {isLoading && !streamingText && <TypingIndicator />}
-            {error && (
+            {error && errorCode !== 'NO_PLAN' && errorCode !== 'PAYWALL' && (
               <div className="my-4 p-3 rounded-xl bg-red-50/80 border border-red-200/50 animate-fade-in-up backdrop-blur-sm">
                 <div className="flex items-center gap-2">
                   <span className="text-red-400 text-sm">⚠</span>
@@ -219,6 +226,86 @@ export default function ChatWindow() {
             )}
             <div ref={messagesEndRef} />
           </div>
+
+          {/* Paywall overlay: 3 free messages used */}
+          {error && errorCode === 'PAYWALL' && (
+            <div className="absolute inset-0 z-20 bg-white/80 backdrop-blur-sm flex items-center justify-center">
+              <div className="bg-white rounded-2xl p-6 sm:p-8 max-w-sm mx-4 shadow-xl border border-gray-200 text-center animate-fade-in-up">
+                <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-amber-50 flex items-center justify-center">
+                  <svg className="w-7 h-7 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+                  </svg>
+                </div>
+                <h3 className="text-lg font-bold text-gray-900 mb-2">
+                  {t('limits.paywallTitle') || "You've used your 3 free messages today"}
+                </h3>
+                <p className="text-sm text-gray-500 mb-6">
+                  {t('limits.paywallDesc') || "Subscribe to continue chatting with Solvia."}
+                </p>
+                <div className="flex flex-col gap-2">
+                  <button
+                    onClick={() => router.push('/pricing')}
+                    className="w-full py-2.5 rounded-xl text-sm font-semibold text-white transition-all hover:brightness-110"
+                    style={{
+                      background: 'linear-gradient(135deg, #22c55e 0%, #16a34a 100%)',
+                      boxShadow: '0 4px 12px rgba(34,197,94,0.3)',
+                    }}
+                  >
+                    {t('nav.pricing') || 'Pricing'}
+                  </button>
+                  <button
+                    onClick={clearError}
+                    className="text-xs text-gray-400 hover:text-gray-600 mt-1"
+                  >
+                    {t('common.close')}
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* No plan / subscribe required overlay */}
+          {error && errorCode === 'NO_PLAN' && (
+            <div className="absolute inset-0 z-20 bg-white/80 backdrop-blur-sm flex items-center justify-center">
+              <div className="bg-white rounded-2xl p-6 sm:p-8 max-w-sm mx-4 shadow-xl border border-gray-200 text-center animate-fade-in-up">
+                <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-brand-50 flex items-center justify-center">
+                  <svg className="w-7 h-7 text-brand-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 18v-5.25m0 0a6.01 6.01 0 001.5-.189m-1.5.189a6.01 6.01 0 01-1.5-.189m3.75 7.478a12.06 12.06 0 01-4.5 0m3.75 2.383a14.406 14.406 0 01-3 0M14.25 18v-.192c0-.983.658-1.823 1.508-2.316a7.5 7.5 0 10-7.517 0c.85.493 1.509 1.333 1.509 2.316V18" />
+                  </svg>
+                </div>
+                <h3 className="text-lg font-bold text-gray-900 mb-2">
+                  {t('limits.noPlanTitle') || 'Choose a plan to chat'}
+                </h3>
+                <p className="text-sm text-gray-500 mb-6">
+                  {t('errors.noPlan')}
+                </p>
+                <div className="flex flex-col gap-2">
+                  <button
+                    onClick={() => router.push('/pricing')}
+                    className="w-full py-2.5 rounded-xl text-sm font-semibold text-white transition-all hover:brightness-110"
+                    style={{
+                      background: 'linear-gradient(135deg, #22c55e 0%, #16a34a 100%)',
+                      boxShadow: '0 4px 12px rgba(34,197,94,0.3)',
+                    }}
+                  >
+                    {t('nav.pricing') || 'Pricing'}
+                  </button>
+                  <button
+                    onClick={() => router.push('/login?next=/demo')}
+                    className="w-full py-2.5 rounded-xl text-sm font-semibold text-gray-600 bg-gray-50 border border-gray-200 hover:bg-gray-100 transition-all"
+                  >
+                    {t('limits.loginToChat') || 'Log in'}
+                  </button>
+                  <button
+                    onClick={clearError}
+                    className="text-xs text-gray-400 hover:text-gray-600 mt-1"
+                  >
+                    {t('common.close')}
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* Hard limit blocking overlay */}
           {hardLimit && (
@@ -267,7 +354,7 @@ export default function ChatWindow() {
           )}
         </div>
 
-        <ChatInput onSend={sendMessage} disabled={isStreaming || hardLimit} />
+        <ChatInput onSend={sendMessage} disabled={isStreaming || hardLimit || errorCode === 'NO_PLAN' || errorCode === 'PAYWALL'} />
 
         {showToolkit && <ToolkitPanel onClose={() => setShowToolkit(false)} />}
       </div>

@@ -16,6 +16,10 @@ interface UsageData {
   budget_eur: number
   tokens_in: number
   tokens_out: number
+  total_billable_minutes: number
+  linked_partner_id: string | null
+  partner_email?: string
+  partner_full_name?: string
 }
 
 export default function BillingPage() {
@@ -37,6 +41,28 @@ export default function BillingPage() {
         .eq('id', user.id)
         .single()
 
+      // For couple plan: fetch partner (if we're subscriber) or subscriber (if we're partner)
+      let partnerProfile: { email?: string; display_name?: string } | null = null
+      if (profile?.plan === 'couple') {
+        if (profile.linked_partner_id) {
+          // We're the partner; linked_partner_id points to subscriber
+          const { data: sub } = await supabase
+            .from('profiles')
+            .select('email, display_name')
+            .eq('id', profile.linked_partner_id)
+            .single()
+          partnerProfile = sub
+        } else {
+          // We're the subscriber; find who has us as linked_partner_id
+          const { data: partner } = await supabase
+            .from('profiles')
+            .select('email, display_name')
+            .eq('linked_partner_id', user.id)
+            .single()
+          partnerProfile = partner
+        }
+      }
+
       const { data: ledger } = await supabase
         .from('ai_usage_ledger')
         .select('*')
@@ -45,6 +71,16 @@ export default function BillingPage() {
         .order('period_start', { ascending: false })
         .limit(1)
         .single()
+
+      const { data: sessions } = await supabase
+        .from('ai_sessions')
+        .select('billable_minutes')
+        .eq('user_id', user.id)
+        .eq('status', 'ENDED')
+
+      const totalBillableMinutes = (sessions || []).reduce(
+        (sum: number, s: { billable_minutes: number }) => sum + (s.billable_minutes || 0), 0
+      )
 
       setUsage({
         plan: profile?.plan || 'free',
@@ -56,6 +92,10 @@ export default function BillingPage() {
         budget_eur: ledger?.budget_eur || 0,
         tokens_in: ledger?.tokens_in || 0,
         tokens_out: ledger?.tokens_out || 0,
+        total_billable_minutes: totalBillableMinutes,
+        linked_partner_id: profile?.linked_partner_id || null,
+        partner_email: partnerProfile?.email,
+        partner_full_name: partnerProfile?.display_name,
       })
       setLoading(false)
     }
@@ -85,6 +125,7 @@ export default function BillingPage() {
     free: 'Free',
     payg: 'Pay-as-you-go',
     starter: 'Starter',
+    couple: 'Couple',
   }
 
   const statusColors: Record<string, string> = {
@@ -147,6 +188,14 @@ export default function BillingPage() {
                     {t('billing.periodEnds') || 'Current period ends'}: {new Date(usage.current_period_end).toLocaleDateString()}
                   </p>
                 )}
+                {usage.plan === 'couple' && (
+                  <p className="text-xs text-gray-600 mt-2">
+                    {t('billing.partnerIncluded') || 'Partner included'}
+                    {(usage.partner_full_name || usage.partner_email) && (
+                      <>: {usage.partner_full_name || usage.partner_email}</>
+                    )}
+                  </p>
+                )}
               </div>
 
               {/* Usage Card */}
@@ -155,7 +204,7 @@ export default function BillingPage() {
                   {t('billing.usage') || 'Usage this period'}
                 </h3>
 
-                {usage.plan === 'starter' && (
+                {(usage.plan === 'starter' || usage.plan === 'couple') && (
                   <div className="mb-4">
                     <div className="flex justify-between text-xs text-gray-500 mb-1">
                       <span>{t('billing.includedMinutes') || 'Included minutes remaining'}</span>
@@ -201,9 +250,11 @@ export default function BillingPage() {
                   {t('billing.estimatedInvoice') || 'Estimated invoice'}
                 </h3>
                 <p className="text-3xl font-bold text-gray-900">
-                  €{usage.plan === 'starter'
-                    ? (100 + Math.max(0, (900 - usage.included_minutes_remaining) - 900) * (10 / 60)).toFixed(2)
-                    : usage.estimated_cost_eur.toFixed(2)
+                  €{usage.plan === 'starter' || usage.plan === 'couple'
+                    ? (100 + Math.max(0, usage.total_billable_minutes - 900) * (10 / 60)).toFixed(2)
+                    : (usage.plan === 'payg'
+                      ? (usage.total_billable_minutes * (10 / 60)).toFixed(2)
+                      : usage.estimated_cost_eur.toFixed(2))
                   }
                 </p>
                 <p className="text-xs text-gray-400 mt-1">

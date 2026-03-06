@@ -2,6 +2,8 @@ import { create } from 'zustand'
 import { streamChat, type ChatMessage } from '@/lib/api'
 import { supabase } from '@/lib/supabase'
 import { useI18nStore } from '@/lib/i18n'
+import { useModeStore } from '@/stores/modeStore'
+import { useTriageStore } from '@/stores/triageStore'
 
 function getSessionId(): string {
   if (typeof window === 'undefined') return 'ssr-placeholder'
@@ -24,6 +26,7 @@ export interface Conversation {
 
 interface ChatState {
   sessionId: string
+  aiSessionId: string | null
   conversations: Conversation[]
   currentConversationId: string | null
   messages: ChatMessage[]
@@ -31,6 +34,7 @@ interface ChatState {
   isStreaming: boolean
   streamingText: string
   error: string | null
+  errorCode: string | null
   sidebarOpen: boolean
 
   softLimit: boolean
@@ -49,6 +53,7 @@ interface ChatState {
 
 export const useChatStore = create<ChatState>((set, get) => ({
   sessionId: getSessionId(),
+  aiSessionId: null,
   conversations: [],
   currentConversationId: null,
   messages: [],
@@ -56,6 +61,7 @@ export const useChatStore = create<ChatState>((set, get) => ({
   isStreaming: false,
   streamingText: '',
   error: null,
+  errorCode: null,
   sidebarOpen: false,
   softLimit: false,
   hardLimit: false,
@@ -74,11 +80,13 @@ export const useChatStore = create<ChatState>((set, get) => ({
       isStreaming: true,
       streamingText: '',
       error: null,
+      errorCode: null,
       sessionStartTime: get().sessionStartTime || Date.now(),
     })
 
     let receivedConvId = currentConversationId
     const language = useI18nStore.getState().lang
+    const activeMode = useModeStore.getState().activeMode
 
     await streamChat(
       newMessages,
@@ -86,6 +94,26 @@ export const useChatStore = create<ChatState>((set, get) => ({
       currentConversationId,
       language,
       {
+        onMeta: (meta) => {
+          if (meta.conversation_id && !receivedConvId) {
+            receivedConvId = meta.conversation_id
+            set({ currentConversationId: meta.conversation_id })
+          }
+          if (meta.ai_session_id) {
+            set({ aiSessionId: meta.ai_session_id })
+          }
+          if (meta.triage?.type) {
+            useTriageStore.getState().showTriage(
+              {
+                triggered: true,
+                type: meta.triage.type as 'self_harm' | 'dv' | 'crisis' | 'high_intensity',
+                confidence: meta.triage.confidence as 'keyword' | 'pattern' | null,
+                keywords: [],
+              },
+              undefined
+            )
+          }
+        },
         onChunk: (text: string, conversationId: string) => {
           if (!receivedConvId && conversationId) {
             receivedConvId = conversationId
@@ -113,9 +141,10 @@ export const useChatStore = create<ChatState>((set, get) => ({
           }
           get().loadConversations()
         },
-        onError: (error: string) => {
+        onError: (error: string, code?: string) => {
           set({
             error,
+            errorCode: code || null,
             isStreaming: false,
             isLoading: false,
             streamingText: '',
@@ -129,18 +158,21 @@ export const useChatStore = create<ChatState>((set, get) => ({
             set({ hardLimit: true })
           }
         },
-      }
+      },
+      activeMode
     )
   },
 
   startNewConversation: () => {
     set({
       currentConversationId: null,
+      aiSessionId: null,
       messages: [],
       streamingText: '',
       isLoading: false,
       isStreaming: false,
       error: null,
+      errorCode: null,
       softLimit: false,
       hardLimit: false,
       sessionStartTime: null,
@@ -186,16 +218,17 @@ export const useChatStore = create<ChatState>((set, get) => ({
   },
 
   setSidebarOpen: (open: boolean) => set({ sidebarOpen: open }),
-  clearError: () => set({ error: null }),
+  clearError: () => set({ error: null, errorCode: null }),
   dismissSoftLimit: () => set({ softLimit: false }),
 
   reportUsage: async () => {
-    const { sessionId } = get()
+    const { aiSessionId } = get()
+    if (!aiSessionId) return
     try {
       await fetch('/api/usage/report', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ session_id: sessionId }),
+        body: JSON.stringify({ session_id: aiSessionId }),
       })
     } catch {
       // Best effort

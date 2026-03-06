@@ -7,6 +7,9 @@ import {
   isSoftLimit,
   isHardLimit,
 } from '@/lib/budget'
+import { getModePrompt } from '@/lib/mode-prompts'
+import { checkTriage } from '@/lib/triage'
+import { trackEventServer } from '@/lib/analytics-server'
 
 const GOOGLE_API_KEY = process.env.GOOGLE_AI_STUDIO_KEY!
 
@@ -18,6 +21,7 @@ const LANG_NAMES: Record<string, string> = {
   it: 'italiano (Italian)',
   fr: 'français (French)',
   de: 'Deutsch (German)',
+  nl: 'Nederlands (Dutch)',
 }
 
 const SYSTEM_PROMPT = `Olet Solvia – hyvinvointiasiantuntija. Kokenut psykologi, jolla on syvä ymmärrys ihmisen elämänhaasteista: parisuhteet, yksinäisyys, mielenterveys, päihdeongelmat, vanhemmuus, taloushuolet, suru ja uupumus. Suorapuheinen, lämmin, rohkea. Et ole chatbot vaan kriittinen tukipilari.
@@ -150,10 +154,47 @@ Jos itsetuhoisuutta, väkivaltaa tai välitöntä vaaraa:
 - Harjoitukset selkeästi erotettuna
 - Ei pitkiä luetteloita – max 3–4 kohtaa`
 
-function buildSystemPrompt(language: string): string {
+interface UserPreferenceParams {
+  guidance_style?: string
+  tone?: string
+}
+
+function buildSystemPrompt(
+  language: string,
+  mode?: string,
+  preferences?: UserPreferenceParams
+): string {
   const langName = LANG_NAMES[language] || LANG_NAMES['fi']
   const langInstruction = `\n\n## KIELI / LANGUAGE\n\nKäyttäjän valitsema oletuskieli on: **${langName}**\n\nKIELISÄÄNTÖ (tärkeysjärjestyksessä):\n1. **ENSISIJAINEN: Vastaa AINA sillä kielellä, jolla käyttäjä itse kirjoittaa.** Käyttäjän kirjoituskieli menee AINA edelle.\n2. **TOISSIJAINEN: Jos et pysty tunnistamaan käyttäjän kieltä**, käytä oletuskieltä: ${langName}.\n3. **ENSIMMÄINEN VIESTI: Jos keskustelu alkaa ja käyttäjän kielen tunnistaminen on epäselvää**, aloita oletuskielellä ${langName}.\n\nLanguage rule (priority order):\n1. ALWAYS respond in the language the user is writing in. User's writing language overrides the default.\n2. If user language cannot be detected (emoji, very short input), use the default: ${langName}.\n3. For the first message when language is unclear, start with ${langName}.`
-  return SYSTEM_PROMPT + langInstruction
+
+  const modePrompt = mode ? getModePrompt(mode) : ''
+  const modeSection = modePrompt ? `\n\n## TILA / MODE\n\n${modePrompt}` : ''
+
+  const guidanceStyle = preferences?.guidance_style || 'balanced'
+  const tone = preferences?.tone || 'gentle'
+
+  const guidanceInstructions: Record<string, string> = {
+    structured: 'Anna selkeät, numeroidut askeleet. Käytä rakenteellista muotoa.',
+    balanced: '',
+    open: 'Ole vapaampi ja keskustelevampi. Anna tilaa käyttäjän omille oivalluksille.',
+  }
+  const toneInstructions: Record<string, string> = {
+    gentle: 'Ole erityisen lempeä ja myötätuntoinen.',
+    direct: 'Ole suora ja selkeä. Mene suoraan asiaan.',
+    light_humor: 'Käytä sopivissa kohdissa kevyttä huumoria keventämään tunnelmaa, mutta kunnioita vakavia aiheita.',
+  }
+
+  const guidanceText = guidanceInstructions[guidanceStyle]
+  const toneText = toneInstructions[tone]
+  const parts: string[] = []
+  if (guidanceText) parts.push(`Ohjaus: ${guidanceText}`)
+  if (toneText) parts.push(`Sävy: ${toneText}`)
+  parts.push('HUOM: Turvallisuusprotokollat (kriisi, itsetuhoisuus, DV) eivät mukaudu käyttäjän valintoihin.')
+  const personalizationSection = `\n\n## KÄYTTÄJÄN VALINNAT / USER PREFERENCES\n\n${parts.join('\n\n')}`
+
+  const neutrality = `\n\n## NEUTRAALIUS / NEUTRALITY\n\nÄlä vahvista "sinä olet oikeassa, toinen väärässä" -tarinaa. Validoi tunne. Ohjaa tarpeisiin, rajoihin ja pyyntöihin. Etsi de-eskalaatiota. Älä ota puolia konfliktitilanteessa.`
+
+  return SYSTEM_PROMPT + langInstruction + modeSection + personalizationSection + neutrality
 }
 
 interface ChatMessage {
@@ -165,7 +206,9 @@ interface ChatRequest {
   messages: ChatMessage[]
   session_id: string
   conversation_id?: string
+  card_id?: string
   language?: string
+  mode?: string
 }
 
 export async function POST(request: Request) {
@@ -181,7 +224,7 @@ export async function POST(request: Request) {
     }
 
     const body: ChatRequest = await request.json()
-    const { messages, session_id, conversation_id, language } = body
+    const { messages, session_id, conversation_id, card_id, language, mode } = body
 
     if (!messages || messages.length === 0 || !session_id) {
       return new Response(
@@ -192,25 +235,63 @@ export async function POST(request: Request) {
 
     const admin = await createSupabaseAdmin()
 
-    const { data: profile } = await admin
-      .from('profiles')
-      .select('plan, current_period_start, current_period_end')
-      .eq('id', user.id)
-      .single()
+    const demoEmail = process.env.DEMO_USER_EMAIL
+    const isDemoUser = !!demoEmail && user.email?.toLowerCase() === demoEmail.toLowerCase()
 
-    const plan = profile?.plan || 'free'
+    const [{ data: profile }, { data: prefs }] = await Promise.all([
+      admin
+        .from('profiles')
+        .select('plan, current_period_start, current_period_end, daily_messages_used, daily_messages_reset_at')
+        .eq('id', user.id)
+        .single(),
+      admin
+        .from('user_preferences')
+        .select('guidance_style, tone')
+        .eq('user_id', user.id)
+        .single(),
+    ])
 
+    const plan = isDemoUser ? 'starter' : (profile?.plan || 'free')
+    const preferences = prefs ? { guidance_style: prefs.guidance_style, tone: prefs.tone } : undefined
+
+    // Free users: 3 messages per day, then PAYWALL
     if (plan === 'free') {
-      return new Response(
-        JSON.stringify({ error: 'NO_PLAN', message: 'Please subscribe to use Solvia' }),
-        { status: 403, headers: { 'Content-Type': 'application/json' } }
-      )
+      const now = new Date()
+      const startOfTodayUTC = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()))
+      const startOfTomorrowUTC = new Date(startOfTodayUTC)
+      startOfTomorrowUTC.setUTCDate(startOfTomorrowUTC.getUTCDate() + 1)
+
+      let dailyUsed = profile?.daily_messages_used ?? 0
+      const resetAt = profile?.daily_messages_reset_at ? new Date(profile.daily_messages_reset_at) : null
+
+      if (!resetAt || now >= resetAt) {
+        dailyUsed = 0
+        await admin
+          .from('profiles')
+          .update({
+            daily_messages_used: 0,
+            daily_messages_reset_at: startOfTomorrowUTC.toISOString(),
+          })
+          .eq('id', user.id)
+      }
+
+      if (dailyUsed >= 3) {
+        return new Response(
+          JSON.stringify({ error: 'PAYWALL', message: "You've used your 3 free messages today. Subscribe to continue." }),
+          { status: 403, headers: { 'Content-Type': 'application/json' } }
+        )
+      }
+
+      await admin
+        .from('profiles')
+        .update({ daily_messages_used: dailyUsed + 1 })
+        .eq('id', user.id)
     }
 
-    const periodStart = profile?.current_period_start
+    const periodStart = !isDemoUser && profile?.current_period_start
       ? new Date(profile.current_period_start)
       : new Date()
-    const periodEnd = profile?.current_period_end
+    const periodEnd = !isDemoUser && profile?.current_period_end
       ? new Date(profile.current_period_end)
       : new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
 
@@ -241,10 +322,25 @@ export async function POST(request: Request) {
         .single()
       if (convError) throw convError
       convId = conv.id
+      if (card_id) {
+        trackEventServer(user.id, 'share_card_replied', { card_id }).catch(() => {})
+      }
     }
 
     const lastUserMsg = messages[messages.length - 1]
+    let triageResult: { triggered: boolean; type: string | null; confidence: string | null } | null = null
     if (lastUserMsg.role === 'user') {
+      const triage = checkTriage(lastUserMsg.content)
+      if (triage.triggered && triage.type) {
+        triageResult = { triggered: true, type: triage.type, confidence: triage.confidence }
+        await admin.from('triage_records').insert({
+          user_id: user.id,
+          trigger_type: triage.type,
+          intensity_score: null,
+          action_taken: null,
+          resolved: false,
+        })
+      }
       await admin.from('messages').insert({
         conversation_id: convId,
         role: 'user',
@@ -277,7 +373,10 @@ export async function POST(request: Request) {
       aiSession = newSession
     }
 
-    const systemPrompt = buildSystemPrompt(language || 'fi')
+    let systemPrompt = buildSystemPrompt(language || 'fi', mode, preferences)
+    if (triageResult?.type === 'self_harm' || triageResult?.type === 'dv') {
+      systemPrompt += `\n\n## KRIISI – HETKELLINEN OHJE\n\nKäyttäjä on ilmaissut huolestuttavaa sisältöä (${triageResult.type}). VASTAA LYHYESTI JA LÄMPIMÄSTI. Mainitse välittömästi: Kriisipuhelin 09 2525 0111, Nollalinja 080 005 005 (väkivalta), Hätänumero 112. Kehota ottamaan yhteyttä. Älä analysoi – tarjoa turvaa ja numerot.`
+    }
 
     const geminiMessages = messages.map((m) => ({
       role: m.role === 'assistant' ? 'model' : 'user',
@@ -322,6 +421,18 @@ export async function POST(request: Request) {
       async start(controller) {
         const encoder = new TextEncoder()
         let buffer = ''
+
+        const metaPayload: Record<string, unknown> = {
+          meta: true,
+          conversation_id: convId,
+          ai_session_id: aiSession?.id || null,
+        }
+        if (triageResult?.triggered && triageResult.type) {
+          metaPayload.triage = { type: triageResult.type, confidence: triageResult.confidence }
+        }
+        controller.enqueue(
+          encoder.encode(`data: ${JSON.stringify(metaPayload)}\n\n`)
+        )
 
         if (softLimit) {
           controller.enqueue(
