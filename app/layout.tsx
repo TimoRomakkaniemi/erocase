@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import './globals.css'
 import { SOSFlow } from '@/components/sos/SOSFlow'
 import { TriageFlowWrapper } from '@/components/safety/TriageFlowWrapper'
+import { ToastProvider } from '@/components/Toast'
 
 export const metadata: Metadata = {
   title: 'Solvia – AI-Powered Life Support',
@@ -27,9 +28,11 @@ export default function RootLayout({
         <script dangerouslySetInnerHTML={{ __html: `(function(){try{var t=localStorage.getItem('theme');var d=t==='dark'||(!t&&window.matchMedia('(prefers-color-scheme:dark)').matches);if(d)document.documentElement.classList.add('dark')}catch(e){}})()` }} />
       </head>
       <body className="h-full">
-        {children}
-        <SOSFlow />
-        <TriageFlowWrapper />
+        <ToastProvider>
+          {children}
+          <SOSFlow />
+          <TriageFlowWrapper />
+        </ToastProvider>
       </body>
     </html>
   )

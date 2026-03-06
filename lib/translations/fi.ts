@@ -1285,4 +1285,30 @@ export const fi = {
       professional: 'Hae ammattiapua kun: suru ei hellitä 6\u201312 kuukauden jälkeen, esiintyy itsetuhoisia ajatuksia, et pysty toimimaan arjessa, k\u00e4yt\u00e4t p\u00e4ihteitä selviytyäksesi, tai tunnet olevasi juuttunut suruun. Komplisoitu suru on hoidettavissa.',
     },
   },
+
+  // Auth
+  'auth.title': 'Kirjaudu Solviaan',
+  'auth.subtitle': 'Lähetämme sinulle kirjautumiskoodin',
+  'auth.otpTitle': 'Syötä vahvistuskoodi',
+  'auth.otpSubtitle': 'Koodi lähetetty osoitteeseen {email}',
+  'auth.emailPlaceholder': 'sinun@sahkoposti.fi',
+  'auth.sendCode': 'Lähetä kirjautumiskoodi',
+  'auth.sending': 'Lähetetään...',
+  'auth.resend': 'Lähetä uudelleen',
+  'auth.resendIn': 'Lähetä uudelleen',
+  'auth.changeEmail': 'Käytä toista sähköpostia',
+  'auth.magicLinkHint': 'Saat koodin ja kirjautumislinkin sähköpostiisi',
+  'auth.language': 'Kieli',
+  'auth.logout': 'Kirjaudu ulos',
+
+  // Navigation
+  'nav.chat': 'Chat',
+  'nav.today': 'Tänään',
+  'nav.journal': 'Päiväkirja',
+  'nav.space': 'Tila',
+  'nav.pricing': 'Hinnasto',
+  'nav.settings': 'Asetukset',
+
+  // Common
+  'common.back': 'Takaisin',
 }

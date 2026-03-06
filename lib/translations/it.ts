@@ -1285,4 +1285,27 @@ export const it: TranslationTree = {
       professional: 'Cerca aiuto quando: il lutto non si placa dopo 6–12 mesi, sorgono pensieri suicidi, o ti senti bloccato.',
     },
   },
+
+  'auth.title': 'Accedi a Solvia',
+  'auth.subtitle': 'Ti invieremo un codice di accesso',
+  'auth.otpTitle': 'Inserisci il codice di verifica',
+  'auth.otpSubtitle': 'Codice inviato a {email}',
+  'auth.emailPlaceholder': 'tua@email.it',
+  'auth.sendCode': 'Invia codice',
+  'auth.sending': 'Invio...',
+  'auth.resend': 'Invia di nuovo',
+  'auth.resendIn': 'Invia di nuovo tra',
+  'auth.changeEmail': 'Usa un altro indirizzo',
+  'auth.magicLinkHint': 'Riceverai un codice e un link magico via email',
+  'auth.language': 'Lingua',
+  'auth.logout': 'Esci',
+
+  'nav.chat': 'Chat',
+  'nav.today': 'Oggi',
+  'nav.journal': 'Diario',
+  'nav.space': 'Spazio',
+  'nav.pricing': 'Prezzi',
+  'nav.settings': 'Impostazioni',
+
+  'common.back': 'Indietro',
 }

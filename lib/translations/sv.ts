@@ -1285,4 +1285,27 @@ export const sv: TranslationTree = {
       professional: 'S\u00F6k professionell hj\u00E4lp n\u00E4r: sorgen inte l\u00E4ttar efter 6\u201312 m\u00E5nader, du har suicidtankar, du inte klarar vardagen, du anv\u00E4nder substanser för att hantera, eller du k\u00E4nner dig fast i sorgen. Komplicerad sorg \u00E4r behandlingsbar.',
     },
   },
+
+  'auth.title': 'Logga in på Solvia',
+  'auth.subtitle': 'Vi skickar en inloggningskod',
+  'auth.otpTitle': 'Ange verifieringskod',
+  'auth.otpSubtitle': 'Kod skickad till {email}',
+  'auth.emailPlaceholder': 'din@epost.se',
+  'auth.sendCode': 'Skicka inloggningskod',
+  'auth.sending': 'Skickar...',
+  'auth.resend': 'Skicka igen',
+  'auth.resendIn': 'Skicka igen om',
+  'auth.changeEmail': 'Använd en annan e-post',
+  'auth.magicLinkHint': 'Du får en kod och en magisk länk via e-post',
+  'auth.language': 'Språk',
+  'auth.logout': 'Logga ut',
+
+  'nav.chat': 'Chatt',
+  'nav.today': 'Idag',
+  'nav.journal': 'Dagbok',
+  'nav.space': 'Rum',
+  'nav.pricing': 'Priser',
+  'nav.settings': 'Inställningar',
+
+  'common.back': 'Tillbaka',
 }

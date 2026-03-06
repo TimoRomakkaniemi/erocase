@@ -1,7 +1,8 @@
 import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
-const PROTECTED_ROUTES = ['/demo', '/pricing', '/onboarding', '/today', '/journal', '/space', '/privacy']
+const PROTECTED_ROUTES = ['/demo', '/pricing', '/onboarding', '/today', '/journal', '/space', '/privacy', '/settings']
+const ADMIN_ROUTES = ['/admin']
 
 export async function middleware(request: NextRequest) {
   let supabaseResponse = NextResponse.next({ request })
@@ -31,20 +32,35 @@ export async function middleware(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser()
 
-  const isProtected = PROTECTED_ROUTES.some((route) =>
-    request.nextUrl.pathname.startsWith(route)
-  )
+  const { pathname } = request.nextUrl
 
-  if (isProtected && !user) {
+  const isProtected = PROTECTED_ROUTES.some((route) => pathname.startsWith(route))
+  const isAdmin = ADMIN_ROUTES.some((route) => pathname.startsWith(route))
+
+  if ((isProtected || isAdmin) && !user) {
     const url = request.nextUrl.clone()
     url.pathname = '/login'
-    url.searchParams.set('next', request.nextUrl.pathname)
+    url.searchParams.set('next', pathname)
     return NextResponse.redirect(url)
   }
 
-  if (request.nextUrl.pathname === '/login' && user) {
+  if (isAdmin && user) {
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('role')
+      .eq('id', user.id)
+      .single()
+
+    if (!profile || (profile.role !== 'admin' && profile.role !== 'superadmin')) {
+      const url = request.nextUrl.clone()
+      url.pathname = '/demo'
+      return NextResponse.redirect(url)
+    }
+  }
+
+  if (pathname === '/login' && user) {
     const url = request.nextUrl.clone()
-    url.pathname = '/'
+    url.pathname = '/demo'
     return NextResponse.redirect(url)
   }
 

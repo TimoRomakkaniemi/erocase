@@ -1285,4 +1285,27 @@ export const en: TranslationTree = {
       professional: 'Seek professional help when: grief doesn\u2019t ease after 6\u201312 months, you have suicidal thoughts, you can\u2019t function in daily life, you use substances to cope, or you feel stuck in grief. Complicated grief is treatable.',
     },
   },
+
+  'auth.title': 'Sign in to Solvia',
+  'auth.subtitle': "We'll send you a login code",
+  'auth.otpTitle': 'Enter verification code',
+  'auth.otpSubtitle': 'Code sent to {email}',
+  'auth.emailPlaceholder': 'your@email.com',
+  'auth.sendCode': 'Send login code',
+  'auth.sending': 'Sending...',
+  'auth.resend': 'Resend code',
+  'auth.resendIn': 'Resend in',
+  'auth.changeEmail': 'Use a different email',
+  'auth.magicLinkHint': "You'll receive a code and a magic link via email",
+  'auth.language': 'Language',
+  'auth.logout': 'Sign out',
+
+  'nav.chat': 'Chat',
+  'nav.today': 'Today',
+  'nav.journal': 'Journal',
+  'nav.space': 'Space',
+  'nav.pricing': 'Pricing',
+  'nav.settings': 'Settings',
+
+  'common.back': 'Back',
 }

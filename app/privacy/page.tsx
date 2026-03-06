@@ -1,10 +1,9 @@
 'use client'
 
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { useT } from '@/lib/i18n'
-import NavBar from '@/components/NavBar'
+import AppShell from '@/components/AppShell'
 import ConsentManager from '@/components/privacy/ConsentManager'
 import AuditTrailView from '@/components/privacy/AuditTrailView'
 import DataExport from '@/components/privacy/DataExport'
@@ -21,19 +20,11 @@ type SectionId = (typeof SECTIONS)[number]['id']
 
 export default function PrivacyPage() {
   const t = useT()
-  const router = useRouter()
   const [activeSection, setActiveSection] = useState<SectionId>('consents')
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <NavBar
-        currentView="home"
-        onNavigate={(v) => {
-          if (v === 'home') router.push('/')
-          if (v === 'demo') router.push('/demo')
-        }}
-      />
-      <div className="pt-24 pb-20 px-4 sm:px-6">
+    <AppShell>
+      <div className="py-8 px-4 sm:px-6">
         <div className="max-w-2xl mx-auto">
           <Link
             href="/settings"
@@ -105,6 +96,6 @@ export default function PrivacyPage() {
           </div>
         </div>
       </div>
-    </div>
+    </AppShell>
   )
 }

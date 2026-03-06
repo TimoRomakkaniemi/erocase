@@ -1285,4 +1285,27 @@ export const fr: TranslationTree = {
       professional: 'Consultez lorsque : le deuil ne diminue pas après 6–12 mois, pensées suicidaires, ou impression d\'être bloqué.',
     },
   },
+
+  'auth.title': 'Se connecter à Solvia',
+  'auth.subtitle': 'Nous vous enverrons un code de connexion',
+  'auth.otpTitle': 'Entrez le code de vérification',
+  'auth.otpSubtitle': 'Code envoyé à {email}',
+  'auth.emailPlaceholder': 'votre@email.fr',
+  'auth.sendCode': 'Envoyer le code',
+  'auth.sending': 'Envoi...',
+  'auth.resend': 'Renvoyer le code',
+  'auth.resendIn': 'Renvoyer dans',
+  'auth.changeEmail': 'Utiliser un autre email',
+  'auth.magicLinkHint': 'Vous recevrez un code et un lien magique par email',
+  'auth.language': 'Langue',
+  'auth.logout': 'Se déconnecter',
+
+  'nav.chat': 'Discussion',
+  'nav.today': "Aujourd'hui",
+  'nav.journal': 'Journal',
+  'nav.space': 'Espace',
+  'nav.pricing': 'Tarifs',
+  'nav.settings': 'Paramètres',
+
+  'common.back': 'Retour',
 }

@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { createBrowserClient } from '@/lib/supabase-browser'
 import { useT } from '@/lib/i18n'
-import NavBar from '@/components/NavBar'
+import AppShell from '@/components/AppShell'
 import PreferencesPanel from '@/components/settings/PreferencesPanel'
 import { useModeStore } from '@/stores/modeStore'
 
@@ -46,26 +46,9 @@ export default function SettingsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <NavBar
-        currentView="home"
-        onNavigate={(v) => {
-          if (v === 'home') router.push('/')
-          if (v === 'demo') router.push('/demo')
-        }}
-      />
-
-      <div className="pt-24 pb-20 px-4 sm:px-6">
+    <AppShell>
+      <div className="py-8 px-4 sm:px-6">
         <div className="max-w-2xl mx-auto">
-          <button
-            onClick={() => router.back()}
-            className="inline-flex items-center gap-2 text-brand-600 font-medium hover:text-brand-700 mb-6 transition-colors"
-          >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-            </svg>
-            {t('common.back') || 'Back'}
-          </button>
           <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-8">
             {t('settings.title')}
           </h1>
@@ -135,6 +118,6 @@ export default function SettingsPage() {
           )}
         </div>
       </div>
-    </div>
+    </AppShell>
   )
 }

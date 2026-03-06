@@ -1285,4 +1285,27 @@ export const es: TranslationTree = {
       professional: 'Busca ayuda profesional cuando: el duelo no cede después de 6–12 meses, aparecen pensamientos suicidas, no puedes funcionar en el día a día, usas sustancias para sobrellevar, o sientes que estás atrapado/a en el duelo. El duelo complicado es tratable. Teléfono de la Esperanza: 717 003 717.',
     },
   },
+
+  'auth.title': 'Iniciar sesión en Solvia',
+  'auth.subtitle': 'Te enviaremos un código de acceso',
+  'auth.otpTitle': 'Introduce el código de verificación',
+  'auth.otpSubtitle': 'Código enviado a {email}',
+  'auth.emailPlaceholder': 'tu@correo.es',
+  'auth.sendCode': 'Enviar código',
+  'auth.sending': 'Enviando...',
+  'auth.resend': 'Reenviar código',
+  'auth.resendIn': 'Reenviar en',
+  'auth.changeEmail': 'Usar otro correo',
+  'auth.magicLinkHint': 'Recibirás un código y un enlace mágico por correo',
+  'auth.language': 'Idioma',
+  'auth.logout': 'Cerrar sesión',
+
+  'nav.chat': 'Chat',
+  'nav.today': 'Hoy',
+  'nav.journal': 'Diario',
+  'nav.space': 'Espacio',
+  'nav.pricing': 'Precios',
+  'nav.settings': 'Ajustes',
+
+  'common.back': 'Volver',
 }

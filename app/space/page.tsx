@@ -2,11 +2,11 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import Link from 'next/link'
 import { createBrowserClient } from '@/lib/supabase-browser'
 import { useT } from '@/lib/i18n'
 import { useSharedStore } from '@/stores/sharedStore'
 import SolviaLogo from '@/components/SolviaLogo'
+import AppShell from '@/components/AppShell'
 import SpaceCard from '@/components/shared/SpaceCard'
 import CreateSpaceModal from '@/components/shared/CreateSpaceModal'
 
@@ -41,31 +41,20 @@ export default function SpacePage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen chat-bg flex flex-col items-center justify-center">
-        <div className="animate-pulse">
-          <SolviaLogo size={48} className="text-brand-500" />
+      <AppShell>
+        <div className="flex-1 flex flex-col items-center justify-center">
+          <div className="animate-pulse">
+            <SolviaLogo size={48} className="text-brand-500" />
+          </div>
+          <p className="mt-4 text-sm text-gray-500">{t('journal.loading')}</p>
         </div>
-        <p className="mt-4 text-sm text-gray-500">{t('journal.loading')}</p>
-      </div>
+      </AppShell>
     )
   }
 
   return (
-    <div className="min-h-screen chat-bg flex flex-col">
-      <header className="flex-shrink-0 sticky top-0 z-40 bg-white/95 backdrop-blur-xl border-b border-gray-100 shadow-sm">
-        <div className="max-w-2xl mx-auto px-4 h-14 flex items-center justify-between">
-          <Link
-            href="/demo"
-            className="flex items-center gap-2 hover:opacity-80 transition-opacity"
-          >
-            <SolviaLogo size={28} />
-            <span className="font-bold text-base text-gray-900">Solvia</span>
-          </Link>
-          <span className="text-sm font-medium text-brand-600">{t('shared.title')}</span>
-        </div>
-      </header>
-
-      <main className="flex-1 overflow-y-auto px-4 sm:px-6 py-6">
+    <AppShell>
+      <div className="flex-1 overflow-y-auto px-4 sm:px-6 py-6">
         <div className="max-w-2xl mx-auto">
           <h1 className="text-xl font-bold text-gray-900 mb-6">{t('shared.title')}</h1>
 
@@ -114,7 +103,7 @@ export default function SpacePage() {
             </>
           )}
         </div>
-      </main>
+      </div>
 
       {showCreateModal && (
         <CreateSpaceModal
@@ -124,6 +113,6 @@ export default function SpacePage() {
           hasFriend={hasFriend}
         />
       )}
-    </div>
+    </AppShell>
   )
 }

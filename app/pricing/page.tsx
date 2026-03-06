@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useT } from '@/lib/i18n'
-import NavBar from '@/components/NavBar'
+import AppShell from '@/components/AppShell'
 import SolviaLogo from '@/components/SolviaLogo'
 import { createBrowserClient } from '@/lib/supabase-browser'
 
@@ -173,13 +173,8 @@ export default function PricingPage() {
     : 0
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <NavBar currentView="home" onNavigate={(v) => {
-        if (v === 'home') router.push('/')
-        if (v === 'demo') router.push('/demo')
-      }} />
-
-      <div className="pt-24 pb-20 px-4 sm:px-6">
+    <AppShell>
+      <div className="py-8 px-4 sm:px-6">
         <div className="max-w-4xl mx-auto">
           {checkoutError && (
             <div className="mb-6 p-4 rounded-xl bg-amber-50 border border-amber-200 flex items-start gap-3">
@@ -433,6 +428,6 @@ export default function PricingPage() {
           </p>
         </div>
       </div>
-    </div>
+    </AppShell>
   )
 }

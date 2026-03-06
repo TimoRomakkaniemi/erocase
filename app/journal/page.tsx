@@ -2,11 +2,11 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import Link from 'next/link'
 import { createBrowserClient } from '@/lib/supabase-browser'
 import { useT } from '@/lib/i18n'
 import { useModeStore } from '@/stores/modeStore'
 import SolviaLogo from '@/components/SolviaLogo'
+import AppShell from '@/components/AppShell'
 import JournalList, { type JournalEntry } from '@/components/journal/JournalList'
 import JournalEntryView from '@/components/journal/JournalEntry'
 import JournalComposer from '@/components/journal/JournalComposer'
@@ -105,31 +105,20 @@ export default function JournalPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen chat-bg flex flex-col items-center justify-center">
-        <div className="animate-pulse">
-          <SolviaLogo size={48} className="text-brand-500" />
+      <AppShell>
+        <div className="flex-1 flex flex-col items-center justify-center">
+          <div className="animate-pulse">
+            <SolviaLogo size={48} className="text-brand-500" />
+          </div>
+          <p className="mt-4 text-sm text-gray-500">{t('journal.loading')}</p>
         </div>
-        <p className="mt-4 text-sm text-gray-500">{t('journal.loading')}</p>
-      </div>
+      </AppShell>
     )
   }
 
   return (
-    <div className="min-h-screen chat-bg flex flex-col">
-      <header className="flex-shrink-0 sticky top-0 z-40 bg-white/95 backdrop-blur-xl border-b border-gray-100 shadow-sm">
-        <div className="max-w-2xl mx-auto px-4 h-14 flex items-center justify-between">
-          <Link
-            href="/demo"
-            className="flex items-center gap-2 hover:opacity-80 transition-opacity"
-          >
-            <SolviaLogo size={28} />
-            <span className="font-bold text-base text-gray-900">Solvia</span>
-          </Link>
-          <span className="text-sm font-medium text-brand-600">{t('journal.title')}</span>
-        </div>
-      </header>
-
-      <main className="flex-1 overflow-y-auto px-4 sm:px-6 py-6">
+    <AppShell>
+      <div className="flex-1 overflow-y-auto px-4 sm:px-6 py-6">
         <div className="max-w-2xl mx-auto">
           <div className="flex items-center justify-between mb-6">
             <h1 className="text-xl font-bold text-gray-900">{t('journal.heading')}</h1>
@@ -202,7 +191,7 @@ export default function JournalPage() {
             />
           )}
         </div>
-      </main>
+      </div>
 
       {selectedEntry && (
         <JournalEntryView
@@ -212,6 +201,6 @@ export default function JournalPage() {
           onUpdate={handleUpdate}
         />
       )}
-    </div>
+    </AppShell>
   )
 }

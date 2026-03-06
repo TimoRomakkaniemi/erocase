@@ -1285,4 +1285,27 @@ export const de: TranslationTree = {
       professional: 'Suchen Sie Hilfe, wenn: die Trauer nach 6–12 Monaten nicht nachlässt, Suizidgedanken auftreten oder Sie sich festgefahren fühlen. Komplizierte Trauer ist behandelbar.',
     },
   },
+
+  'auth.title': 'Bei Solvia anmelden',
+  'auth.subtitle': 'Wir senden Ihnen einen Anmeldecode',
+  'auth.otpTitle': 'Bestätigungscode eingeben',
+  'auth.otpSubtitle': 'Code gesendet an {email}',
+  'auth.emailPlaceholder': 'ihre@email.de',
+  'auth.sendCode': 'Anmeldecode senden',
+  'auth.sending': 'Wird gesendet...',
+  'auth.resend': 'Code erneut senden',
+  'auth.resendIn': 'Erneut senden in',
+  'auth.changeEmail': 'Andere E-Mail verwenden',
+  'auth.magicLinkHint': 'Sie erhalten einen Code und einen Magic Link per E-Mail',
+  'auth.language': 'Sprache',
+  'auth.logout': 'Abmelden',
+
+  'nav.chat': 'Chat',
+  'nav.today': 'Heute',
+  'nav.journal': 'Tagebuch',
+  'nav.space': 'Raum',
+  'nav.pricing': 'Preise',
+  'nav.settings': 'Einstellungen',
+
+  'common.back': 'Zurück',
 }

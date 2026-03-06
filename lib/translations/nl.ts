@@ -1285,4 +1285,27 @@ export const nl: TranslationTree = {
       professional: 'Zoek professionele hulp wanneer: rouw na 6\u201312 maanden niet vermindert, je suïcidale gedachten hebt, je niet kunt functioneren in het dagelijks leven, je middelen gebruikt om te copen, of je vastzit in rouw. Gecompliceerde rouw is behandelbaar.',
     },
   },
+
+  'auth.title': 'Inloggen bij Solvia',
+  'auth.subtitle': 'We sturen je een inlogcode',
+  'auth.otpTitle': 'Voer verificatiecode in',
+  'auth.otpSubtitle': 'Code verzonden naar {email}',
+  'auth.emailPlaceholder': 'jouw@email.nl',
+  'auth.sendCode': 'Stuur inlogcode',
+  'auth.sending': 'Versturen...',
+  'auth.resend': 'Code opnieuw sturen',
+  'auth.resendIn': 'Opnieuw sturen over',
+  'auth.changeEmail': 'Ander e-mailadres gebruiken',
+  'auth.magicLinkHint': 'Je ontvangt een code en een magische link per e-mail',
+  'auth.language': 'Taal',
+  'auth.logout': 'Uitloggen',
+
+  'nav.chat': 'Chat',
+  'nav.today': 'Vandaag',
+  'nav.journal': 'Dagboek',
+  'nav.space': 'Ruimte',
+  'nav.pricing': 'Prijzen',
+  'nav.settings': 'Instellingen',
+
+  'common.back': 'Terug',
 }
