@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { useT } from '@/lib/i18n'
 import LanguageSelector from '@/components/LanguageSelector'
 import SolviaLogo from '@/components/SolviaLogo'
+import ThemeToggle from '@/components/ThemeToggle'
 
 interface Props {
   currentView: 'home' | 'demo'
@@ -79,12 +80,7 @@ export default function NavBar({ currentView, onNavigate }: Props) {
           >
             {t('nav.pricing') || 'Pricing'}
           </Link>
-          <Link href="/billing"
-            className={`text-sm font-medium transition-colors hover:text-brand-500
-              ${forceLight ? 'text-gray-600' : 'text-white/80'}`}
-          >
-            {t('nav.billing') || 'Billing'}
-          </Link>
+          <ThemeToggle variant={forceLight ? 'light' : 'dark'} />
           <Link href="/settings"
             className={`p-2 rounded-lg transition-colors hover:text-brand-500
               ${forceLight ? 'text-gray-600' : 'text-white/80'}`}
@@ -144,11 +140,6 @@ export default function NavBar({ currentView, onNavigate }: Props) {
               className="block w-full text-left px-3 py-2.5 text-sm font-medium text-gray-700 rounded-lg hover:bg-gray-50"
             >
               {t('nav.pricing') || 'Pricing'}
-            </Link>
-            <Link href="/billing" onClick={() => setMobileMenu(false)}
-              className="block w-full text-left px-3 py-2.5 text-sm font-medium text-gray-700 rounded-lg hover:bg-gray-50"
-            >
-              {t('nav.billing') || 'Billing'}
             </Link>
             <Link href="/settings" onClick={() => setMobileMenu(false)}
               className="flex items-center gap-2 w-full text-left px-3 py-2.5 text-sm font-medium text-gray-700 rounded-lg hover:bg-gray-50"

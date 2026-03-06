@@ -334,7 +334,7 @@ export default function ChatWindow() {
                     {t('limits.upgrade') || 'Upgrade plan'}
                   </button>
                   <button
-                    onClick={() => router.push('/billing')}
+                    onClick={() => router.push('/pricing')}
                     className="w-full py-2.5 rounded-xl text-sm font-semibold text-gray-600 bg-gray-50 border border-gray-200 hover:bg-gray-100 transition-all"
                   >
                     {t('limits.viewBilling') || 'View billing'}

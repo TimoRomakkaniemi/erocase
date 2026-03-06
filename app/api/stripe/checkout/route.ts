@@ -79,7 +79,7 @@ export async function POST(request: Request) {
       customer: customerId,
       mode: 'subscription',
       line_items: lineItems,
-      success_url: `${origin}/billing?session_id={CHECKOUT_SESSION_ID}`,
+      success_url: `${origin}/pricing?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${origin}/pricing`,
       subscription_data: {
         metadata: {
