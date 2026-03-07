@@ -1292,6 +1292,8 @@ export const fi = {
   'auth.otpTitle': 'Syötä vahvistuskoodi',
   'auth.otpSubtitle': 'Koodi lähetetty osoitteeseen {email}',
   'auth.emailPlaceholder': 'sinun@sahkoposti.fi',
+  'auth.passwordPlaceholder': 'Salasana',
+  'auth.signInWithPassword': 'Kirjaudu salasanalla',
   'auth.sendCode': 'Lähetä kirjautumiskoodi',
   'auth.sending': 'Lähetetään...',
   'auth.resend': 'Lähetä uudelleen',

@@ -1291,6 +1291,8 @@ export const it: TranslationTree = {
   'auth.otpTitle': 'Inserisci il codice di verifica',
   'auth.otpSubtitle': 'Codice inviato a {email}',
   'auth.emailPlaceholder': 'tua@email.it',
+  'auth.passwordPlaceholder': 'Password',
+  'auth.signInWithPassword': 'Accedi con password',
   'auth.sendCode': 'Invia codice',
   'auth.sending': 'Invio...',
   'auth.resend': 'Invia di nuovo',

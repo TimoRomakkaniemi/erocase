@@ -25,6 +25,7 @@ function LoginForm() {
 
   const [step, setStep] = useState<Step>('email')
   const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
   const [otp, setOtp] = useState(['', '', '', '', '', ''])
   const [error, setError] = useState('')
   const [shake, setShake] = useState(false)
@@ -39,6 +40,28 @@ function LoginForm() {
     const timer = setTimeout(() => setCountdown(countdown - 1), 1000)
     return () => clearTimeout(timer)
   }, [countdown])
+
+  const handleSignInWithPassword = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!password.trim()) return
+    setError('')
+    setLoading(true)
+    try {
+      const { error: signInError } = await supabase.auth.signInWithPassword({
+        email: email.trim(),
+        password: password.trim(),
+      })
+      if (signInError) throw signInError
+      router.push(nextUrl)
+      router.refresh()
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : 'Unknown error'
+      setError(msg)
+      triggerShake()
+    } finally {
+      setLoading(false)
+    }
+  }
 
   const handleSendOtp = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -173,21 +196,33 @@ function LoginForm() {
           </div>
 
           {step === 'email' ? (
-            <form onSubmit={handleSendOtp} className="space-y-4">
-              <input type="email" value={email}
-                onChange={(e) => { setEmail(e.target.value); setError('') }}
-                placeholder={t('auth.emailPlaceholder') || 'your@email.com'}
-                autoFocus required
-                className="w-full px-4 py-3 rounded-xl text-sm text-white placeholder-gray-500 outline-none transition-all focus:ring-2 focus:ring-brand-500/50"
-                style={{ background: 'rgba(255,255,255,0.08)', border: error ? '1px solid #ef4444' : '1px solid rgba(255,255,255,0.1)' }} />
-              {error && <p className="text-red-400 text-xs pl-1">{error}</p>}
-              <button type="submit" disabled={loading || !email.trim()}
-                className="w-full h-11 rounded-xl text-sm font-semibold text-white transition-all hover:brightness-110 active:scale-[0.98] disabled:opacity-50"
-                style={{ background: 'linear-gradient(135deg, #22c55e 0%, #16a34a 100%)', boxShadow: '0 4px 12px rgba(34,197,94,0.3)' }}>
-                {loading ? (t('auth.sending') || 'Sending...') : (t('auth.sendCode') || 'Send login code')}
-              </button>
-              <p className="text-center text-xs text-gray-500 mt-3">{t('auth.magicLinkHint') || "You'll receive a code and a magic link via email"}</p>
-            </form>
+            <div className="space-y-4">
+              <form onSubmit={(e) => { e.preventDefault(); (password.trim() ? handleSignInWithPassword(e) : handleSendOtp(e)) }} className="space-y-4">
+                <input type="email" value={email}
+                  onChange={(e) => { setEmail(e.target.value); setError('') }}
+                  placeholder={t('auth.emailPlaceholder') || 'your@email.com'}
+                  autoFocus required
+                  className="w-full px-4 py-3 rounded-xl text-sm text-white placeholder-gray-500 outline-none transition-all focus:ring-2 focus:ring-brand-500/50"
+                  style={{ background: 'rgba(255,255,255,0.08)', border: error ? '1px solid #ef4444' : '1px solid rgba(255,255,255,0.1)' }} />
+                <input type="password" value={password}
+                  onChange={(e) => { setPassword(e.target.value); setError('') }}
+                  placeholder={t('auth.passwordPlaceholder') || 'Password'}
+                  autoComplete="current-password"
+                  className="w-full px-4 py-3 rounded-xl text-sm text-white placeholder-gray-500 outline-none transition-all focus:ring-2 focus:ring-brand-500/50"
+                  style={{ background: 'rgba(255,255,255,0.08)', border: error ? '1px solid #ef4444' : '1px solid rgba(255,255,255,0.1)' }} />
+                {error && <p className="text-red-400 text-xs pl-1">{error}</p>}
+                <button type="submit" disabled={loading || !email.trim()}
+                  className="w-full h-11 rounded-xl text-sm font-semibold text-white transition-all hover:brightness-110 active:scale-[0.98] disabled:opacity-50"
+                  style={{ background: 'linear-gradient(135deg, #22c55e 0%, #16a34a 100%)', boxShadow: '0 4px 12px rgba(34,197,94,0.3)' }}>
+                  {loading
+                    ? (t('auth.sending') || 'Sending...')
+                    : password.trim()
+                      ? (t('auth.signInWithPassword') || 'Sign in with password')
+                      : (t('auth.sendCode') || 'Send login code')}
+                </button>
+              </form>
+              <p className="text-center text-xs text-gray-500">{t('auth.magicLinkHint') || "You'll receive a code and a magic link via email"}</p>
+            </div>
           ) : (
             <div className="space-y-4">
               <div className="flex justify-center gap-2" onPaste={handleOtpPaste}>

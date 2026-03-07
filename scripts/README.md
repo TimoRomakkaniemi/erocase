@@ -4,7 +4,7 @@ Demo-käyttäjä ohittaa maksujärjestelmän ja voi käyttää chattia ilman til
 
 **Kirjautuminen:**
 - Sähköposti: `timo@demo.solvia.fi`
-- Salasana: (sama kuin .env.local → `DEMO_USER_PASSWORD`)
+- Salasana: sama kuin `.env.local` → `DEMO_USER_PASSWORD` (syötä kirjautumissivun salasanakenttään)
 
 **Luonti (yksi kerta):**
 

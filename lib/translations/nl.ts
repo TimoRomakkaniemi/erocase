@@ -1291,6 +1291,8 @@ export const nl: TranslationTree = {
   'auth.otpTitle': 'Voer verificatiecode in',
   'auth.otpSubtitle': 'Code verzonden naar {email}',
   'auth.emailPlaceholder': 'jouw@email.nl',
+  'auth.passwordPlaceholder': 'Wachtwoord',
+  'auth.signInWithPassword': 'Inloggen met wachtwoord',
   'auth.sendCode': 'Stuur inlogcode',
   'auth.sending': 'Versturen...',
   'auth.resend': 'Code opnieuw sturen',

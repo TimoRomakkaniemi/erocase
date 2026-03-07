@@ -31,6 +31,13 @@ function getNestedValue(obj: Record<string, unknown>, path: string): string | un
   return typeof current === 'string' ? current : undefined
 }
 
+/** Lookup: flat root key first (e.g. 'auth.emailPlaceholder'), then nested (e.g. auth.title). */
+function getTranslationValue(dict: Record<string, unknown>, key: string): string | undefined {
+  const flat = dict[key]
+  if (typeof flat === 'string') return flat
+  return getNestedValue(dict, key)
+}
+
 function interpolate(template: string, vars?: Record<string, string | number>): string {
   if (!vars) return template
   return template.replace(/\{\{(\w+)\}\}/g, (_, key) => String(vars[key] ?? `{{${key}}}`))
@@ -72,10 +79,10 @@ import { translations } from '@/lib/translations'
 
 export function t(key: string, vars?: Record<string, string | number>): string {
   const lang = useI18nStore.getState().lang
-  const dict = translations[lang]
-  const value = getNestedValue(dict as unknown as Record<string, unknown>, key)
+  const dict = translations[lang] as unknown as Record<string, unknown>
+  const value = getTranslationValue(dict, key)
   if (value) return interpolate(value, vars)
-  const fallback = getNestedValue(translations.fi as unknown as Record<string, unknown>, key)
+  const fallback = getTranslationValue(translations.fi as unknown as Record<string, unknown>, key)
   if (fallback) return interpolate(fallback, vars)
   return key
 }
@@ -85,10 +92,10 @@ export function t(key: string, vars?: Record<string, string | number>): string {
 export function useT() {
   const lang = useI18nStore((s) => s.lang)
   return (key: string, vars?: Record<string, string | number>): string => {
-    const dict = translations[lang]
-    const value = getNestedValue(dict as unknown as Record<string, unknown>, key)
+    const dict = translations[lang] as unknown as Record<string, unknown>
+    const value = getTranslationValue(dict, key)
     if (value) return interpolate(value, vars)
-    const fallback = getNestedValue(translations.fi as unknown as Record<string, unknown>, key)
+    const fallback = getTranslationValue(translations.fi as unknown as Record<string, unknown>, key)
     if (fallback) return interpolate(fallback, vars)
     return key
   }

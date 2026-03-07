@@ -1291,6 +1291,8 @@ export const sv: TranslationTree = {
   'auth.otpTitle': 'Ange verifieringskod',
   'auth.otpSubtitle': 'Kod skickad till {email}',
   'auth.emailPlaceholder': 'din@epost.se',
+  'auth.passwordPlaceholder': 'Lösenord',
+  'auth.signInWithPassword': 'Logga in med lösenord',
   'auth.sendCode': 'Skicka inloggningskod',
   'auth.sending': 'Skickar...',
   'auth.resend': 'Skicka igen',
