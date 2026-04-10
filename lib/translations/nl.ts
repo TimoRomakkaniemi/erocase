@@ -1315,6 +1315,13 @@ export const nl: TranslationTree = {
   'auth.backToSignIn': 'Terug naar inloggen',
   'auth.passwordsMismatch': 'Wachtwoorden komen niet overeen.',
   'auth.passwordTooShort': 'Wachtwoord moet minstens 6 tekens zijn.',
+  'auth.errorInvalidCredentials': 'Verkeerd e-mailadres of wachtwoord, of account nog niet bevestigd. Controleer na registratie de bevestigingslink. Je kunt ook zonder wachtwoord inloggen: veld leegmaken en de code per e-mail gebruiken.',
+  'auth.errorEmailNotConfirmed': 'Bevestig eerst je e-mail via de link die we stuurden, log daarna in met wachtwoord.',
+  'auth.errorUserAlreadyExists': 'Er bestaat al een account met dit e-mailadres. Gebruik het tabblad Inloggen.',
+  'auth.errorSignupsDisabled': 'Nieuwe registraties zijn uitgeschakeld.',
+  'auth.errorRateLimit': 'Te veel pogingen. Even wachten en opnieuw proberen.',
+  'auth.errorGeneric': 'Inloggen mislukt. Probeer opnieuw.',
+  'auth.errorCallback': 'Inloglink verlopen of mislukt. Probeer opnieuw.',
 
   'nav.chat': 'Chat',
   'nav.today': 'Vandaag',

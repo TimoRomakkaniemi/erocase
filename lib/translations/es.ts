@@ -1315,6 +1315,13 @@ export const es: TranslationTree = {
   'auth.backToSignIn': 'Volver al inicio de sesión',
   'auth.passwordsMismatch': 'Las contraseñas no coinciden.',
   'auth.passwordTooShort': 'La contraseña debe tener al menos 6 caracteres.',
+  'auth.errorInvalidCredentials': 'Correo o contraseña incorrectos, o la cuenta aún no está confirmada. Si te registraste hace poco, revisa el enlace de confirmación. También puedes iniciar sesión sin contraseña: deja el campo vacío y usa el código por correo.',
+  'auth.errorEmailNotConfirmed': 'Confirma primero tu correo con el enlace que enviamos; luego inicia sesión con contraseña.',
+  'auth.errorUserAlreadyExists': 'Ya existe una cuenta con este correo. Usa la pestaña Iniciar sesión.',
+  'auth.errorSignupsDisabled': 'Los nuevos registros están desactivados.',
+  'auth.errorRateLimit': 'Demasiados intentos. Espera un momento.',
+  'auth.errorGeneric': 'Error al iniciar sesión. Inténtalo de nuevo.',
+  'auth.errorCallback': 'El enlace de acceso caducó o falló. Inténtalo de nuevo.',
 
   'nav.chat': 'Chat',
   'nav.today': 'Hoy',

@@ -1315,6 +1315,13 @@ export const fr: TranslationTree = {
   'auth.backToSignIn': 'Retour à la connexion',
   'auth.passwordsMismatch': 'Les mots de passe ne correspondent pas.',
   'auth.passwordTooShort': 'Le mot de passe doit contenir au moins 6 caractères.',
+  'auth.errorInvalidCredentials': 'E-mail ou mot de passe incorrect, ou compte non confirmé. Si vous venez de vous inscrire, vérifiez le lien de confirmation. Vous pouvez aussi vous connecter sans mot de passe : videz le champ et utilisez le code reçu par e-mail.',
+  'auth.errorEmailNotConfirmed': 'Confirmez d’abord votre e-mail via le lien envoyé, puis connectez-vous avec le mot de passe.',
+  'auth.errorUserAlreadyExists': 'Un compte existe déjà avec cet e-mail. Utilisez l’onglet Connexion.',
+  'auth.errorSignupsDisabled': 'Les nouvelles inscriptions sont désactivées.',
+  'auth.errorRateLimit': 'Trop de tentatives. Patientez puis réessayez.',
+  'auth.errorGeneric': 'Échec de la connexion. Réessayez.',
+  'auth.errorCallback': 'Le lien de connexion a expiré ou a échoué. Réessayez.',
 
   'nav.chat': 'Discussion',
   'nav.today': "Aujourd'hui",

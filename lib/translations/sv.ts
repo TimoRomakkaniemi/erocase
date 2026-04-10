@@ -1315,6 +1315,13 @@ export const sv: TranslationTree = {
   'auth.backToSignIn': 'Tillbaka till inloggning',
   'auth.passwordsMismatch': 'Lösenorden matchar inte.',
   'auth.passwordTooShort': 'Lösenordet måste vara minst 6 tecken.',
+  'auth.errorInvalidCredentials': 'Fel e-post eller lösenord, eller kontot är inte bekräftat. Om du precis registrerat dig, kontrollera bekräftelselänken. Du kan också logga in utan lösenord: töm lösenordsfältet och använd e-postkoden.',
+  'auth.errorEmailNotConfirmed': 'Bekräfta din e-post först via länken vi skickade, logga sedan in med lösenord.',
+  'auth.errorUserAlreadyExists': 'Det finns redan ett konto med denna e-post. Anv fliken Logga in.',
+  'auth.errorSignupsDisabled': 'Nya registreringar är avstängda.',
+  'auth.errorRateLimit': 'För många försök. Vänta och försök igen.',
+  'auth.errorGeneric': 'Inloggning misslyckades. Försök igen.',
+  'auth.errorCallback': 'Inloggningslänken gick ut eller misslyckades. Försök igen.',
 
   'nav.chat': 'Chatt',
   'nav.today': 'Idag',

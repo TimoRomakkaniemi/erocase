@@ -1315,6 +1315,13 @@ export const de: TranslationTree = {
   'auth.backToSignIn': 'Zurück zur Anmeldung',
   'auth.passwordsMismatch': 'Passwörter stimmen nicht überein.',
   'auth.passwordTooShort': 'Das Passwort muss mindestens 6 Zeichen haben.',
+  'auth.errorInvalidCredentials': 'Falsche E-Mail oder Passwort, oder Konto noch nicht bestätigt. Nach der Registrierung den Bestätigungslink in der E-Mail prüfen. Sie können sich auch ohne Passwort anmelden: Feld leeren und Code per E-Mail nutzen.',
+  'auth.errorEmailNotConfirmed': 'Bitte zuerst die E-Mail über den Link bestätigen, dann mit Passwort anmelden.',
+  'auth.errorUserAlreadyExists': 'Es gibt bereits ein Konto mit dieser E-Mail. Tab „Anmelden“ verwenden.',
+  'auth.errorSignupsDisabled': 'Neue Registrierungen sind deaktiviert.',
+  'auth.errorRateLimit': 'Zu viele Versuche. Kurz warten und erneut versuchen.',
+  'auth.errorGeneric': 'Anmeldung fehlgeschlagen. Bitte erneut versuchen.',
+  'auth.errorCallback': 'Anmeldelink abgelaufen oder fehlgeschlagen. Bitte erneut versuchen.',
 
   'nav.chat': 'Chat',
   'nav.today': 'Heute',

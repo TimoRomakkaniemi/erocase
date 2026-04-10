@@ -13,6 +13,7 @@ interface User {
   disabled: boolean
   created_at: string
   updated_at: string
+  email_confirmed_at: string | null
 }
 
 export default function AdminUsersPage() {
@@ -112,6 +113,7 @@ export default function AdminUsersPage() {
                 <th className="text-left px-4 py-3 font-medium text-gray-500">User</th>
                 <th className="text-left px-4 py-3 font-medium text-gray-500">Role</th>
                 <th className="text-left px-4 py-3 font-medium text-gray-500">Plan</th>
+                <th className="text-left px-4 py-3 font-medium text-gray-500">Email verified</th>
                 <th className="text-left px-4 py-3 font-medium text-gray-500">Status</th>
                 <th className="text-left px-4 py-3 font-medium text-gray-500">Joined</th>
                 <th className="text-right px-4 py-3 font-medium text-gray-500"></th>
@@ -121,11 +123,11 @@ export default function AdminUsersPage() {
               {loading ? (
                 Array.from({ length: 5 }).map((_, i) => (
                   <tr key={i} className="border-b border-gray-50">
-                    <td colSpan={6} className="px-4 py-4"><div className="h-4 bg-gray-100 rounded animate-pulse" /></td>
+                    <td colSpan={7} className="px-4 py-4"><div className="h-4 bg-gray-100 rounded animate-pulse" /></td>
                   </tr>
                 ))
               ) : users.length === 0 ? (
-                <tr><td colSpan={6} className="px-4 py-12 text-center text-gray-400">No users found</td></tr>
+                <tr><td colSpan={7} className="px-4 py-12 text-center text-gray-400">No users found</td></tr>
               ) : (
                 users.map(u => (
                   <tr key={u.id} className={`border-b border-gray-50 hover:bg-gray-50 transition-colors ${u.disabled ? 'opacity-50' : ''}`}>
@@ -144,6 +146,13 @@ export default function AdminUsersPage() {
                       <span className={`inline-block px-2 py-0.5 rounded-full text-xs font-medium ${planBadge(u.plan)}`}>
                         {u.plan}
                       </span>
+                    </td>
+                    <td className="px-4 py-3">
+                      {u.email_confirmed_at ? (
+                        <span className="text-xs text-green-600 font-medium">Yes</span>
+                      ) : (
+                        <span className="text-xs text-amber-600 font-medium">Pending</span>
+                      )}
                     </td>
                     <td className="px-4 py-3">
                       {u.disabled ? (

@@ -1315,6 +1315,13 @@ export const en: TranslationTree = {
   'auth.backToSignIn': 'Back to sign in',
   'auth.passwordsMismatch': 'Passwords do not match.',
   'auth.passwordTooShort': 'Password must be at least 6 characters.',
+  'auth.errorInvalidCredentials': 'Wrong email or password, or your account is not confirmed yet. If you just signed up, check your inbox for the confirmation link. You can also sign in without a password: clear the password field and use the email code.',
+  'auth.errorEmailNotConfirmed': 'Please confirm your email first. Open the message we sent you and click the link, then sign in with your password.',
+  'auth.errorUserAlreadyExists': 'An account with this email already exists. Use the Sign in tab.',
+  'auth.errorSignupsDisabled': 'New sign-ups are disabled.',
+  'auth.errorRateLimit': 'Too many attempts. Wait a moment and try again.',
+  'auth.errorGeneric': 'Sign-in failed. Please try again.',
+  'auth.errorCallback': 'The sign-in link expired or failed. Please try again.',
 
   'nav.chat': 'Chat',
   'nav.today': 'Today',

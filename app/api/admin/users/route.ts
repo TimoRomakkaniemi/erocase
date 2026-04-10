@@ -14,7 +14,7 @@ export async function GET(request: Request) {
     const limit = parseInt(url.searchParams.get('limit') || '20')
     const offset = (page - 1) * limit
 
-    let query = db.from('profiles').select('id, email, display_name, role, plan, plan_status, disabled, created_at, updated_at, country_code', { count: 'exact' })
+    let query = db.from('profiles').select('id, email, display_name, role, plan, plan_status, disabled, created_at, updated_at, country_code, email_confirmed_at', { count: 'exact' })
 
     if (search) query = query.or(`email.ilike.%${search}%,display_name.ilike.%${search}%`)
     if (plan) query = query.eq('plan', plan)

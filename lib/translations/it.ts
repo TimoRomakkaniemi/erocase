@@ -1315,6 +1315,13 @@ export const it: TranslationTree = {
   'auth.backToSignIn': 'Torna all’accesso',
   'auth.passwordsMismatch': 'Le password non coincidono.',
   'auth.passwordTooShort': 'La password deve avere almeno 6 caratteri.',
+  'auth.errorInvalidCredentials': 'Email o password errati, o account non confermato. Se ti sei appena registrato, controlla il link di conferma. Puoi anche accedere senza password: svuota il campo e usa il codice via email.',
+  'auth.errorEmailNotConfirmed': 'Conferma prima l’email con il link che ti abbiamo inviato, poi accedi con la password.',
+  'auth.errorUserAlreadyExists': 'Esiste già un account con questa email. Usa la scheda Accedi.',
+  'auth.errorSignupsDisabled': 'Le nuove registrazioni sono disabilitate.',
+  'auth.errorRateLimit': 'Troppi tentativi. Attendi e riprova.',
+  'auth.errorGeneric': 'Accesso non riuscito. Riprova.',
+  'auth.errorCallback': 'Il link di accesso è scaduto o non valido. Riprova.',
 
   'nav.chat': 'Chat',
   'nav.today': 'Oggi',

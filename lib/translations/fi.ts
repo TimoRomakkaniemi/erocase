@@ -1316,6 +1316,13 @@ export const fi = {
   'auth.backToSignIn': 'Takaisin kirjautumiseen',
   'auth.passwordsMismatch': 'Salasanat eivät täsmää.',
   'auth.passwordTooShort': 'Salasanan on oltava vähintään 6 merkkiä.',
+  'auth.errorInvalidCredentials': 'Väärä sähköposti tai salasana, tai tiliä ei ole vielä vahvistettu. Jos rekisteröidyit juuri, tarkista sähköpostista vahvistuslinkki. Voit myös kirjautua ilman salasanaa: tyhjennä salasanakenttä ja käytä kirjautumiskoodia.',
+  'auth.errorEmailNotConfirmed': 'Sähköpostiosoitetta ei ole vahvistettu. Avaa postilaatikkosi ja klikkaa vahvistuslinkkiä, sitten kirjaudu salasanalla.',
+  'auth.errorUserAlreadyExists': 'Tili on jo olemassa tällä sähköpostilla. Valitse välilehti Kirjaudu.',
+  'auth.errorSignupsDisabled': 'Uusien tilien rekisteröinti on poissa käytöstä.',
+  'auth.errorRateLimit': 'Liian monta yritystä. Odota hetki ja yritä uudelleen.',
+  'auth.errorGeneric': 'Kirjautuminen epäonnistui. Yritä uudelleen.',
+  'auth.errorCallback': 'Kirjautumislinkki vanhentui tai epäonnistui. Yritä uudelleen.',
 
   // Navigation
   'nav.chat': 'Chat',

@@ -4,6 +4,7 @@ import { Suspense, useState, useRef, useEffect } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { createBrowserClient } from '@/lib/supabase-browser'
 import { useT } from '@/lib/i18n'
+import { translateSupabaseAuthError } from '@/lib/supabase-auth-errors'
 import LanguageSelector from '@/components/LanguageSelector'
 import SolviaLogo from '@/components/SolviaLogo'
 
@@ -44,6 +45,15 @@ function LoginForm() {
     return () => clearTimeout(timer)
   }, [countdown])
 
+  useEffect(() => {
+    if (searchParams.get('error') !== 'auth') return
+    setError(t('auth.errorCallback'))
+    setShake(true)
+    const tmr = setTimeout(() => setShake(false), 500)
+    return () => clearTimeout(tmr)
+    // searchParams identity is stable for the same URL; omit t to avoid re-running every render (useT returns new fn)
+  }, [searchParams])
+
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!email.trim() || !password.trim()) return
@@ -76,8 +86,7 @@ function LoginForm() {
       setConfirmPassword('')
       setPassword('')
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : 'Unknown error'
-      setError(msg)
+      setError(translateSupabaseAuthError(err, t))
       triggerShake()
     } finally {
       setLoading(false)
@@ -98,8 +107,7 @@ function LoginForm() {
       router.push(nextUrl)
       router.refresh()
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : 'Unknown error'
-      setError(msg)
+      setError(translateSupabaseAuthError(err, t))
       triggerShake()
     } finally {
       setLoading(false)
@@ -122,8 +130,7 @@ function LoginForm() {
       setCountdown(60)
       setTimeout(() => inputRefs.current[0]?.focus(), 100)
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : 'Unknown error'
-      setError(msg)
+      setError(translateSupabaseAuthError(err, t))
       triggerShake()
     } finally {
       setLoading(false)
@@ -145,8 +152,7 @@ function LoginForm() {
       router.push(nextUrl)
       router.refresh()
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : 'Unknown error'
-      setError(msg)
+      setError(translateSupabaseAuthError(err, t))
       setOtp(['', '', '', '', '', ''])
       triggerShake()
       setTimeout(() => inputRefs.current[0]?.focus(), 100)
@@ -197,8 +203,7 @@ function LoginForm() {
       setCountdown(60)
       setOtp(['', '', '', '', '', ''])
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : 'Unknown error'
-      setError(msg)
+      setError(translateSupabaseAuthError(err, t))
     } finally {
       setLoading(false)
     }
