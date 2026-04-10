@@ -714,6 +714,7 @@ export const nl: TranslationTree = {
     revoked: 'Deze kaart is ingetrokken',
     anonymous: 'Partner',
     generateError: 'Kon geen veilige versie genereren',
+    noCards: 'Nog geen gedeelde kaarten.',
   },
 
   summary: {
@@ -1302,6 +1303,18 @@ export const nl: TranslationTree = {
   'auth.magicLinkHint': 'Je ontvangt een code en een magische link per e-mail',
   'auth.language': 'Taal',
   'auth.logout': 'Uitloggen',
+  'auth.tabSignIn': 'Inloggen',
+  'auth.tabSignUp': 'Registreren',
+  'auth.signUpTitle': 'Account aanmaken',
+  'auth.signUpSubtitle': 'Vul e-mail en wachtwoord in. Je moet je e-mail mogelijk bevestigen.',
+  'auth.confirmPasswordPlaceholder': 'Wachtwoord bevestigen',
+  'auth.signUpSubmit': 'Account aanmaken',
+  'auth.signUpMagicHint': 'Voor code of magic link, gebruik het tabblad Inloggen.',
+  'auth.checkEmailTitle': 'Controleer je e-mail',
+  'auth.checkEmailBody': 'We stuurden een bevestigingslink naar {email}. Open die om je account te voltooien.',
+  'auth.backToSignIn': 'Terug naar inloggen',
+  'auth.passwordsMismatch': 'Wachtwoorden komen niet overeen.',
+  'auth.passwordTooShort': 'Wachtwoord moet minstens 6 tekens zijn.',
 
   'nav.chat': 'Chat',
   'nav.today': 'Vandaag',

@@ -714,6 +714,7 @@ export const es: TranslationTree = {
     revoked: 'Esta tarjeta fue revocada',
     anonymous: 'Pareja',
     generateError: 'No se pudo generar la versión segura',
+    noCards: 'Aún no hay tarjetas compartidas.',
   },
 
   summary: {
@@ -1302,6 +1303,18 @@ export const es: TranslationTree = {
   'auth.magicLinkHint': 'Recibirás un código y un enlace mágico por correo',
   'auth.language': 'Idioma',
   'auth.logout': 'Cerrar sesión',
+  'auth.tabSignIn': 'Iniciar sesión',
+  'auth.tabSignUp': 'Registrarse',
+  'auth.signUpTitle': 'Crear cuenta',
+  'auth.signUpSubtitle': 'Introduce tu correo y contraseña. Puede que debas confirmar el correo.',
+  'auth.confirmPasswordPlaceholder': 'Confirmar contraseña',
+  'auth.signUpSubmit': 'Crear cuenta',
+  'auth.signUpMagicHint': 'Para código o enlace mágico, usa la pestaña Iniciar sesión.',
+  'auth.checkEmailTitle': 'Revisa tu correo',
+  'auth.checkEmailBody': 'Enviamos un enlace de confirmación a {email}. Ábrelo para terminar la cuenta.',
+  'auth.backToSignIn': 'Volver al inicio de sesión',
+  'auth.passwordsMismatch': 'Las contraseñas no coinciden.',
+  'auth.passwordTooShort': 'La contraseña debe tener al menos 6 caracteres.',
 
   'nav.chat': 'Chat',
   'nav.today': 'Hoy',

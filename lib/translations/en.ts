@@ -714,6 +714,7 @@ export const en: TranslationTree = {
     revoked: 'This card was revoked',
     anonymous: 'Partner',
     generateError: 'Could not generate safe version',
+    noCards: 'No share cards yet.',
   },
 
   summary: {
@@ -1302,6 +1303,18 @@ export const en: TranslationTree = {
   'auth.magicLinkHint': "You'll receive a code and a magic link via email",
   'auth.language': 'Language',
   'auth.logout': 'Sign out',
+  'auth.tabSignIn': 'Sign in',
+  'auth.tabSignUp': 'Register',
+  'auth.signUpTitle': 'Create account',
+  'auth.signUpSubtitle': 'Enter your email and password. You may need to confirm your email.',
+  'auth.confirmPasswordPlaceholder': 'Confirm password',
+  'auth.signUpSubmit': 'Create account',
+  'auth.signUpMagicHint': 'For a login code or magic link, use the Sign in tab.',
+  'auth.checkEmailTitle': 'Check your email',
+  'auth.checkEmailBody': 'We sent a confirmation link to {email}. Open it to finish setting up your account.',
+  'auth.backToSignIn': 'Back to sign in',
+  'auth.passwordsMismatch': 'Passwords do not match.',
+  'auth.passwordTooShort': 'Password must be at least 6 characters.',
 
   'nav.chat': 'Chat',
   'nav.today': 'Today',

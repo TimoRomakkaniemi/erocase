@@ -714,6 +714,7 @@ export const it: TranslationTree = {
     revoked: 'Questa scheda è stata revocata',
     anonymous: 'Partner',
     generateError: 'Impossibile generare la versione sicura',
+    noCards: 'Nessuna scheda condivisa ancora.',
   },
 
   summary: {
@@ -1302,6 +1303,18 @@ export const it: TranslationTree = {
   'auth.magicLinkHint': 'Riceverai un codice e un link magico via email',
   'auth.language': 'Lingua',
   'auth.logout': 'Esci',
+  'auth.tabSignIn': 'Accedi',
+  'auth.tabSignUp': 'Registrati',
+  'auth.signUpTitle': 'Crea account',
+  'auth.signUpSubtitle': 'Inserisci email e password. Potresti dover confermare l’email.',
+  'auth.confirmPasswordPlaceholder': 'Conferma password',
+  'auth.signUpSubmit': 'Crea account',
+  'auth.signUpMagicHint': 'Per codice o link magico, usa la scheda Accedi.',
+  'auth.checkEmailTitle': 'Controlla la email',
+  'auth.checkEmailBody': 'Abbiamo inviato un link di conferma a {email}. Aprilo per completare l’account.',
+  'auth.backToSignIn': 'Torna all’accesso',
+  'auth.passwordsMismatch': 'Le password non coincidono.',
+  'auth.passwordTooShort': 'La password deve avere almeno 6 caratteri.',
 
   'nav.chat': 'Chat',
   'nav.today': 'Oggi',

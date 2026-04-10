@@ -714,6 +714,7 @@ export const fi = {
     revoked: 'Tämä kortti on peruutettu',
     anonymous: 'Kumppani',
     generateError: 'Turvallista versiota ei voitu luoda',
+    noCards: 'Ei jaettuja kortteja vielä.',
   },
 
   summary: {
@@ -1303,6 +1304,18 @@ export const fi = {
   'auth.magicLinkHint': 'Saat koodin ja kirjautumislinkin sähköpostiisi',
   'auth.language': 'Kieli',
   'auth.logout': 'Kirjaudu ulos',
+  'auth.tabSignIn': 'Kirjaudu',
+  'auth.tabSignUp': 'Rekisteröidy',
+  'auth.signUpTitle': 'Luo tili',
+  'auth.signUpSubtitle': 'Syötä sähköposti ja salasana. Saat vahvistuslinkin, jos se on käytössä.',
+  'auth.confirmPasswordPlaceholder': 'Salasana uudelleen',
+  'auth.signUpSubmit': 'Luo tili',
+  'auth.signUpMagicHint': 'Kirjautumiskoodi ja linkki: käytä välilehteä Kirjaudu.',
+  'auth.checkEmailTitle': 'Tarkista sähköpostisi',
+  'auth.checkEmailBody': 'Lähetimme vahvistuslinkin osoitteeseen {email}. Avaa linkki viimeistelläksesi tilin.',
+  'auth.backToSignIn': 'Takaisin kirjautumiseen',
+  'auth.passwordsMismatch': 'Salasanat eivät täsmää.',
+  'auth.passwordTooShort': 'Salasanan on oltava vähintään 6 merkkiä.',
 
   // Navigation
   'nav.chat': 'Chat',

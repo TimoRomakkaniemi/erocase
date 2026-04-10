@@ -714,6 +714,7 @@ export const sv: TranslationTree = {
     revoked: 'Detta kort har återkallats',
     anonymous: 'Partner',
     generateError: 'Kunde inte skapa säker version',
+    noCards: 'Inga delade kort ännu.',
   },
 
   summary: {
@@ -1302,6 +1303,18 @@ export const sv: TranslationTree = {
   'auth.magicLinkHint': 'Du får en kod och en magisk länk via e-post',
   'auth.language': 'Språk',
   'auth.logout': 'Logga ut',
+  'auth.tabSignIn': 'Logga in',
+  'auth.tabSignUp': 'Registrera',
+  'auth.signUpTitle': 'Skapa konto',
+  'auth.signUpSubtitle': 'Ange e-post och lösenord. Du kan behöva bekräfta din e-post.',
+  'auth.confirmPasswordPlaceholder': 'Bekräfta lösenord',
+  'auth.signUpSubmit': 'Skapa konto',
+  'auth.signUpMagicHint': 'För inloggningskod eller magisk länk, anv fliken Logga in.',
+  'auth.checkEmailTitle': 'Kolla din e-post',
+  'auth.checkEmailBody': 'Vi skickade en bekräftelselänk till {email}. Öppna den för att slutföra kontot.',
+  'auth.backToSignIn': 'Tillbaka till inloggning',
+  'auth.passwordsMismatch': 'Lösenorden matchar inte.',
+  'auth.passwordTooShort': 'Lösenordet måste vara minst 6 tecken.',
 
   'nav.chat': 'Chatt',
   'nav.today': 'Idag',

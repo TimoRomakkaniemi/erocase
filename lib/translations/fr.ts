@@ -714,6 +714,7 @@ export const fr: TranslationTree = {
     revoked: 'Cette carte a été révoquée',
     anonymous: 'Partenaire',
     generateError: 'Impossible de générer la version sûre',
+    noCards: 'Aucune carte partagée pour l’instant.',
   },
 
   summary: {
@@ -1302,6 +1303,18 @@ export const fr: TranslationTree = {
   'auth.magicLinkHint': 'Vous recevrez un code et un lien magique par email',
   'auth.language': 'Langue',
   'auth.logout': 'Se déconnecter',
+  'auth.tabSignIn': 'Connexion',
+  'auth.tabSignUp': 'Inscription',
+  'auth.signUpTitle': 'Créer un compte',
+  'auth.signUpSubtitle': 'Saisissez e-mail et mot de passe. Une confirmation par e-mail peut être requise.',
+  'auth.confirmPasswordPlaceholder': 'Confirmer le mot de passe',
+  'auth.signUpSubmit': 'Créer un compte',
+  'auth.signUpMagicHint': 'Pour un code ou un lien magique, utilisez l’onglet Connexion.',
+  'auth.checkEmailTitle': 'Vérifiez votre e-mail',
+  'auth.checkEmailBody': 'Nous avons envoyé un lien de confirmation à {email}. Ouvrez-le pour finaliser le compte.',
+  'auth.backToSignIn': 'Retour à la connexion',
+  'auth.passwordsMismatch': 'Les mots de passe ne correspondent pas.',
+  'auth.passwordTooShort': 'Le mot de passe doit contenir au moins 6 caractères.',
 
   'nav.chat': 'Discussion',
   'nav.today': "Aujourd'hui",
