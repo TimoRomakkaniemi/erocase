@@ -664,6 +664,7 @@ export const en: TranslationTree = {
     accepted: 'Invite accepted!',
     loginHint: 'Log in to accept the invite.',
     goHome: 'Go home',
+    acceptFailed: 'Something went wrong. Try again or ask for a new invite.',
   },
 
   task: {

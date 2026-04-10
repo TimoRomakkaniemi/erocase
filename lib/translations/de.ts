@@ -664,6 +664,7 @@ export const de: TranslationTree = {
     accepted: 'Einladung angenommen!',
     loginHint: 'Melden Sie sich an, um die Einladung anzunehmen.',
     goHome: 'Zur Startseite',
+    acceptFailed: 'Etwas ist schiefgelaufen. Bitte erneut versuchen oder eine neue Einladung anfordern.',
   },
 
   task: {

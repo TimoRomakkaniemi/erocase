@@ -664,6 +664,7 @@ export const nl: TranslationTree = {
     accepted: 'Uitnodiging geaccepteerd!',
     loginHint: 'Log in om de uitnodiging te accepteren.',
     goHome: 'Naar home',
+    acceptFailed: 'Er ging iets mis. Probeer opnieuw of vraag een nieuwe uitnodiging.',
   },
 
   task: {

@@ -664,6 +664,7 @@ export const fi = {
     accepted: 'Kutsu hyväksytty!',
     loginHint: 'Kirjaudu sisään hyväksyäksesi kutsun.',
     goHome: 'Etusivulle',
+    acceptFailed: 'Jokin meni pieleen. Yritä uudelleen tai pyydä uusi kutsu.',
   },
 
   task: {

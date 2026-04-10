@@ -664,6 +664,7 @@ export const sv: TranslationTree = {
     accepted: 'Inbjudan accepterad!',
     loginHint: 'Logga in för att acceptera inbjudan.',
     goHome: 'Till startsidan',
+    acceptFailed: 'Något gick fel. Försök igen eller be om en ny inbjudan.',
   },
 
   task: {

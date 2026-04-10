@@ -664,6 +664,7 @@ export const it: TranslationTree = {
     accepted: 'Invito accettato!',
     loginHint: 'Accedi per accettare l\'invito.',
     goHome: 'Vai alla home',
+    acceptFailed: 'Qualcosa è andato storto. Riprova o chiedi un nuovo invito.',
   },
 
   task: {

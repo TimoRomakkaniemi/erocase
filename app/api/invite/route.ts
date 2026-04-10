@@ -62,7 +62,9 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'token required' }, { status: 400 })
   }
 
-  const { data: space, error: spaceError } = await supabase
+  // Invitee is not a space member yet, so RLS blocks shared_spaces / members reads on the user client.
+  const admin = await createSupabaseAdmin()
+  const { data: space, error: spaceError } = await admin
     .from('shared_spaces')
     .select('id, status, invite_expires_at')
     .eq('invite_token', token)
@@ -81,7 +83,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Space is no longer accepting invites' }, { status: 400 })
   }
 
-  const { data: existingMembers, error: countError } = await supabase
+  const { data: existingMembers, error: countError } = await admin
     .from('shared_space_members')
     .select('id')
     .eq('space_id', space.id)
@@ -94,18 +96,18 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Space is full' }, { status: 400 })
   }
 
-  const { data: myMembership } = await supabase
+  const { data: myMembership } = await admin
     .from('shared_space_members')
     .select('id')
     .eq('space_id', space.id)
     .eq('user_id', user.id)
-    .single()
+    .maybeSingle()
 
   if (myMembership) {
     return NextResponse.json({ error: 'Already a member' }, { status: 400 })
   }
 
-  const { error: insertError } = await supabase
+  const { error: insertError } = await admin
     .from('shared_space_members')
     .insert({
       space_id: space.id,
@@ -117,7 +119,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: insertError.message }, { status: 500 })
   }
 
-  const { error: updateError } = await supabase
+  const { error: updateError } = await admin
     .from('shared_spaces')
     .update({ status: 'active' })
     .eq('id', space.id)

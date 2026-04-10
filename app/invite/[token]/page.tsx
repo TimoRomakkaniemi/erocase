@@ -58,6 +58,8 @@ export default function InvitePage() {
       if (res.ok) {
         setState('accepted')
         setTimeout(() => router.push(`/space/${data.space_id}`), 1500)
+      } else if (res.status === 410) {
+        setState('expired')
       } else if (data.error?.toLowerCase().includes('already')) {
         setState('alreadyMember')
       } else {
@@ -105,7 +107,7 @@ export default function InvitePage() {
     return (
       <div className="min-h-screen chat-bg flex flex-col items-center justify-center p-4">
         <div className="max-w-sm text-center">
-          <p className="text-gray-600">{t('invite.expired')}</p>
+          <p className="text-gray-600">{t('invite.acceptFailed')}</p>
           <Link
             href="/"
             className="mt-4 inline-block px-4 py-2 rounded-xl font-medium text-brand-600 bg-brand-50"
