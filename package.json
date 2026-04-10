@@ -7,9 +7,12 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "create-demo-user": "node scripts/create-demo-user.mjs"
+    "create-demo-user": "node scripts/create-demo-user.mjs",
+    "send-email-sendgrid": "node scripts/send-email-sendgrid.mjs",
+    "sync-sendgrid-vercel": "node scripts/sync-sendgrid-to-vercel.mjs"
   },
   "dependencies": {
+    "@sendgrid/mail": "^8.1.6",
     "@supabase/ssr": "^0.6.1",
     "@supabase/supabase-js": "^2.95.3",
     "next": "^15.3.3",
